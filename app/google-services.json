@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "854883700822",
+    "project_id": "alex-atour-usatu",
+    "storage_bucket": "alex-atour-usatu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:854883700822:android:12e808f9ec497faf432bf7",
+        "android_client_info": {
+          "package_name": "com.alex.atour"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "854883700822-o0nsv6av1sdd1s0bop4bu7lh4dfqkpcm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv_tpUHslWFDTmjqYTDcLeP-xwipKpQgE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "854883700822-o0nsv6av1sdd1s0bop4bu7lh4dfqkpcm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
