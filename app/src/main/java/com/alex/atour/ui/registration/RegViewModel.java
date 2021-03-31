@@ -14,11 +14,13 @@ public class RegViewModel extends ViewModel {
 
     private RegModel model;
     private final MutableLiveData<Boolean> isLoading;
+    private final MutableLiveData<Boolean> regFlag;
     private final MutableLiveData<String> errorMessage;
 
     public RegViewModel(){
         isLoading = new MutableLiveData<>();
         errorMessage = new MutableLiveData<>();
+        regFlag = new MutableLiveData<>();
 
         model = new RegModel(this);
     }
@@ -28,6 +30,7 @@ public class RegViewModel extends ViewModel {
     }
 
     public MutableLiveData<Boolean> getIsLoading() { return isLoading; }
+    public MutableLiveData<Boolean> getRegFlag() { return regFlag; }
     public MutableLiveData<String> getErrorMessage() { return errorMessage; }
 
 
@@ -48,9 +51,11 @@ public class RegViewModel extends ViewModel {
     }
     void registrationSuccess(){
         isLoading.setValue(false);
+        regFlag.setValue(true);
     }
     void registrationError(String msg){
         isLoading.setValue(false);
         errorMessage.setValue(msg);
+        regFlag.setValue(false);
     }
 }

@@ -13,15 +13,18 @@
     <string name="types">Виды</string>
     <string name="type_walk">Пеший</string>
     <string name="type_ski">Лыжный</string>
-    <string name="type_hills">Горный</string>
+    <string name="type_hike">Горный</string>
     <string name="type_water">Водный</string>
     <string name="type_speleo">Спелео</string>
-    <string name="bike">Велосипед</string>
+    <string name="type_bike">Вело</string>
     <string name="type_auto">АвтоМото</string>
     <string name="type_other">Прочее</string>
     <string name="comment">Комментарий</string>
     <string name="link">Ссылка на облачное хранилище</string>
     <string name="request">Заявка</string>
+    <string name="main_referee">Гл. судья</string>
+    <string name="data_from">Дата начала</string>
+    <string name="data_to">Дата окончания</string>
 
 
     <string-array name="cities">

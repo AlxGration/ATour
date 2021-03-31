@@ -45,8 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         TextView tvError = findViewById(R.id.tv_error);
 
         //observers
-        viewModel.getAuthFlag().observe(this, isAuth->{
-            if (isAuth){
+        viewModel.getAuthFlag().observe(this, isAuthSuccess->{
+            if (isAuthSuccess){
                 //TODO: start MainActivity
                 startActivity(
                         new Intent(this, MembershipRequestActivity.class)

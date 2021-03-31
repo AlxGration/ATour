@@ -61,7 +61,7 @@ public class MembershipRequestActivity extends AppCompatActivity {
             case R.id.cb_ski:
 
                 break;
-            case R.id.cb_hills:
+            case R.id.cb_hike:
 
                 break;
             case R.id.cb_water:

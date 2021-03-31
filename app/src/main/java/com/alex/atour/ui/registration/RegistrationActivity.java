@@ -1,6 +1,7 @@
 package com.alex.atour.ui.registration;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alex.atour.R;
 
@@ -49,6 +51,12 @@ public class RegistrationActivity extends AppCompatActivity {
                             View.VISIBLE:
                             View.INVISIBLE
             );
+        });
+        viewModel.getRegFlag().observe(this, isRegSuccess ->{
+            if (isRegSuccess){
+                Toast.makeText(this, "Успешно", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         });
         viewModel.getErrorMessage().observe(this, tvError::setText);
 
