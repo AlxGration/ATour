@@ -42,15 +42,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-
     <Spinner
         android:id="@+id/spin_city"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="?actionBarSize"
         android:entries="@array/cities"
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@id/et_fio"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintStart_toStartOf="@id/et_fio"
+        app:layout_constraintEnd_toEndOf="@id/et_fio"/>
 
     <TextView
         android:id="@+id/tv_7"

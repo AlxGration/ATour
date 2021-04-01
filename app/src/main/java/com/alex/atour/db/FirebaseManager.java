@@ -1,5 +1,5 @@
 package com.alex.atour.db;
-import android.content.Context;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.concurrent.Executor;
 
 public class FirebaseManager extends DBManager{
 

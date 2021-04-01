@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/li_size"
+    android:background="@drawable/bg_grey"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/img_role"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:src="@drawable/ic_admin"
+        android:scaleType="centerInside"
+        android:padding="5dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/border_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_fio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="14dp"
+        android:text="Винов Александр Сергеевич"
+        android:textColor="@color/black"
+        android:textSize="@dimen/main_text_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/img_role"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_sub_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="@dimen/sub_text_size"
+        app:layout_constraintStart_toStartOf="@id/tv_fio"
+        app:layout_constraintTop_toBottomOf="@id/tv_fio" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

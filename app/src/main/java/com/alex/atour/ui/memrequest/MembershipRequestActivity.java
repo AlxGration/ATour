@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.alex.atour.R;
 
@@ -52,31 +53,31 @@ public class MembershipRequestActivity extends AppCompatActivity {
     }
 
     public void onChooseType(View view) {
-        boolean isChecked = ((CheckBox)view).isChecked();
+        boolean isChecked = ((ToggleButton)view).isChecked();
 
         switch (view.getId()){
-            case R.id.cb_walk:
+            case R.id.tb_walk:
 
                 break;
-            case R.id.cb_ski:
+            case R.id.tb_ski:
 
                 break;
-            case R.id.cb_hike:
+            case R.id.tb_hike:
 
                 break;
-            case R.id.cb_water:
+            case R.id.tb_water:
 
                 break;
-            case R.id.cb_speleo:
+            case R.id.tb_speleo:
 
                 break;
-            case R.id.cb_bike:
+            case R.id.tb_bike:
 
                 break;
-            case R.id.cb_auto:
+            case R.id.tb_auto:
 
                 break;
-            case R.id.cb_other:
+            case R.id.tb_other:
 
                 break;
         }

@@ -3,13 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.memrequest.MembershipRequestActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:theme="@style/Theme.ATour.AppBarOverlay">
@@ -134,69 +133,74 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
-                    <CheckBox
-                        android:id="@+id/cb_walk"
+                    <ToggleButton
+                        android:id="@+id/tb_walk"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginRight="5dp"
                         android:textSize="@dimen/sub_text_size"
-                        android:button="@null"
+                        android:paddingTop="10dp"
                         android:drawableTint="@color/text_radio_btn"
-                        android:drawableTop="@drawable/ic_eye"
+                        android:drawableTop="@drawable/ic_walk"
                         android:background="@drawable/bg_toggle"
                         android:textColor="@color/text_radio_btn"
                         android:gravity="center_horizontal|bottom"
                         android:onClick="onChooseType"
-                        android:textAlignment="gravity"
-                        android:text="@string/type_walk"
-                        android:checked="false" />
-                    <CheckBox
-                        android:id="@+id/cb_ski"
+                        android:textAllCaps="false"
+                        android:textOff="@string/type_walk"
+                        android:textOn="@string/type_walk"
+                        android:checked="false"/>
+                    <ToggleButton
+                        android:id="@+id/tb_ski"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginRight="5dp"
                         android:textSize="@dimen/sub_text_size"
-                        android:button="@null"
+                        android:paddingTop="10dp"
                         android:drawableTint="@color/text_radio_btn"
-                        android:drawableTop="@drawable/ic_eye"
+                        android:drawableTop="@drawable/ic_ski"
                         android:background="@drawable/bg_toggle"
                         android:textColor="@color/text_radio_btn"
                         android:gravity="center_horizontal|bottom"
                         android:onClick="onChooseType"
-                        android:textAlignment="gravity"
-                        android:text="@string/type_ski"
-                        android:checked="false" />
-                    <CheckBox
-                        android:id="@+id/cb_hike"
+                        android:textAllCaps="false"
+                        android:textOff="@string/type_ski"
+                        android:textOn="@string/type_ski"
+                        android:checked="false"/>
+                    <ToggleButton
+                        android:id="@+id/tb_hike"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginRight="5dp"
                         android:textSize="@dimen/sub_text_size"
-                        android:button="@null"
+                        android:paddingTop="10dp"
                         android:drawableTint="@color/text_radio_btn"
-                        android:drawableTop="@drawable/ic_eye"
+                        android:drawableTop="@drawable/ic_hike"
                         android:background="@drawable/bg_toggle"
                         android:textColor="@color/text_radio_btn"
                         android:gravity="center_horizontal|bottom"
                         android:onClick="onChooseType"
-                        android:textAlignment="gravity"
-                        android:text="@string/type_hike"
-                        android:checked="false" />
-                    <CheckBox
-                        android:id="@+id/cb_water"
+                        android:textAllCaps="false"
+                        android:textOff="@string/type_hike"
+                        android:textOn="@string/type_hike"
+                        android:checked="false"/>
+                    <ToggleButton
+                        android:id="@+id/tb_water"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
+                        android:layout_marginRight="5dp"
                         android:textSize="@dimen/sub_text_size"
-                        android:button="@null"
+                        android:paddingTop="10dp"
                         android:drawableTint="@color/text_radio_btn"
-                        android:drawableTop="@drawable/ic_eye"
+                        android:drawableTop="@drawable/ic_water"
                         android:background="@drawable/bg_toggle"
                         android:textColor="@color/text_radio_btn"
                         android:gravity="center_horizontal|bottom"
                         android:onClick="onChooseType"
-                        android:textAlignment="gravity"
-                        android:text="@string/type_water"
-                        android:checked="false" />
+                        android:textAllCaps="false"
+                        android:textOff="@string/type_water"
+                        android:textOn="@string/type_water"
+                        android:checked="false"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/row_2"
@@ -207,69 +211,74 @@
                     app:layout_constraintTop_toBottomOf="@id/row_1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
-                    <CheckBox
-                        android:id="@+id/cb_speleo"
+                    <ToggleButton
+                        android:id="@+id/tb_speleo"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginRight="5dp"
                         android:textSize="@dimen/sub_text_size"
-                        android:button="@null"
+                        android:paddingTop="10dp"
                         android:drawableTint="@color/text_radio_btn"
-                        android:drawableTop="@drawable/ic_eye"
+                        android:drawableTop="@drawable/ic_speleo"
                         android:background="@drawable/bg_toggle"
                         android:textColor="@color/text_radio_btn"
                         android:gravity="center_horizontal|bottom"
                         android:onClick="onChooseType"
-                        android:textAlignment="gravity"
-                        android:text="@string/type_speleo"
-                        android:checked="false" />
-                    <CheckBox
-                        android:id="@+id/cb_bike"
+                        android:textAllCaps="false"
+                        android:textOff="@string/type_speleo"
+                        android:textOn="@string/type_speleo"
+                        android:checked="false"/>
+                    <ToggleButton
+                        android:id="@+id/tb_bike"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginRight="5dp"
                         android:textSize="@dimen/sub_text_size"
-                        android:button="@null"
+                        android:paddingTop="10dp"
                         android:drawableTint="@color/text_radio_btn"
-                        android:drawableTop="@drawable/ic_eye"
+                        android:drawableTop="@drawable/ic_bike"
                         android:background="@drawable/bg_toggle"
                         android:textColor="@color/text_radio_btn"
                         android:gravity="center_horizontal|bottom"
                         android:onClick="onChooseType"
-                        android:textAlignment="gravity"
-                        android:text="@string/type_bike"
-                        android:checked="false" />
-                    <CheckBox
-                        android:id="@+id/cb_auto"
+                        android:textAllCaps="false"
+                        android:textOff="@string/type_bike"
+                        android:textOn="@string/type_bike"
+                        android:checked="false"/>
+                    <ToggleButton
+                        android:id="@+id/tb_auto"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginRight="5dp"
                         android:textSize="@dimen/sub_text_size"
-                        android:button="@null"
+                        android:paddingTop="10dp"
                         android:drawableTint="@color/text_radio_btn"
-                        android:drawableTop="@drawable/ic_eye"
+                        android:drawableTop="@drawable/ic_auto"
                         android:background="@drawable/bg_toggle"
                         android:textColor="@color/text_radio_btn"
                         android:gravity="center_horizontal|bottom"
                         android:onClick="onChooseType"
-                        android:textAlignment="gravity"
-                        android:text="@string/type_auto"
-                        android:checked="false" />
-                    <CheckBox
-                        android:id="@+id/cb_other"
+                        android:textAllCaps="false"
+                        android:textOff="@string/type_auto"
+                        android:textOn="@string/type_auto"
+                        android:checked="false"/>
+                    <ToggleButton
+                        android:id="@+id/tb_other"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
+                        android:layout_marginRight="5dp"
                         android:textSize="@dimen/sub_text_size"
-                        android:button="@null"
+                        android:paddingTop="10dp"
                         android:drawableTint="@color/text_radio_btn"
-                        android:drawableTop="@drawable/ic_eye"
+                        android:drawableTop="@drawable/ic_other"
                         android:background="@drawable/bg_toggle"
                         android:textColor="@color/text_radio_btn"
                         android:gravity="center_horizontal|bottom"
                         android:onClick="onChooseType"
-                        android:textAlignment="gravity"
-                        android:text="@string/type_other"
-                        android:checked="false" />
+                        android:textAllCaps="false"
+                        android:textOff="@string/type_other"
+                        android:textOn="@string/type_other"
+                        android:checked="false"/>
                 </LinearLayout>
 
                 <EditText
