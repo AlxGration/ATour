@@ -5,10 +5,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -38,7 +36,7 @@ public class MembershipRequestActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(MemReqViewModel.class);
 
         memReq = new MembershipRequest();
-        memReq.setChamID(getIntent().getStringExtra("chamID"));
+        memReq.setChampID(getIntent().getStringExtra("chamID"));
 
         //init ui
         TextView tvError = findViewById(R.id.tv_error);

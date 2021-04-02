@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.ui.champ.ChampActivity;
+import com.alex.atour.ui.list.MainActivity;
 import com.alex.atour.ui.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.registration.RegistrationActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
             if (isAuthSuccess){
                 //TODO: start MainActivity
                 startActivity(
-                        new Intent(this, ChampActivity.class)
+                        new Intent(this, MainActivity.class)
                 );
             }
         });

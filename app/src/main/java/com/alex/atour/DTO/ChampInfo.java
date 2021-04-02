@@ -1,11 +1,11 @@
 package com.alex.atour.DTO;
 
-public class MembershipRequest {
-    String id, userID, comment, cloudLink, docsLink, champID;
-    int role;
+public class ChampInfo {
+    String id, title, champID, dataFrom, dataTo, city;
+    int status;
     boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
 
-    public MembershipRequest(){}
+    public ChampInfo(){}
 
     public String getId() {
         return id;
@@ -15,12 +15,12 @@ public class MembershipRequest {
         this.id = id;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getTitle() {
+        return title;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getChampID() {
@@ -31,36 +31,36 @@ public class MembershipRequest {
         this.champID = champID;
     }
 
-    public String getComment() {
-        return comment;
+    public String getDataFrom() {
+        return dataFrom;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setDataFrom(String dataFrom) {
+        this.dataFrom = dataFrom;
     }
 
-    public String getCloudLink() {
-        return cloudLink;
+    public String getDataTo() {
+        return dataTo;
     }
 
-    public void setCloudLink(String cloudLink) {
-        this.cloudLink = cloudLink;
+    public void setDataTo(String dataTo) {
+        this.dataTo = dataTo;
     }
 
-    public String getDocsLink() {
-        return docsLink;
+    public String getCity() {
+        return city;
     }
 
-    public void setDocsLink(String docsLink) {
-        this.docsLink = docsLink;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public int getRole() {
-        return role;
+    public int getStatus() {
+        return status;
     }
 
-    public void setRole(int role) {
-        this.role = role;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public boolean isTypeWalk() {
