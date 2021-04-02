@@ -5,8 +5,6 @@ import android.app.Activity;
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
 
-import java.util.concurrent.Executor;
-
 public class RegModel {
 
     private final RegViewModel viewModel;
@@ -23,7 +21,7 @@ public class RegModel {
 
     public void registrationRequest(String fio, String city, String phone, String email, String pass){
         User user = new User("", fio, city, phone, email);
-        db.registration(user, pass, new DBManager.IonRegistrationListener() {
+        db.registration(user, pass, new DBManager.IonOperationListener() {
             @Override
             public void onSuccess() {
                 viewModel.registrationSuccess();

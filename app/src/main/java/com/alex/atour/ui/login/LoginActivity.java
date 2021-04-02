@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isPasswordHidden;
     private EditText etPass, etLogin;
     private ProgressBar pBar;
+    private Button btnLogin;
     private LoginViewModel viewModel;
 
     @Override
@@ -42,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         //init ui
         etPass = findViewById(R.id.et_password);
         etLogin = findViewById(R.id.et_login);
+        btnLogin = findViewById(R.id.btn_login);
         pBar = findViewById(R.id.progress_bar);
         TextView tvError = findViewById(R.id.tv_error);
 
@@ -60,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                             View.VISIBLE:
                             View.INVISIBLE
             );
+            btnLogin.setEnabled(!isLoading);
         });
         viewModel.getErrorMessage().observe(this, tvError::setText);
 

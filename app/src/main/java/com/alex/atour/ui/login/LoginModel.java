@@ -1,11 +1,8 @@
 package com.alex.atour.ui.login;
 
 import android.app.Activity;
-import android.content.Context;
 
 import com.alex.atour.db.DBManager;
-
-import java.util.concurrent.Executor;
 
 public class LoginModel {
 
@@ -22,7 +19,7 @@ public class LoginModel {
     }
 
     public void loginRequest(String login, String pass){
-           db.login(login, pass, new DBManager.IonLoginListener() {
+           db.login(login, pass, new DBManager.IonOperationListener() {
                @Override
                public void onSuccess() {
                    viewModel.loginSuccess();

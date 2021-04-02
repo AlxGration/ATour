@@ -109,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="@id/et_password" />
 
     <Button
-        android:id="@+id/btn_confirm"
+        android:id="@+id/btn_send"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

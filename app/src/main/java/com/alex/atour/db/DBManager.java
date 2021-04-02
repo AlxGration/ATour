@@ -2,9 +2,8 @@ package com.alex.atour.db;
 
 import android.app.Activity;
 
+import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
-
-import java.util.concurrent.Executor;
 
 public abstract class DBManager {
 
@@ -26,14 +25,11 @@ public abstract class DBManager {
 
     public abstract boolean checkUserAuth();
 
-    public abstract void login(String login, String password, IonLoginListener loginListener);
-    public abstract void registration(User user, String password, IonRegistrationListener regListener);
+    public abstract void login(String login, String password, IonOperationListener loginListener);
+    public abstract void registration(User user, String password, IonOperationListener regListener);
+    public abstract void sendMembershipRequest(MembershipRequest memReq, IonOperationListener regListener);
 
-    public interface IonLoginListener{
-        void onSuccess();
-        void onFailed(String msg);
-    }
-    public interface IonRegistrationListener{
+    public interface IonOperationListener {
         void onSuccess();
         void onFailed(String msg);
     }

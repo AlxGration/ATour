@@ -43,13 +43,13 @@
                 app:layout_constraintStart_toEndOf="@id/btn_back"
                 app:layout_constraintEnd_toStartOf="@id/btn_ok"/>
             <Button
-                android:id="@+id/btn_ok"
+                android:id="@+id/btn_send_request"
                 android:layout_width="70dp"
                 android:layout_height="30dp"
                 android:textAllCaps="false"
                 android:text="Подать\nзаявку"
                 android:textSize="@dimen/sub_text_size"
-                android:onClick="onClickSendBtn"
+                android:onClick="onClickMemRequestBtn"
                 android:background="@drawable/border_black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

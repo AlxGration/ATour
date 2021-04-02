@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.InputType;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -26,6 +27,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private Spinner spCity;
     private RegViewModel viewModel;
     private ProgressBar pBar;
+    private Button btnSend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class RegistrationActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.et_email);
         spCity = findViewById(R.id.spin_city);
         pBar = findViewById(R.id.progress_bar);
+        btnSend = findViewById(R.id.btn_send);
         TextView tvError = findViewById(R.id.tv_error);
 
         //observers
@@ -51,6 +54,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             View.VISIBLE:
                             View.INVISIBLE
             );
+            btnSend.setEnabled(!isLoading);
         });
         viewModel.getRegFlag().observe(this, isRegSuccess ->{
             if (isRegSuccess){
