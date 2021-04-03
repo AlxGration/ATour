@@ -1,4 +1,4 @@
-package com.alex.atour.ui.memrequest;
+package com.alex.atour.ui.create.memrequest;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;

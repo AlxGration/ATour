@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.alex.atour.R;
 import com.alex.atour.models.ChampsListRecyclerAdapter;
 import com.alex.atour.ui.champ.ChampActivity;
+import com.alex.atour.ui.create.champ.ChampCreationActivity;
+import com.alex.atour.ui.profile.ProfileActivity;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -32,13 +34,13 @@ public class MainActivity extends AppCompatActivity implements
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
 
-        tvList = findViewById(R.id.tv_tab_1);
-        tvMy = findViewById(R.id.tv_tab_2);
+        tvMy = findViewById(R.id.tv_tab_1);
+        tvList = findViewById(R.id.tv_tab_2);
         tvManage = findViewById(R.id.tv_tab_3);
 
-        tvList.setOnClickListener(view -> viewPager.setCurrentItem(0));
-        tvMy.setOnClickListener(view -> viewPager.setCurrentItem(1));
-        tvManage.setOnClickListener(view -> viewPager.setCurrentItem(3));
+        tvMy.setOnClickListener(view -> viewPager.setCurrentItem(0));
+        tvList.setOnClickListener(view -> viewPager.setCurrentItem(1));
+        tvManage.setOnClickListener(view -> viewPager.setCurrentItem(2));
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -47,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onPageSelected(int position) {
                 if (position == 0){
-                    setActiveTab(tvList);
-                    setInactiveTab(tvMy);
-                    setInactiveTab(tvManage);
-                }else if (position == 1){
                     setActiveTab(tvMy);
                     setInactiveTab(tvList);
+                    setInactiveTab(tvManage);
+                }else if (position == 1){
+                    setActiveTab(tvList);
+                    setInactiveTab(tvMy);
                     setInactiveTab(tvManage);
                 }else{
                     setActiveTab(tvManage);
@@ -97,5 +99,17 @@ public class MainActivity extends AppCompatActivity implements
         //Intent intent = new Intent(MainActivity.this, SearchActivity.class);
         //startActivity(intent);
         //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    public void onClickNewChamp(View view) {
+        startActivity(
+                new Intent(this, ChampCreationActivity.class)
+        );
+    }
+
+    public void onClickProfile(View view) {
+        startActivity(
+                new Intent(this, ProfileActivity.class)
+        );
     }
 }

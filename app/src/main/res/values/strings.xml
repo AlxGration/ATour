@@ -30,7 +30,20 @@
     <string name="results_waiting">Документы приняты, ожидайте результатов</string>
     <string name="profile">Профиль</string>
     <string name="search">Поиск</string>
+    <string name="title">Название</string>
+    <string name="city">Город</string>
+    <string name="status">Статус соревнований</string>
+    <string name="my">Мои</string>
+    <string name="list">Список</string>
+    <string name="manage">Управляю</string>
+    <string name="sign_out">Выйти</string>
 
+    <string-array name="statuses">
+        <item>Чемпионат</item>
+        <item>Кубок</item>
+        <item>Перенство</item>
+        <item>Всероссийские</item>
+    </string-array>
 
     <string-array name="cities">
         <item>г. Абакан</item>

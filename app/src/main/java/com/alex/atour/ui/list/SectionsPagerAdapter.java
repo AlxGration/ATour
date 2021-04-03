@@ -26,9 +26,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                return new ChampsFragment();
-            case 1:
                 return new MyChampsFragment();
+            case 1:
+                return new ChampsFragment();
             case 2:
             default:
                 return new ManagedChampsFragment();

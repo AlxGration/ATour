@@ -1,9 +1,7 @@
 package com.alex.atour.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,15 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alex.atour.R;
-import com.alex.atour.db.DBManager;
-import com.alex.atour.ui.champ.ChampActivity;
 import com.alex.atour.ui.list.MainActivity;
-import com.alex.atour.ui.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.registration.RegistrationActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.concurrent.Executor;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -52,10 +43,10 @@ public class LoginActivity extends AppCompatActivity {
         //observers
         viewModel.getAuthFlag().observe(this, isAuthSuccess->{
             if (isAuthSuccess){
-                //TODO: start MainActivity
                 startActivity(
                         new Intent(this, MainActivity.class)
                 );
+                finish();
             }
         });
         viewModel.getIsLoading().observe(this, isLoading->{

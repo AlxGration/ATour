@@ -1,7 +1,6 @@
-package com.alex.atour.ui.memrequest;
+package com.alex.atour.ui.create.memrequest;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.db.DBManager;

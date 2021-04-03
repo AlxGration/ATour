@@ -48,6 +48,28 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateOnly="true"
+            android:indeterminateTint="@color/black"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorError"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <TextView
             android:id="@+id/tv_sec_name"
             android:layout_width="wrap_content"
@@ -89,7 +111,7 @@
             android:id="@+id/tv_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="г. Уфа"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="@dimen/main_text_size"
             android:layout_marginStart="10dp"
@@ -111,7 +133,7 @@
             android:id="@+id/tv_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="sasha@mail.ru"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="@dimen/main_text_size"
             app:layout_constraintStart_toStartOf="@id/tv_title_email"
@@ -132,11 +154,25 @@
             android:id="@+id/tv_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+7 (919) 607-4583"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="@dimen/main_text_size"
             app:layout_constraintStart_toStartOf="@id/tv_title_phone"
             app:layout_constraintTop_toBottomOf="@id/tv_title_phone"/>
+
+        <Button
+            android:id="@+id/btn_sign_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding"
+            android:text="@string/sign_out"
+            android:textColor="@color/red"
+            android:textAllCaps="false"
+            android:onClick="onClickSignOut"
+            android:textSize="@dimen/main_text_size"
+            android:background="@drawable/bg_white"
+            app:layout_constraintStart_toStartOf="@id/tv_title_phone"
+            app:layout_constraintTop_toBottomOf="@id/tv_phone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

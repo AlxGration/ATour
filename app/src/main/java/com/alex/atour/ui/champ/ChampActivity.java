@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.alex.atour.R;
-import com.alex.atour.ui.memrequest.MembershipRequestActivity;
+import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ChampActivity extends AppCompatActivity {
@@ -37,12 +37,6 @@ public class ChampActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MembershipRequestActivity.class);
         intent.putExtra("chamID", "asdjkl");//TODO: send real id
         startActivityForResult(intent, 1);
-    }
-
-    @Override
-    public void onBackPressed() {
-        FirebaseAuth.getInstance().signOut();
-        super.onBackPressed();
     }
 
     @Override

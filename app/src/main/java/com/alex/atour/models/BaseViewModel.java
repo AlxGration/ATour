@@ -18,7 +18,4 @@ public class BaseViewModel  extends ViewModel {
 
     public void setIsLoading(boolean isLoading){ this.isLoading.setValue(isLoading); }
     public void setErrorMessage(String msg){ this.errorMessage.setValue(msg); }
-
-
-
 }

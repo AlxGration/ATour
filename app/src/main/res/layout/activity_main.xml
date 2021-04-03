@@ -14,29 +14,46 @@
         android:paddingTop="@dimen/padding"
         android:theme="@style/Theme.ATour.AppBarOverlay">
 
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/border_search"
-            android:orientation="horizontal"
             app:layout_scrollFlags="enterAlways|scroll"
-            android:layout_marginBottom="8dp"
-            android:onClick="onClickSearch">
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border_search"
+                android:orientation="horizontal"
+                android:layout_toStartOf="@id/img_profile"
+                android:onClick="onClickSearch">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_search"
+                    android:scaleType="centerInside"
+                    android:layout_marginStart="20dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:hint="@string/search"
+                    android:layout_marginStart="14dp"/>
+            </LinearLayout>
+
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/border_search"
+                android:id="@+id/img_profile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_profile"
                 android:scaleType="centerInside"
-                android:layout_marginStart="20dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:textSize="18sp"
-                android:hint="@string/search"
-                android:layout_marginStart="14dp"/>
-        </LinearLayout>
+                android:background="@drawable/bg_white"
+                android:onClick="onClickProfile"
+                android:layout_marginStart="8dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
 
         <include layout="@layout/main_tabs_layout" />
 
@@ -49,4 +66,14 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
     </androidx.viewpager.widget.ViewPager>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_ok"
+        android:tint="@color/white"
+        android:backgroundTint="@color/black"
+
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/padding"
+        android:onClick="onClickNewChamp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

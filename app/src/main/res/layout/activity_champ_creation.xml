@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.create.memrequest.MembershipRequestActivity">
+    tools:context=".ui.create.champ.ChampCreationActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -32,14 +32,15 @@
                 app:layout_constraintStart_toStartOf="parent"/>
             <TextView
                 android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:text="@string/request"
+                android:text="Создание чемпионата"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btn_back"/>
+                app:layout_constraintStart_toEndOf="@id/btn_back"
+                app:layout_constraintEnd_toStartOf="@id/btn_ok"/>
             <ImageButton
                 android:id="@+id/btn_ok"
                 android:layout_width="30dp"
@@ -70,40 +71,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <RadioGroup
-                    android:id="@+id/rg_role"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-                    <RadioButton
-                        android:id="@+id/rb_member"
-                        android:layout_width="100dp"
-                        android:layout_height="46dp"
-                        android:textSize="@dimen/mid_text_size"
-                        android:text="@string/member"
-                        android:layout_marginRight="5dp"
-                        android:checked="true"
-                        android:gravity="center"
-                        android:button="@android:color/transparent"
-                        android:background="@drawable/bg_rb_left"
-                        android:textColor="@color/text_radio_btn"/>
-                    <RadioButton
-                        android:id="@+id/rb_referee"
-                        android:layout_width="100dp"
-                        android:layout_height="46dp"
-                        android:textSize="@dimen/mid_text_size"
-                        android:text="@string/referee"
-                        android:gravity="center"
-                        android:button="@android:color/transparent"
-                        android:background="@drawable/bg_rb_right"
-                        android:textColor="@color/text_radio_btn"/>
-                </RadioGroup>
-
                 <ProgressBar
                     android:id="@+id/progress_bar"
                     android:layout_width="wrap_content"
@@ -120,10 +87,128 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorError"
-                    android:textAlignment="center"
+                    android:gravity="center"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@id/rg_role"
+                    android:text=""
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="@id/row_1"/>
+
+                <EditText
+                    android:id="@+id/et_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="13"
+                    android:maxLength="40"
+                    android:hint="@string/title"
+                    android:inputType="textMultiLine"
+                    app:layout_constraintTop_toBottomOf="@id/tv_error"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_middle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:text=" — "
+                    android:gravity="center"
+                    android:layout_marginTop="40dp"
+                    app:layout_constraintTop_toBottomOf="@id/et_title"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_data_from"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_title_data_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/data_from"
+                    android:textSize="@dimen/mid_text_size"
+                    android:textColor="@color/grey"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/et_title"
+                    app:layout_constraintStart_toStartOf="@id/tv_data_from"
+                    app:layout_constraintEnd_toEndOf="@id/tv_data_from"
+                    app:layout_constraintBottom_toTopOf="@id/tv_data_from"/>
+
+                <TextView
+                    android:id="@+id/tv_title_data_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/data_to"
+                    android:textSize="@dimen/mid_text_size"
+                    android:textColor="@color/grey"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintStart_toStartOf="@id/tv_data_to"
+                    app:layout_constraintEnd_toEndOf="@id/tv_data_to"
+                    app:layout_constraintBottom_toTopOf="@id/tv_data_to"/>
+
+
+                <TextView
+                    android:id="@+id/tv_data_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_black"
+                    android:padding="5dp"
+                    android:text="17.09.2020"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/main_text_size"
+                    app:layout_constraintEnd_toStartOf="@id/tv_middle"
+                    app:layout_constraintTop_toTopOf="@id/tv_middle" />
+
+                <TextView
+                    android:id="@+id/tv_data_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="17.11.2020"
+                    android:padding="5dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/border_black"
+                    android:textSize="@dimen/main_text_size"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toTopOf="@id/tv_middle"
+                    app:layout_constraintStart_toEndOf="@id/tv_middle"/>
+
+                <TextView
+                    android:id="@+id/tv_title_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/city"
+                    android:textSize="@dimen/mid_text_size"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_data_from"
+                    app:layout_constraintStart_toStartOf="@id/row_1"/>
+
+                <Spinner
+                    android:id="@+id/spin_city"
+                    android:layout_width="0dp"
+                    android:layout_height="?actionBarSize"
+                    android:entries="@array/cities"
+                    android:textAlignment="center"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_city"
+                    app:layout_constraintStart_toStartOf="@id/et_title"
+                    app:layout_constraintEnd_toEndOf="@id/et_title"/>
+
+                <TextView
+                    android:id="@+id/tv_title_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/status"
+                    android:textSize="@dimen/mid_text_size"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/spin_city"
+                    app:layout_constraintStart_toStartOf="@id/row_1"/>
+
+                <Spinner
+                    android:id="@+id/spin_status"
+                    android:layout_width="0dp"
+                    android:layout_height="?actionBarSize"
+                    android:entries="@array/statuses"
+                    android:textAlignment="center"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_status"
+                    app:layout_constraintStart_toStartOf="@id/et_title"
+                    app:layout_constraintEnd_toEndOf="@id/et_title"/>
 
                 <TextView
                     android:id="@+id/tv_types"
@@ -131,7 +216,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/types"
                     android:textSize="@dimen/mid_text_size"
-                    app:layout_constraintTop_toBottomOf="@id/tv_error"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/spin_status"
                     app:layout_constraintStart_toStartOf="@id/row_1"/>
 
                 <LinearLayout
@@ -292,43 +378,17 @@
                         android:checked="false"/>
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/et_comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:ems="13"
-                    android:hint="@string/comment"
-                    android:inputType="textMultiLine"
-
-                    app:layout_constraintTop_toBottomOf="@id/row_2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-                <EditText
-                    android:id="@+id/et_link"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textSize="@dimen/mid_text_size"
-                    android:hint="@string/link"
-                    android:inputType="textMultiLine"
-                    app:layout_constraintTop_toBottomOf="@id/et_comment"
-                    app:layout_constraintStart_toStartOf="@id/et_comment"
-                    app:layout_constraintEnd_toEndOf="@id/et_comment"
-                    android:visibility="visible"/>
-
                 <Button
                     android:id="@+id/btn_send"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="8dp"
                     style="@style/BlackButton"
                     android:text="@string/send"
                     android:onClick="onClickSendBtn"
-                    app:layout_constraintTop_toBottomOf="@id/et_link"
-                    app:layout_constraintStart_toStartOf="@id/et_link"
-                    app:layout_constraintEnd_toEndOf="@id/et_link"/>
+                    app:layout_constraintTop_toBottomOf="@id/row_2"
+                    app:layout_constraintStart_toStartOf="@id/et_title"
+                    app:layout_constraintEnd_toEndOf="@id/et_title"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
