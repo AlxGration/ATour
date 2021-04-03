@@ -5,41 +5,35 @@ import androidx.lifecycle.ViewModel;
 
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.db.DBManager;
+import com.alex.atour.models.BaseViewModel;
 
-public class MemReqViewModel extends ViewModel {
+public class MemReqViewModel extends BaseViewModel {
 
-    private final MutableLiveData<String> errorMessage;
-    private final MutableLiveData<Boolean> isLoading;
     private final MutableLiveData<Boolean> isRequestSuccess;
     private DBManager db;
 
     public MemReqViewModel(){
-        errorMessage = new MutableLiveData<>();
         isRequestSuccess = new MutableLiveData<>();
-        isLoading = new MutableLiveData<>();
-
         db = DBManager.getInstance();
     }
 
-
-    public MutableLiveData<String> getErrorMessage() { return errorMessage; }
     public MutableLiveData<Boolean> getIsRequestSuccess() { return isRequestSuccess; }
-    public MutableLiveData<Boolean> getIsLoading() { return isLoading; }
 
     public void sendMembershipRequest(MembershipRequest memReq){
-        isLoading.setValue(true);
+        setIsLoading(true);
         db.sendMembershipRequest(memReq, new DBManager.IonOperationListener() {
             @Override
             public void onSuccess() {
                 isRequestSuccess.setValue(true);
-                isLoading.setValue(false);
+                setIsLoading(false);
+                setErrorMessage("");
             }
 
             @Override
             public void onFailed(String msg) {
-                errorMessage.setValue(msg);
+                setIsLoading(false);
+                setErrorMessage(msg);
                 isRequestSuccess.setValue(false);
-                isLoading.setValue(false);
             }
         });
     }

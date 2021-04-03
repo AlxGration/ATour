@@ -19,7 +19,7 @@ public abstract class DBManager {
     }
 
     public static DBManager getInstance(){
-        if (db == null) db =  new FirebaseManager();
+        if (db == null) db =  new FirebaseDB();
         return db;
     }
 
@@ -30,6 +30,11 @@ public abstract class DBManager {
     public abstract void sendMembershipRequest(MembershipRequest memReq, IonOperationListener regListener);
 
     public interface IonOperationListener {
+        void onSuccess();
+        void onFailed(String msg);
+    }
+
+    public interface IChampsListListener {
         void onSuccess();
         void onFailed(String msg);
     }

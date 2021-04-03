@@ -1,6 +1,5 @@
 package com.alex.atour.ui.list.my;
 
-
 import com.alex.atour.db.DBManager;
 
 public class MyChampsModel {
@@ -11,5 +10,9 @@ public class MyChampsModel {
     MyChampsModel(MyChampsViewModel viewModel){
         this.viewModel = viewModel;
         db = DBManager.getInstance();
+    }
+
+    public void requestChampsList(){
+        
     }
 }

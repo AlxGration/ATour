@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private ViewPager viewPager;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private TextView tvList, tvMy, tvManage, tvError;
+    private TextView tvList, tvMy, tvManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements
         tvList = findViewById(R.id.tv_tab_1);
         tvMy = findViewById(R.id.tv_tab_2);
         tvManage = findViewById(R.id.tv_tab_3);
-        tvError = findViewById(R.id.tv_error);
 
         tvList.setOnClickListener(view -> viewPager.setCurrentItem(0));
         tvMy.setOnClickListener(view -> viewPager.setCurrentItem(1));
@@ -63,18 +62,9 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {            }
+            public void onPageScrollStateChanged(int state) {  }
         });
 
-    }
-
-    public void showError(String msg){
-        tvError.setText(msg);
-        tvError.setVisibility(View.VISIBLE);
-    }
-
-    public void hideError(){
-        tvError.setVisibility(View.GONE);
     }
 
     private void setActiveTab(TextView tv){

@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class FirebaseManager extends DBManager{
+public class FirebaseDB extends DBManager{
 
     private final String USER_TABLE = "Users";
     private final String REQUEST_TABLE = "Requests";

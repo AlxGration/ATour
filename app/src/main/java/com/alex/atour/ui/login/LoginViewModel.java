@@ -6,24 +6,21 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.alex.atour.models.BaseViewModel;
 import com.alex.atour.models.ValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.concurrent.Executor;
 
-public class LoginViewModel extends ViewModel {
+public class LoginViewModel extends BaseViewModel {
 
-    private LoginModel model;
+    private final LoginModel model;
 
-    private final MutableLiveData<Boolean> isLoading;
     private final MutableLiveData<Boolean> authFlag;
-    private final MutableLiveData<String> errorMessage;
 
     public LoginViewModel(){
-        isLoading = new MutableLiveData<>();
         authFlag = new MutableLiveData<>();
-        errorMessage = new MutableLiveData<>();
         model = new LoginModel(this);
     }
 
@@ -32,14 +29,12 @@ public class LoginViewModel extends ViewModel {
     }
 
     public MutableLiveData<Boolean> getAuthFlag() { return authFlag; }
-    public MutableLiveData<Boolean> getIsLoading() { return isLoading; }
-    public MutableLiveData<String> getErrorMessage() { return errorMessage; }
 
     void loginRequest(String login, String pass){
         // data validation
         if (ValueFormatter.isLoginFormat(login) && ValueFormatter.isPasswordFormat(pass)){
             loginError("");
-            isLoading.setValue(true);
+            setIsLoading(true);
             model.loginRequest(login, pass);
         }else{
             loginError("Некорректные данные");
@@ -51,11 +46,12 @@ public class LoginViewModel extends ViewModel {
     }
 
     void loginSuccess(){
-        isLoading.setValue(false);
+        setIsLoading(false);
+        setErrorMessage("");
         authFlag.setValue(true);
     }
     void loginError(String msg){
-        isLoading.setValue(false);
-        errorMessage.setValue(msg);
+        setIsLoading(false);
+        setErrorMessage(msg);
     }
 }

@@ -6,20 +6,17 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.alex.atour.models.BaseViewModel;
 import com.alex.atour.models.ValueFormatter;
 
 import java.util.concurrent.Executor;
 
-public class RegViewModel extends ViewModel {
+public class RegViewModel extends BaseViewModel {
 
-    private RegModel model;
-    private final MutableLiveData<Boolean> isLoading;
+    private final RegModel model;
     private final MutableLiveData<Boolean> regFlag;
-    private final MutableLiveData<String> errorMessage;
 
     public RegViewModel(){
-        isLoading = new MutableLiveData<>();
-        errorMessage = new MutableLiveData<>();
         regFlag = new MutableLiveData<>();
 
         model = new RegModel(this);
@@ -28,11 +25,7 @@ public class RegViewModel extends ViewModel {
     void addExecutor(Activity activity){
         model.addExecutor(activity);
     }
-
-    public MutableLiveData<Boolean> getIsLoading() { return isLoading; }
     public MutableLiveData<Boolean> getRegFlag() { return regFlag; }
-    public MutableLiveData<String> getErrorMessage() { return errorMessage; }
-
 
     void registrationRequest(String fio, String city, String phone, String email, String pass){
         Log.e("TAG", "REG: "+ fio+ " "+ city+ " "+ phone+ " "+ email+ " "+ pass +" ");
@@ -43,19 +36,19 @@ public class RegViewModel extends ViewModel {
                 ValueFormatter.isPasswordFormat(pass)
         ){
             registrationError("");
-            isLoading.setValue(true);
+            setIsLoading(true);
             model.registrationRequest(fio, city, phone, email, pass);
         }else{
             registrationError("Некорректные данные");
         }
     }
     void registrationSuccess(){
-        isLoading.setValue(false);
+        setIsLoading(false);
         regFlag.setValue(true);
     }
     void registrationError(String msg){
-        isLoading.setValue(false);
-        errorMessage.setValue(msg);
+        setIsLoading(false);
+        setErrorMessage(msg);
         regFlag.setValue(false);
     }
 }
