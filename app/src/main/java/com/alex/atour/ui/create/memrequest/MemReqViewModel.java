@@ -20,7 +20,7 @@ public class MemReqViewModel extends BaseViewModel {
 
     public void sendMembershipRequest(MembershipRequest memReq){
         setIsLoading(true);
-        db.sendMembershipRequest(memReq, new DBManager.IonOperationListener() {
+        db.sendMembershipRequest(memReq, new DBManager.IRequestListener() {
             @Override
             public void onSuccess() {
                 isRequestSuccess.setValue(true);

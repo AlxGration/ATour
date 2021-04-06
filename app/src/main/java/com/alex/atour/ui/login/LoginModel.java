@@ -19,7 +19,7 @@ public class LoginModel {
     }
 
     public void loginRequest(String login, String pass){
-           db.login(login, pass, new DBManager.IonOperationListener() {
+           db.login(login, pass, new DBManager.IRequestListener() {
                @Override
                public void onSuccess() {
                    viewModel.loginSuccess();

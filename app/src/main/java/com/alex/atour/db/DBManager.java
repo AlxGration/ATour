@@ -24,18 +24,22 @@ public abstract class DBManager {
     }
 
     public abstract boolean checkUserAuth();
+    public abstract void signOut();
 
-    public abstract void login(String login, String password, IonOperationListener loginListener);
-    public abstract void registration(User user, String password, IonOperationListener regListener);
-    public abstract void sendMembershipRequest(MembershipRequest memReq, IonOperationListener regListener);
+    public abstract void login(String login, String password, IRequestListener listener);
+    public abstract void registration(User user, String password, IRequestListener listener);
+    public abstract void sendMembershipRequest(MembershipRequest memReq, IRequestListener listener);
+    public abstract User getUserData(String userID, IUserInfoListener listener);
 
-    public interface IonOperationListener {
+    public interface IRequestListener {
         void onSuccess();
         void onFailed(String msg);
     }
 
-    public interface IChampsListListener {
-        void onSuccess();
+    public interface IUserInfoListener {
+        void onSuccess(User user);
         void onFailed(String msg);
     }
+
+
 }

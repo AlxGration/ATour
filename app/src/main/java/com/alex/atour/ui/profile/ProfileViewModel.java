@@ -1,17 +1,13 @@
 package com.alex.atour.ui.profile;
 
-import android.app.Activity;
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 
 import com.alex.atour.models.BaseViewModel;
-import com.alex.atour.models.ValueFormatter;
-import com.alex.atour.ui.registration.RegModel;
 
 public class ProfileViewModel extends BaseViewModel {
 
-    //private final RegModel model;
+    private final ProfileModel model;
+
     private final MutableLiveData<String> secName;
     private final MutableLiveData<String> name;
     private final MutableLiveData<String> city;
@@ -24,7 +20,7 @@ public class ProfileViewModel extends BaseViewModel {
         city = new MutableLiveData<>();
         email = new MutableLiveData<>();
         phone = new MutableLiveData<>();
-        //model = new RegModel(this);
+        model = new ProfileModel(this);
     }
 
     public MutableLiveData<String> getSecName() { return secName; }
@@ -33,16 +29,29 @@ public class ProfileViewModel extends BaseViewModel {
     public MutableLiveData<String> getEmail() { return email; }
     public MutableLiveData<String> getPhone() { return phone; }
 
-    public void loadProfile(){
+    public void setSecName(String s) { secName.setValue(s); }
+    public void setName(String s) { name.setValue(s); }
+    public void setCity(String s) { city.setValue(s); }
+    public void setEmail(String s) { email.setValue(s); }
+    public void setPhone(String s) { phone.setValue(s); }
 
+    public void loadProfile(String userID){
+        setIsLoading(true);
+        setErrorMessage("");
+
+        model.requestUserProfile(userID);
     }
 
-    void registrationSuccess(){
+    void requestProfileSuccess(){
         setIsLoading(false);
         setErrorMessage("");
     }
-    void registrationError(String msg){
+    void requestProfileError(String msg){
         setIsLoading(false);
         setErrorMessage(msg);
+    }
+
+    void signOut(){
+        model.signOut();
     }
 }

@@ -21,7 +21,7 @@ public class RegModel {
 
     public void registrationRequest(String fio, String city, String phone, String email, String pass){
         User user = new User("", fio, city, phone, email);
-        db.registration(user, pass, new DBManager.IonOperationListener() {
+        db.registration(user, pass, new DBManager.IRequestListener() {
             @Override
             public void onSuccess() {
                 viewModel.registrationSuccess();

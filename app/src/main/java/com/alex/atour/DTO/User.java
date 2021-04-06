@@ -1,6 +1,9 @@
 package com.alex.atour.DTO;
 
 public class User {
+
+    public static final String MyID = "MY";
+
     private String id;
     private String fio;
     private String city;

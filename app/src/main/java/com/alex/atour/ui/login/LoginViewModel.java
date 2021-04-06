@@ -2,6 +2,7 @@ package com.alex.atour.ui.login;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -53,5 +54,10 @@ public class LoginViewModel extends BaseViewModel {
     void loginError(String msg){
         setIsLoading(false);
         setErrorMessage(msg);
+        logOut();
+    }
+
+    public void logOut(){
+        authFlag.setValue(false);
     }
 }

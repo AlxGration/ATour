@@ -1,17 +1,21 @@
 package com.alex.atour.ui.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.ui.login.LoginActivity;
+import com.alex.atour.ui.login.LoginViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -25,6 +29,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         btnSignOut = findViewById(R.id.btn_sign_out);
         tvError = findViewById(R.id.tv_error);
@@ -48,7 +54,9 @@ public class ProfileActivity extends AppCompatActivity {
         viewModel.getEmail().observe(this, tvEmail::setText);
         viewModel.getPhone().observe(this, tvPhone::setText);
 
-        viewModel.loadProfile();
+
+        //if userID from getIntent == User.MyID
+        viewModel.loadProfile(User.MyID);//userID or "MY" (comparing in FirebaseDB.class)
     }
 
     public void onClickBackBtn(View view) {
@@ -56,7 +64,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onClickSignOut(View view) {// выход из аккаунта
-        FirebaseAuth.getInstance().signOut();
+        //todo:sign out doesn't work
+        viewModel.signOut();
+
+
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
