@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.alex.atour.ui.list.champs.ChampsFragment;
+import com.alex.atour.ui.list.champs.ChampsListFragment;
 import com.alex.atour.ui.list.manage.ManagedChampsFragment;
 import com.alex.atour.ui.list.my.MyChampsFragment;
 
@@ -28,7 +28,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new MyChampsFragment();
             case 1:
-                return new ChampsFragment();
+                return new ChampsListFragment();
             case 2:
             default:
                 return new ManagedChampsFragment();

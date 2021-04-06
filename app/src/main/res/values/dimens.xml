@@ -20,8 +20,10 @@
     <dimen name="active_tap_size">30sp</dimen>
     <dimen name="inactive_tap_size">18sp</dimen>
     <dimen name="li_size">68dp</dimen>
+    <dimen name="li_size_champ">78dp</dimen>
 
     <integer name="active_tap_size">30</integer>
     <integer name="inactive_tap_size">18</integer>
+    <integer name="max_len">40</integer>
 
 </resources>

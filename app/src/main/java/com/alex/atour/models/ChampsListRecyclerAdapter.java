@@ -47,7 +47,7 @@ public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRe
 
         holder.tvTitle.setText(info.getTitle());
         holder.tvCity.setText(info.getCity());
-        holder.tvYear.setText(info.getDataTo().split(".")[2]);
+        holder.tvYear.setText(info.getDataTo().split("\\.")[0]);
 
         holder.imgWalk.setVisibility(
                 info.isTypeWalk()? View.VISIBLE: View.GONE
@@ -75,13 +75,10 @@ public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRe
         );
         
         holder.itemView.setTag(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (listener != null) {
-                    ChampInfo info = data.get(((int)view.getTag()));
-                    listener.startChampActivityWith(info.getChampID());
-                }
+        holder.itemView.setOnClickListener(view -> {
+            if (listener != null) {
+                ChampInfo info1 = data.get(((int)view.getTag()));
+                listener.startChampActivityWith(info1);
             }
         });
     }
@@ -96,7 +93,7 @@ public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRe
         listener = lis;
     }
     public interface IonItemClickListener{
-        void startChampActivityWith(String champID);
+        void startChampActivityWith(ChampInfo info);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -115,7 +112,7 @@ public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRe
             tvTitle = view.findViewById(R.id.tv_title);
             tvCity = view.findViewById(R.id.tv_city);
             tvYear = view.findViewById(R.id.tv_year);
-            imgWalk = view.findViewById(R.id.tb_walk);
+            imgWalk = view.findViewById(R.id.img_walk);
             imgSki = view.findViewById(R.id.img_ski);
             imgHike = view.findViewById(R.id.img_hike);
             imgWater = view.findViewById(R.id.img_water);

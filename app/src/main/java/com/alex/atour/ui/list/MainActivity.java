@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.R;
 import com.alex.atour.models.ChampsListRecyclerAdapter;
 import com.alex.atour.ui.champ.ChampActivity;
@@ -129,9 +130,9 @@ public class MainActivity extends AppCompatActivity implements
     // обработчик нажатия на элемент списка
     // открывает акнивность информации о чемпионате
     @Override
-    public void startChampActivityWith(String champID) {
+    public void startChampActivityWith(ChampInfo info) {
         Intent intent = new Intent(this, ChampActivity.class);
-        intent.putExtra("champID", champID);
+        intent.putExtra("champInfo", info);
         startActivity(intent);
     }
 
@@ -150,17 +151,15 @@ public class MainActivity extends AppCompatActivity implements
     private void showView(int len){
         //hide main list, show searchFragment
         if (len > 0){
-            if (tabsLayout.getVisibility()!=View.GONE) {
-                Fragment fragment = getSearchFragment();
-                tabsLayout.setVisibility(View.GONE);
-                imgSearch.setVisibility(View.INVISIBLE);
-                imgCancel.setVisibility(View.VISIBLE);
-                frameLayout.setVisibility(View.VISIBLE);
+            Fragment fragment = getSearchFragment();
+            tabsLayout.setVisibility(View.GONE);
+            imgSearch.setVisibility(View.INVISIBLE);
+            imgCancel.setVisibility(View.VISIBLE);
+            frameLayout.setVisibility(View.VISIBLE);
 
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_layout, fragment)
-                        .commitNow();
-            }
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frame_layout, fragment)
+                    .commitNow();
         }else{
             //hide searchFragment, show main list
             tabsLayout.setVisibility(View.VISIBLE);

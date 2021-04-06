@@ -98,9 +98,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="13"
-                    android:maxLength="40"
+                    android:maxLength="@integer/max_len"
                     android:hint="@string/title"
-                    android:inputType="textMultiLine"
+                    android:inputType="text"
                     app:layout_constraintTop_toBottomOf="@id/tv_error"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />

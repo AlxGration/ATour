@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -30,6 +31,9 @@ public class SearchFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_champs_list, container, false);
+
+        TextView tvError = view.findViewById(R.id.tv_error);
+        tvError.setText("PUSH SearchButton on Keyboard to search");
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_champs_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -7,26 +7,27 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.R;
+import com.alex.atour.models.ChampsListRecyclerAdapter;
+import com.alex.atour.ui.list.MainActivity;
+
+import java.util.ArrayList;
 
 
-public class ChampsFragment extends Fragment{
+public class ChampsListFragment extends Fragment{
 
-    //private MyChampsViewModel viewModel;
+    private ChampsListViewModel viewModel;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //viewModel = new ViewModelProvider(this).get(MyChampsViewModel.class);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //viewModel.getFavouriteStocksFromDB();
+        viewModel = new ViewModelProvider(this).get(ChampsListViewModel.class);
     }
 
     @Override
@@ -36,16 +37,15 @@ public class ChampsFragment extends Fragment{
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_champs_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        /*
-        viewModel.getFavouriteStocksMutableLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Stock>>() {
-            @Override
-            public void onChanged(ArrayList<Stock> stocks) {
-                StocksListRecyclerAdapter adapter = new StocksListRecyclerAdapter(stocks);
-                adapter.setOnItemClickListener(((MainActivity)getActivity()));
-                recyclerView.setAdapter(adapter);
-            }
+
+        viewModel.getChampsLiveData().observe(getViewLifecycleOwner(), champsList -> {
+            ChampsListRecyclerAdapter adapter = new ChampsListRecyclerAdapter(champsList);
+            ChampsListRecyclerAdapter.setOnItemClickListener(((MainActivity)getActivity()));
+            recyclerView.setAdapter(adapter);
         });
-        */
+
+        viewModel.requestChampsList();
+
         return view;
     }
 }

@@ -19,13 +19,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 
 public class FirebaseDB extends DBManager{
 
-    private final String USER_TABLE = "Users";
-    private final String REQUEST_TABLE = "Requests";
-    private final String CHAMP_TABLE = "Champs";
-    private final String CHAMP_INFO_TABLE = "ChampsInfo";
+    private final String USER_TABLE = "Users";// таблица пользователей
+    private final String REQUEST_TABLE = "Requests";// запросы на участие чемпионате
+    private final String CHAMP_TABLE = "Champs";//основная таблица чемпионата(документы,судьи,участници,заявки,оценки)
+    private final String CHAMP_INFO_TABLE = "ChampsInfo";//информация о чемпионате
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -136,38 +138,48 @@ public class FirebaseDB extends DBManager{
         //create champInfoRecord in ChampsInfoTable
         champInfoRef.child(champInfoID).setValue(champInfo);
 
-
-
         //create champRecord in ChampsTable
         champ.setInfoID(champInfoID);
-        champRef.child(champID).setValue(champ).addOnCompleteListener(new OnCompleteListener<Void>() {
+        champRef.child(champID).setValue(champ).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                if (listener!=null) listener.onSuccess();
+            }else{
+                if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
+            }
+        });
+    }
+
+    @Override
+    public void getChampsList(IChampsInfoListener listener) {
+        Query query = getDbRef().child(CHAMP_INFO_TABLE);
+        query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    if (listener!=null) listener.onSuccess();
-                }else{
-                    if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<ChampInfo> list = new ArrayList<ChampInfo>((int)snapshot.getChildrenCount());
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate champs
+                    list.add(snap.getValue(ChampInfo.class));
                 }
+
+                if (listener!=null) listener.onSuccess(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
             }
         });
     }
 
     private FirebaseUser getUser(){
-        if (user == null){
-            user = getAuth().getCurrentUser();
-        }
+        if (user == null){ user = getAuth().getCurrentUser(); }
         return user;
     }
     private DatabaseReference getDbRef(){
-        if (dbRef == null){
-            dbRef = database.getReference();
-        }
+        if (dbRef == null){ dbRef = database.getReference(); }
         return dbRef;
     }
     private FirebaseAuth getAuth(){
-        if (auth == null){
-            auth = FirebaseAuth.getInstance();
-        }
+        if (auth == null){ auth = FirebaseAuth.getInstance(); }
         return auth;
     }
 }

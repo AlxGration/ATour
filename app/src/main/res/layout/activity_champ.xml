@@ -40,7 +40,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btn_back"
-                app:layout_constraintEnd_toStartOf="@id/btn_ok"/>
+                app:layout_constraintEnd_toStartOf="@id/btn_send_request"/>
             <Button
                 android:id="@+id/btn_send_request"
                 android:layout_width="70dp"
@@ -125,16 +125,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_middle"
             app:layout_constraintStart_toEndOf="@id/tv_middle"/>
 
-        <ImageView
-            android:id="@+id/img_title_city"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="@dimen/padding"
-            android:src="@drawable/ic_place"
-            android:layout_marginTop="20dp"
-            app:tint="@color/grey"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_data_from"/>
+
 
         <TextView
             android:id="@+id/tv_city"
@@ -144,8 +135,9 @@
             android:textColor="@color/black"
             android:textSize="@dimen/main_text_size"
             android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@id/img_title_city"
-            app:layout_constraintBottom_toBottomOf="@id/img_title_city"/>
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_data_from"/>
 
         <TextView
             android:id="@+id/tv_title_types"
@@ -154,8 +146,8 @@
             android:text="@string/types"
             android:textColor="@color/grey"
             android:textSize="@dimen/mid_text_size"
-            app:layout_constraintTop_toBottomOf="@id/img_title_city"
-            app:layout_constraintStart_toStartOf="@id/img_title_city"/>
+            app:layout_constraintTop_toBottomOf="@id/tv_city"
+            app:layout_constraintStart_toStartOf="@id/tv_city"/>
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cg_types"
@@ -165,100 +157,116 @@
             app:layout_constraintStart_toStartOf="@id/tv_title_types">
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/cp_walk"
                 app:chipIcon="@drawable/ic_walk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Chip.Entry"
                 app:closeIconEnabled="false"
                 app:checkedIcon="@null"
-                app:chipIconTint="@color/white"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/black"
+                app:chipIconTint="@color/black"
+                android:textColor="@color/black"
+                app:chipBackgroundColor="@color/grey_bg"
                 android:checkable="false"
+                android:visibility="gone"
                 android:text="@string/type_walk"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/cp_ski"
                 app:chipIcon="@drawable/ic_ski"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Chip.Entry"
                 app:closeIconEnabled="false"
                 app:checkedIcon="@null"
-                app:chipIconTint="@color/white"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/black"
+                app:chipIconTint="@color/black"
+                android:textColor="@color/black"
+                app:chipBackgroundColor="@color/grey_bg"
                 android:checkable="false"
+                android:visibility="gone"
                 android:text="@string/type_ski"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/cp_hike"
                 app:chipIcon="@drawable/ic_hike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Chip.Entry"
                 app:closeIconEnabled="false"
                 app:checkedIcon="@null"
-                app:chipIconTint="@color/white"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/black"
+                app:chipIconTint="@color/black"
+                android:textColor="@color/black"
+                app:chipBackgroundColor="@color/grey_bg"
                 android:checkable="false"
+                android:visibility="gone"
                 android:text="@string/type_hike"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/cp_water"
                 app:chipIcon="@drawable/ic_water"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Chip.Entry"
                 app:closeIconEnabled="false"
                 app:checkedIcon="@null"
-                app:chipIconTint="@color/white"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/black"
+                app:chipIconTint="@color/black"
+                android:textColor="@color/black"
+                app:chipBackgroundColor="@color/grey_bg"
                 android:checkable="false"
+                android:visibility="gone"
                 android:text="@string/type_water"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/cp_speleo"
                 app:chipIcon="@drawable/ic_speleo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Chip.Entry"
                 app:closeIconEnabled="false"
                 app:checkedIcon="@null"
-                app:chipIconTint="@color/white"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/black"
+                app:chipIconTint="@color/black"
+                android:textColor="@color/black"
+                app:chipBackgroundColor="@color/grey_bg"
                 android:checkable="false"
+                android:visibility="gone"
                 android:text="@string/type_speleo"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/cp_bike"
                 app:chipIcon="@drawable/ic_bike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Chip.Entry"
                 app:closeIconEnabled="false"
                 app:checkedIcon="@null"
-                app:chipIconTint="@color/white"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/black"
+                app:chipIconTint="@color/black"
+                android:textColor="@color/black"
+                app:chipBackgroundColor="@color/grey_bg"
                 android:checkable="false"
+                android:visibility="gone"
                 android:text="@string/type_bike"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/cp_auto"
                 app:chipIcon="@drawable/ic_auto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Chip.Entry"
                 app:closeIconEnabled="false"
                 app:checkedIcon="@null"
-                app:chipIconTint="@color/white"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/black"
+                app:chipIconTint="@color/black"
+                android:textColor="@color/black"
+                app:chipBackgroundColor="@color/grey_bg"
                 android:checkable="false"
+                android:visibility="gone"
                 android:text="@string/type_auto"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/cp_other"
                 app:chipIcon="@drawable/ic_other"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Chip.Entry"
                 app:closeIconEnabled="false"
                 app:checkedIcon="@null"
-                app:chipIconTint="@color/white"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/black"
+                app:chipIconTint="@color/black"
+                android:textColor="@color/black"
+                app:chipBackgroundColor="@color/grey_bg"
                 android:checkable="false"
+                android:visibility="gone"
                 android:text="@string/type_other"/>
 
         </com.google.android.material.chip.ChipGroup>

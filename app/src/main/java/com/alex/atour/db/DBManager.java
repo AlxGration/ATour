@@ -5,6 +5,9 @@ import android.app.Activity;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
+import com.alex.atour.ui.champ.ChampActivity;
+
+import java.util.ArrayList;
 
 public abstract class DBManager {
 
@@ -32,6 +35,7 @@ public abstract class DBManager {
     public abstract void sendMembershipRequest(MembershipRequest memReq, IRequestListener listener);
     public abstract void getUserData(String userID, IUserInfoListener listener);
     public abstract void createNewChampRequest(ChampInfo champInfo, IRequestListener listener);
+    public abstract void getChampsList(IChampsInfoListener listener);
 
     public interface IRequestListener {
         void onSuccess();
@@ -40,6 +44,10 @@ public abstract class DBManager {
 
     public interface IUserInfoListener {
         void onSuccess(User user);
+        void onFailed(String msg);
+    }
+    public interface IChampsInfoListener{
+        void onSuccess(ArrayList<ChampInfo> champsList);
         void onFailed(String msg);
     }
 
