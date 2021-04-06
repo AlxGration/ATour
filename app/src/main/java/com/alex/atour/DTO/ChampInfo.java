@@ -1,11 +1,19 @@
 package com.alex.atour.DTO;
 
 public class ChampInfo {
-    String id, title, champID, dataFrom, dataTo, city;
+    String id, title, champID, dataFrom, dataTo, city, adminID;
     int status;
     boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
 
     public ChampInfo(){}
+
+    public String getAdminID() {
+        return adminID;
+    }
+
+    public void setAdminID(String adminID) {
+        this.adminID = adminID;
+    }
 
     public String getId() {
         return id;

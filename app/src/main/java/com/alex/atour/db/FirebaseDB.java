@@ -4,8 +4,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.alex.atour.DTO.Champ;
+import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +24,8 @@ public class FirebaseDB extends DBManager{
 
     private final String USER_TABLE = "Users";
     private final String REQUEST_TABLE = "Requests";
+    private final String CHAMP_TABLE = "Champs";
+    private final String CHAMP_INFO_TABLE = "ChampsInfo";
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -88,10 +94,9 @@ public class FirebaseDB extends DBManager{
     }
 
     @Override
-    public User getUserData(String userID, IUserInfoListener listener) {
+    public void getUserData(String userID, IUserInfoListener listener) {
         if (userID.equals(User.MyID)){
-            user = getUser();
-            userID = user.getUid();
+            userID = getUser().getUid();
         }
 
         Query query = getDbRef().child(USER_TABLE).child(userID);
@@ -107,7 +112,44 @@ public class FirebaseDB extends DBManager{
                 if (listener!=null) listener.onFailed(error.getMessage());
             }
         });
-        return null;
+    }
+
+    @Override
+    public void createNewChampRequest(ChampInfo champInfo, IRequestListener listener) {
+        String userID = "";
+        userID = getUser().getUid();
+
+        //create champID in Champs table
+        DatabaseReference champRef = getDbRef().child(CHAMP_TABLE);
+        String champID = champRef.push().getKey();
+        //start filling ChampRecord in Champs table
+        Champ champ = new Champ();
+        champ.setId(champID);
+
+
+        //create champInfoID in ChampsInfoTable
+        DatabaseReference champInfoRef = getDbRef().child(CHAMP_INFO_TABLE);
+        String champInfoID = champInfoRef.push().getKey();
+        champInfo.setId(champInfoID);   // id
+        champInfo.setChampID(champID);  // id чемпионата
+        champInfo.setAdminID(userID);   // id организатора
+        //create champInfoRecord in ChampsInfoTable
+        champInfoRef.child(champInfoID).setValue(champInfo);
+
+
+
+        //create champRecord in ChampsTable
+        champ.setInfoID(champInfoID);
+        champRef.child(champID).setValue(champ).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    if (listener!=null) listener.onSuccess();
+                }else{
+                    if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
+                }
+            }
+        });
     }
 
     private FirebaseUser getUser(){

@@ -2,6 +2,7 @@ package com.alex.atour.db;
 
 import android.app.Activity;
 
+import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 
@@ -29,7 +30,8 @@ public abstract class DBManager {
     public abstract void login(String login, String password, IRequestListener listener);
     public abstract void registration(User user, String password, IRequestListener listener);
     public abstract void sendMembershipRequest(MembershipRequest memReq, IRequestListener listener);
-    public abstract User getUserData(String userID, IUserInfoListener listener);
+    public abstract void getUserData(String userID, IUserInfoListener listener);
+    public abstract void createNewChampRequest(ChampInfo champInfo, IRequestListener listener);
 
     public interface IRequestListener {
         void onSuccess();

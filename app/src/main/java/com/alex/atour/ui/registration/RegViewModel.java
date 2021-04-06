@@ -28,7 +28,6 @@ public class RegViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> getRegFlag() { return regFlag; }
 
     void registrationRequest(String fio, String city, String phone, String email, String pass){
-        Log.e("TAG", "REG: "+ fio+ " "+ city+ " "+ phone+ " "+ email+ " "+ pass +" ");
         if (
                 ValueFormatter.isFIOFormat(fio) &&
                 ValueFormatter.isPhoneFormat(phone) &&

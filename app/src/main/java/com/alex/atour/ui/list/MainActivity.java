@@ -5,10 +5,20 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alex.atour.R;
@@ -24,6 +34,12 @@ public class MainActivity extends AppCompatActivity implements
     private ViewPager viewPager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private TextView tvList, tvMy, tvManage;
+    private ImageView imgSearch;
+    private ImageButton imgCancel;
+    private EditText etSearch;
+    private ConstraintLayout tabsLayout;
+    private FrameLayout frameLayout;
+    private SearchFragment searchFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +53,11 @@ public class MainActivity extends AppCompatActivity implements
         tvMy = findViewById(R.id.tv_tab_1);
         tvList = findViewById(R.id.tv_tab_2);
         tvManage = findViewById(R.id.tv_tab_3);
+        etSearch = findViewById(R.id.et_search);
+        imgCancel = findViewById(R.id.img_cancel);
+        imgSearch = findViewById(R.id.img_search);
+        tabsLayout = findViewById(R.id.tabs_layout);
+        frameLayout = findViewById(R.id.frame_layout);
 
         tvMy.setOnClickListener(view -> viewPager.setCurrentItem(0));
         tvList.setOnClickListener(view -> viewPager.setCurrentItem(1));
@@ -67,6 +88,26 @@ public class MainActivity extends AppCompatActivity implements
             public void onPageScrollStateChanged(int state) {  }
         });
 
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //swapping views depends on search line
+                //0 - main list, >0 - searchFragment
+                showView(charSequence.length());
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+        etSearch.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String searchRequest = textView.getText().toString();
+                showFragmentWithResult(searchRequest);
+                return true;
+            }
+            return false;
+        });
     }
 
     private void setActiveTab(TextView tv){
@@ -94,13 +135,6 @@ public class MainActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
-
-    public void onClickSearch(View view) {
-        //Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-        //startActivity(intent);
-        //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
-
     public void onClickNewChamp(View view) {
         startActivity(
                 new Intent(this, ChampCreationActivity.class)
@@ -111,5 +145,44 @@ public class MainActivity extends AppCompatActivity implements
         startActivity(
                 new Intent(this, ProfileActivity.class)
         );
+    }
+
+    private void showView(int len){
+        //hide main list, show searchFragment
+        if (len > 0){
+            if (tabsLayout.getVisibility()!=View.GONE) {
+                Fragment fragment = getSearchFragment();
+                tabsLayout.setVisibility(View.GONE);
+                imgSearch.setVisibility(View.INVISIBLE);
+                imgCancel.setVisibility(View.VISIBLE);
+                frameLayout.setVisibility(View.VISIBLE);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, fragment)
+                        .commitNow();
+            }
+        }else{
+            //hide searchFragment, show main list
+            tabsLayout.setVisibility(View.VISIBLE);
+            imgSearch.setVisibility(View.VISIBLE);
+
+            imgCancel.setVisibility(View.INVISIBLE);
+            frameLayout.setVisibility(View.INVISIBLE);
+        }
+    }
+    private Fragment getSearchFragment(){
+        if (searchFragment == null){
+            searchFragment = new SearchFragment();
+        }
+        return searchFragment;
+    }
+    private void showFragmentWithResult(String searchRequest){
+        if (searchFragment != null && frameLayout.getVisibility() == View.VISIBLE){
+            searchFragment.setSearchQuery(searchRequest);
+        }
+    }
+
+    public void onClickCancel(View view) {
+        etSearch.setText("");
     }
 }
