@@ -1,4 +1,4 @@
-package com.alex.atour.ui.list.my;
+package com.alex.atour.ui.list.search;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,16 +18,16 @@ import com.alex.atour.models.ChampsListRecyclerAdapter;
 import com.alex.atour.ui.list.ChampsListViewModel;
 import com.alex.atour.ui.list.MainActivity;
 
-
-public class MyChampsFragment extends Fragment{
+public class SearchFragment extends Fragment {
 
     private ChampsListViewModel viewModel;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(getActivity()).get(ChampsListViewModel.class);
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,17 +35,31 @@ public class MyChampsFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_champs_list, container, false);
 
         TextView tvError = view.findViewById(R.id.tv_error);
+        ProgressBar pBar = view.findViewById(R.id.progress_bar);
+
         RecyclerView recyclerView = view.findViewById(R.id.rv_champs_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        viewModel.getMyChampsListLiveData().observe(getViewLifecycleOwner(), champs-> {
-            ChampsListRecyclerAdapter adapter = new ChampsListRecyclerAdapter(champs);
+        viewModel.getFoundChampsListLiveData().observe(getViewLifecycleOwner(), champsList -> {
+            ChampsListRecyclerAdapter adapter = new ChampsListRecyclerAdapter(champsList);
             ChampsListRecyclerAdapter.setOnItemClickListener(((MainActivity)getActivity()));
             recyclerView.setAdapter(adapter);
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading->{
+            pBar.setVisibility(isLoading?
+                            View.VISIBLE:
+                            View.GONE
+            );
+        });
 
-        viewModel.requestMyChampsList();
         return view;
+    }
+
+    public void setSearchQuery(String searchRequest){
+        if (searchRequest.isEmpty())
+            viewModel.eraseFoundChampsList();
+        else
+            viewModel.requestChampsList(searchRequest);
     }
 }

@@ -179,6 +179,27 @@ public class FirebaseDB extends DBManager{
     }
 
     @Override
+    public void getChampsList(String searchRequest,IChampsInfoListener listener) {
+        Query query = getDbRef().child(CHAMP_INFO_TABLE).orderByChild("title").startAt(searchRequest);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<ChampInfo> list = new ArrayList<ChampInfo>((int)snapshot.getChildrenCount());
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate champs
+                    list.add(snap.getValue(ChampInfo.class));
+                }
+
+                if (listener!=null) listener.onSuccess(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
+            }
+        });
+    }
+
+    @Override
     public void getManagedChampsList(IChampsInfoListener listener) {
         Query query = getDbRef().child(CHAMP_INFO_TABLE).orderByChild("adminID").equalTo(getUser().getUid());
         query.addValueEventListener(new ValueEventListener() {

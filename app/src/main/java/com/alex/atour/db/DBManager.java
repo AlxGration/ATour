@@ -36,6 +36,7 @@ public abstract class DBManager {
     public abstract void getUserData(String userID, IUserInfoListener listener);//регистрационные данные пользователя по айди
     public abstract void createNewChamp(ChampInfo champInfo, IRequestListener listener);//создание чемпионата
     public abstract void getChampsList(IChampsInfoListener listener);//общий список чемпионатов
+    public abstract void getChampsList(String searchRequest, IChampsInfoListener listener);//общий список чемпионатов
     public abstract void getManagedChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
     public abstract void getMyChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
 

@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -27,6 +26,7 @@ import com.alex.atour.R;
 import com.alex.atour.models.ChampsListRecyclerAdapter;
 import com.alex.atour.ui.champ.ChampActivity;
 import com.alex.atour.ui.create.champ.ChampCreationActivity;
+import com.alex.atour.ui.list.search.SearchFragment;
 import com.alex.atour.ui.profile.ProfileActivity;
 
 
@@ -152,16 +152,17 @@ public class MainActivity extends AppCompatActivity implements
     private void showView(int len){
         //hide main list, show searchFragment
         if (len > 0){
-            Fragment fragment = getSearchFragment();
             tabsLayout.setVisibility(View.GONE);
             imgSearch.setVisibility(View.INVISIBLE);
             imgCancel.setVisibility(View.VISIBLE);
             frameLayout.setVisibility(View.VISIBLE);
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_layout, fragment)
+                    .replace(R.id.frame_layout,  getSearchFragment())
                     .commitNow();
         }else{
+            searchFragment.setSearchQuery("");
+
             //hide searchFragment, show main list
             tabsLayout.setVisibility(View.VISIBLE);
             imgSearch.setVisibility(View.VISIBLE);
@@ -183,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void onClickCancel(View view) {
+        searchFragment.setSearchQuery("");
         etSearch.setText("");
     }
 }
