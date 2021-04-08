@@ -30,12 +30,14 @@ public abstract class DBManager {
     public abstract boolean checkUserAuth();
     public abstract void signOut();
 
-    public abstract void login(String login, String password, IRequestListener listener);
-    public abstract void registration(User user, String password, IRequestListener listener);
-    public abstract void sendMembershipRequest(MembershipRequest memReq, IRequestListener listener);
-    public abstract void getUserData(String userID, IUserInfoListener listener);
-    public abstract void createNewChampRequest(ChampInfo champInfo, IRequestListener listener);
-    public abstract void getChampsList(IChampsInfoListener listener);
+    public abstract void login(String login, String password, IRequestListener listener);//аутентификация
+    public abstract void registration(User user, String password, IRequestListener listener);//регистрация
+    public abstract void sendMembershipRequest(MembershipRequest memReq, IRequestListener listener);//создание заявки на чемпионат
+    public abstract void getUserData(String userID, IUserInfoListener listener);//регистрационные данные пользователя по айди
+    public abstract void createNewChamp(ChampInfo champInfo, IRequestListener listener);//создание чемпионата
+    public abstract void getChampsList(IChampsInfoListener listener);//общий список чемпионатов
+    public abstract void getManagedChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
+    public abstract void getMyChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
 
     public interface IRequestListener {
         void onSuccess();

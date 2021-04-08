@@ -2,23 +2,32 @@ package com.alex.atour.ui.champ;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alex.atour.DTO.ChampInfo;
+import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
+import com.alex.atour.ui.profile.ProfileActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ChampActivity extends AppCompatActivity {
 
-    private TextView tvResultInfo;
+    private TextView tvResultInfo, tvAdminFio;
     private Button btnSendRequest;
+    private ProgressBar pBar;
     private ChampInfo info;
+    private User admin;
+
+    private ChampViewModel viewModel;
 
     //todo: hide btnSendRequest
 
@@ -27,12 +36,29 @@ public class ChampActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_champ);
 
+        viewModel = new ViewModelProvider(this).get(ChampViewModel.class);
+
         //init ui
         tvResultInfo = findViewById(R.id.tv_result_info);
         btnSendRequest = findViewById(R.id.btn_send_request);
+        tvAdminFio = findViewById(R.id.tv_fio);
+        TextView tvError = findViewById(R.id.tv_error);
+        pBar = findViewById(R.id.progress_bar);
 
         //setting ChampInfo on UI
         setDataOnUI((ChampInfo) getIntent().getSerializableExtra("champInfo"));
+
+        //setting adminInfo
+        viewModel.getAdminLiveData().observe(this, user -> {
+            tvAdminFio.setText(user.getFio());
+            admin = user;
+        });
+        viewModel.getIsLoading().observe(this, isLoading->{
+            pBar.setVisibility(
+                    isLoading? View.VISIBLE: View.INVISIBLE
+            );
+        });
+        viewModel.getErrorMessage().observe(this, tvError::setText);
     }
 
     public void onClickBackBtn(View view) {
@@ -41,7 +67,7 @@ public class ChampActivity extends AppCompatActivity {
 
     public void onClickMemRequestBtn(View view) {
         Intent intent = new Intent(this, MembershipRequestActivity.class);
-        intent.putExtra("chamID", info.getChampID());//TODO: send real id
+        intent.putExtra("chamID", info.getChampID());
         startActivityForResult(intent, 1);
     }
 
@@ -56,8 +82,22 @@ public class ChampActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickShowProfile(View view){
+        if (admin == null) {
+            viewModel.requestError("Не удалось загрузить информацию об админестраторе");
+            return;
+        }
+
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("userInfo", admin);
+        startActivity(intent);
+    }
+
     private void setDataOnUI(ChampInfo info){
-        if (info == null) return;
+        if (info == null) {
+            viewModel.requestError("Не удалось загрузить информацию");
+            return;
+        }
         this.info = info;
 
         TextView tvTitle = findViewById(R.id.tv_title);
@@ -89,5 +129,8 @@ public class ChampActivity extends AppCompatActivity {
         if (info.isTypeAuto()) findViewById(R.id.cp_auto).setVisibility(View.VISIBLE);
         if (info.isTypeOther()) findViewById(R.id.cp_other).setVisibility(View.VISIBLE);
 
+
+        //request admin info
+        viewModel.requestAdminData(info.getAdminID());
     }
 }

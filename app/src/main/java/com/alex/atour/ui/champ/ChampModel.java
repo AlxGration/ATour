@@ -1,25 +1,26 @@
-package com.alex.atour.ui.list.my;
+package com.alex.atour.ui.champ;
 
 import com.alex.atour.DTO.ChampInfo;
+import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
 
 import java.util.ArrayList;
 
-public class MyChampsModel {
+public class ChampModel {
 
     private final DBManager db;
-    private final MyChampsViewModel viewModel;
+    private final ChampViewModel viewModel;
 
-    MyChampsModel(MyChampsViewModel viewModel){
+    ChampModel(ChampViewModel viewModel){
         this.viewModel = viewModel;
         db = DBManager.getInstance();
     }
 
-    public void requestChampsList(){
-        db.getMyChampsList(new DBManager.IChampsInfoListener() {
+    public void requestUserData(String adminID){
+        db.getUserData(adminID, new DBManager.IUserInfoListener() {
             @Override
-            public void onSuccess(ArrayList<ChampInfo> champsList) {
-                viewModel.requestSuccess(champsList);
+            public void onSuccess(User user) {
+                viewModel.setAdminData(user);
             }
             @Override
             public void onFailed(String msg) {

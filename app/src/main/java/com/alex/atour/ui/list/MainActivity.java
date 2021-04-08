@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alex.atour.DTO.ChampInfo;
+import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.models.ChampsListRecyclerAdapter;
 import com.alex.atour.ui.champ.ChampActivity;
@@ -143,9 +144,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void onClickProfile(View view) {
-        startActivity(
-                new Intent(this, ProfileActivity.class)
-        );
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("userID", User.MyID);//userID or "MY" (comparing in FirebaseDB.class)
+        startActivity(intent);
     }
 
     private void showView(int len){

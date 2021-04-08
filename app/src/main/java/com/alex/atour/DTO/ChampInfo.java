@@ -3,7 +3,7 @@ package com.alex.atour.DTO;
 import java.io.Serializable;
 
 public class ChampInfo implements Serializable {
-    String id, title, champID, dataFrom, dataTo, city, adminID;
+    String title, champID, dataFrom, dataTo, city, adminID;
     int status;
     boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
 
@@ -15,14 +15,6 @@ public class ChampInfo implements Serializable {
 
     public void setAdminID(String adminID) {
         this.adminID = adminID;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getTitle() {

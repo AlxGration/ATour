@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.alex.atour.DTO.Champ;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.MembershipRequest;
+import com.alex.atour.DTO.RequestLinks;
 import com.alex.atour.DTO.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -86,13 +87,23 @@ public class FirebaseDB extends DBManager{
         memReq.setId(keyID);
         memReq.setUserID(user.getUid());
 
-        dbRef.child(keyID).setValue(memReq).addOnCompleteListener(task -> {
+        RequestLinks tmp = new RequestLinks(memReq.getChampID(), memReq.getUserID());
+
+        ref.child(keyID).setValue(tmp).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
-                if (listener!=null) listener.onSuccess();
+                DatabaseReference champRef = getDbRef().child(CHAMP_TABLE).child(memReq.getChampID()).child(REQUEST_TABLE);
+                champRef.child(keyID).setValue(memReq).addOnCompleteListener(t -> {
+                    if (t.isSuccessful()){
+                        if (listener!=null) listener.onSuccess();
+                    }else{
+                        if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
+                    }
+                });
             }else{
                 if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
             }
         });
+
     }
 
     @Override
@@ -117,7 +128,7 @@ public class FirebaseDB extends DBManager{
     }
 
     @Override
-    public void createNewChampRequest(ChampInfo champInfo, IRequestListener listener) {
+    public void createNewChamp(ChampInfo champInfo, IRequestListener listener) {
         String userID = "";
         userID = getUser().getUid();
 
@@ -131,15 +142,12 @@ public class FirebaseDB extends DBManager{
 
         //create champInfoID in ChampsInfoTable
         DatabaseReference champInfoRef = getDbRef().child(CHAMP_INFO_TABLE);
-        String champInfoID = champInfoRef.push().getKey();
-        champInfo.setId(champInfoID);   // id
         champInfo.setChampID(champID);  // id чемпионата
         champInfo.setAdminID(userID);   // id организатора
         //create champInfoRecord in ChampsInfoTable
-        champInfoRef.child(champInfoID).setValue(champInfo);
+        champInfoRef.child(champID).setValue(champInfo);
 
         //create champRecord in ChampsTable
-        champ.setInfoID(champInfoID);
         champRef.child(champID).setValue(champ).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 if (listener!=null) listener.onSuccess();
@@ -161,6 +169,62 @@ public class FirebaseDB extends DBManager{
                 }
 
                 if (listener!=null) listener.onSuccess(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getManagedChampsList(IChampsInfoListener listener) {
+        Query query = getDbRef().child(CHAMP_INFO_TABLE).orderByChild("adminID").equalTo(getUser().getUid());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<ChampInfo> list = new ArrayList<ChampInfo>((int)snapshot.getChildrenCount());
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate champs
+                    list.add(snap.getValue(ChampInfo.class));
+                }
+
+                if (listener!=null) listener.onSuccess(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getMyChampsList(IChampsInfoListener listener) {
+        Query query = getDbRef().child(REQUEST_TABLE).orderByChild("userID").equalTo(getUser().getUid());
+        query.addValueEventListener(new ValueEventListener() { //запрос на чемпионаты, на которые пользователь подал заявку
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                ArrayList<ChampInfo> list = new ArrayList<ChampInfo>((int)snapshot.getChildrenCount());
+                DatabaseReference chInfoRef = getDbRef().child(CHAMP_INFO_TABLE);
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
+                    String champInfoID = snap.getValue(RequestLinks.class).champInfoID;
+
+                    Query q = chInfoRef.orderByChild("champID").equalTo(champInfoID);
+                    q.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snp) {//getting champ info
+                            for (DataSnapshot sp: snp.getChildren()){ 
+                                list.add(sp.getValue(ChampInfo.class));
+                            }
+                            if (listener!=null) listener.onSuccess(list);
+                        }
+                        @Override public void onCancelled(@NonNull DatabaseError error) {
+                            if (listener!=null) listener.onFailed(error.getMessage());
+                        }
+                    });
+                }
             }
 
             @Override

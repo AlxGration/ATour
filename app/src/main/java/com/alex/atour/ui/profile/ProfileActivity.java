@@ -55,8 +55,15 @@ public class ProfileActivity extends AppCompatActivity {
         viewModel.getPhone().observe(this, tvPhone::setText);
 
 
-        //if userID from getIntent == User.MyID
-        viewModel.loadProfile(User.MyID);//userID or "MY" (comparing in FirebaseDB.class)
+
+        User u = (User) getIntent().getSerializableExtra("userInfo");
+        if (u == null){                                                     //если открываю свой провиль
+            String userID = getIntent().getStringExtra("userID");
+            viewModel.loadProfile(userID);
+            btnSignOut.setVisibility(View.VISIBLE);
+        }else{                                                              //если чей то другой
+            viewModel.setUserInfo(u);
+        }
     }
 
     public void onClickBackBtn(View view) {
@@ -64,9 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onClickSignOut(View view) {// выход из аккаунта
-        //todo:sign out doesn't work
         viewModel.signOut();
-
 
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

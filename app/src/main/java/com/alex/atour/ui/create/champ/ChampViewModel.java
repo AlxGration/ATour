@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.alex.atour.DTO.ChampInfo;
-import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.models.BaseViewModel;
 import com.alex.atour.models.StatusConverter;
@@ -72,7 +71,7 @@ public class ChampViewModel extends BaseViewModel {
         champInfo.setStatus(StatusConverter.statusToInt(status));
 
         setIsLoading(true);
-        db.createNewChampRequest(champInfo, new DBManager.IRequestListener() {
+        db.createNewChamp(champInfo, new DBManager.IRequestListener() {
             @Override
             public void onSuccess() {
                 isRequestSuccess.setValue(true);

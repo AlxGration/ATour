@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/li_size"
     android:background="@drawable/bg_grey"
+    android:onClick="onClickShowProfile"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -31,16 +32,76 @@
         app:layout_constraintStart_toEndOf="@id/img_role"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <TextView
-        android:id="@+id/tv_sub_name"
+    <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/black"
-        android:textSize="@dimen/sub_text_size"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@id/tv_fio"
-        app:layout_constraintTop_toBottomOf="@id/tv_fio" />
-
-
+        app:layout_constraintTop_toBottomOf="@id/tv_fio">
+        <ImageView
+            android:id="@+id/img_walk"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_walk"
+            android:layout_marginRight="5dp"
+            android:visibility="invisible"
+            app:tint="@color/grey" />
+        <ImageView
+            android:id="@+id/img_ski"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_ski"
+            android:layout_marginRight="5dp"
+            android:visibility="invisible"
+            app:tint="@color/grey" />
+        <ImageView
+            android:id="@+id/img_hike"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_hike"
+            android:layout_marginRight="5dp"
+            android:visibility="invisible"
+            app:tint="@color/grey" />
+        <ImageView
+            android:id="@+id/img_water"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_water"
+            android:layout_marginRight="5dp"
+            android:visibility="invisible"
+            app:tint="@color/grey" />
+        <ImageView
+            android:id="@+id/img_speleo"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_speleo"
+            android:layout_marginRight="5dp"
+            android:visibility="invisible"
+            app:tint="@color/grey" />
+        <ImageView
+            android:id="@+id/img_bike"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_bike"
+            android:layout_marginRight="5dp"
+            android:visibility="invisible"
+            app:tint="@color/grey" />
+        <ImageView
+            android:id="@+id/img_auto"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_auto"
+            android:layout_marginRight="5dp"
+            android:visibility="invisible"
+            app:tint="@color/grey" />
+        <ImageView
+            android:id="@+id/img_other"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_other"
+            android:layout_marginRight="5dp"
+            android:visibility="invisible"
+            app:tint="@color/grey" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

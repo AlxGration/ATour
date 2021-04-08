@@ -2,6 +2,7 @@ package com.alex.atour.ui.profile;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.alex.atour.DTO.User;
 import com.alex.atour.models.BaseViewModel;
 
 public class ProfileViewModel extends BaseViewModel {
@@ -29,12 +30,6 @@ public class ProfileViewModel extends BaseViewModel {
     public MutableLiveData<String> getEmail() { return email; }
     public MutableLiveData<String> getPhone() { return phone; }
 
-    public void setSecName(String s) { secName.setValue(s); }
-    public void setName(String s) { name.setValue(s); }
-    public void setCity(String s) { city.setValue(s); }
-    public void setEmail(String s) { email.setValue(s); }
-    public void setPhone(String s) { phone.setValue(s); }
-
     public void loadProfile(String userID){
         setIsLoading(true);
         setErrorMessage("");
@@ -42,13 +37,21 @@ public class ProfileViewModel extends BaseViewModel {
         model.requestUserProfile(userID);
     }
 
-    void requestProfileSuccess(){
-        setIsLoading(false);
-        setErrorMessage("");
-    }
     void requestProfileError(String msg){
         setIsLoading(false);
         setErrorMessage(msg);
+    }
+
+    void setUserInfo(User user){
+        setIsLoading(false);
+        setErrorMessage("");
+
+        String[] fio = user.getFio().split(" ");
+        secName.setValue(fio[0]);
+        name.setValue(fio[1]+" "+fio[2]);
+        city.setValue(user.getCity());
+        email.setValue(user.getEmail());
+        phone.setValue("+7 "+user.getPhone());
     }
 
     void signOut(){

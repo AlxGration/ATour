@@ -20,13 +20,7 @@ public class ProfileModel {
         db.getUserData(userID, new DBManager.IUserInfoListener() {
             @Override
             public void onSuccess(User user) {
-                String[] fio = user.getFio().split(" ");
-                viewModel.setSecName(fio[0]);
-                viewModel.setName(fio[1]+" "+fio[2]);
-                viewModel.setCity(user.getCity());
-                viewModel.setEmail(user.getEmail());
-                viewModel.setPhone("+7 "+user.getPhone());
-                viewModel.requestProfileSuccess();
+                viewModel.setUserInfo(user);
             }
 
             @Override

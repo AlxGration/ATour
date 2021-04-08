@@ -1,22 +1,22 @@
-package com.alex.atour.ui.list.my;
+package com.alex.atour.ui.list.manage;
 
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.db.DBManager;
 
 import java.util.ArrayList;
 
-public class MyChampsModel {
+public class ManagedChampsModel {
 
     private final DBManager db;
-    private final MyChampsViewModel viewModel;
+    private final ManagedChampsViewModel viewModel;
 
-    MyChampsModel(MyChampsViewModel viewModel){
+    ManagedChampsModel(ManagedChampsViewModel viewModel){
         this.viewModel = viewModel;
         db = DBManager.getInstance();
     }
 
     public void requestChampsList(){
-        db.getMyChampsList(new DBManager.IChampsInfoListener() {
+        db.getManagedChampsList(new DBManager.IChampsInfoListener() {
             @Override
             public void onSuccess(ArrayList<ChampInfo> champsList) {
                 viewModel.requestSuccess(champsList);

@@ -7,29 +7,29 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.R;
-import com.alex.atour.ui.list.my.MyChampsViewModel;
+import com.alex.atour.models.ChampsListRecyclerAdapter;
+import com.alex.atour.ui.list.MainActivity;
+
+import java.util.ArrayList;
 
 
 public class ManagedChampsFragment extends Fragment{
 
-    //private MyChampsViewModel viewModel;
+    private ManagedChampsViewModel viewModel;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //viewModel = new ViewModelProvider(this).get(MyChampsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ManagedChampsViewModel.class);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //viewModel.getFavouriteStocksFromDB();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,16 +38,18 @@ public class ManagedChampsFragment extends Fragment{
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_champs_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        /*
-        viewModel.getFavouriteStocksMutableLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Stock>>() {
+
+        viewModel.getManagedChampsLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<ChampInfo>>() {
             @Override
-            public void onChanged(ArrayList<Stock> stocks) {
-                StocksListRecyclerAdapter adapter = new StocksListRecyclerAdapter(stocks);
-                adapter.setOnItemClickListener(((MainActivity)getActivity()));
+            public void onChanged(ArrayList<ChampInfo> champsList) {
+                ChampsListRecyclerAdapter adapter = new ChampsListRecyclerAdapter(champsList);
+                ChampsListRecyclerAdapter.setOnItemClickListener(((MainActivity)getActivity()));
                 recyclerView.setAdapter(adapter);
             }
         });
-        */
+
+        viewModel.requestChampsList();
+
         return view;
     }
 }
