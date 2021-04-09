@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.alex.atour.R;
 import com.alex.atour.models.ChampsListRecyclerAdapter;
 import com.alex.atour.models.RequestsListRecyclerAdapter;
 import com.alex.atour.ui.list.MainActivity;
+import com.alex.atour.ui.profile.ProfileActivity;
 
 public class RequestsListActivity extends AppCompatActivity implements RequestsListRecyclerAdapter.IonItemClickListener {
 
@@ -57,7 +59,11 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
 
     @Override
     public void startProfileActivityWith(MembershipRequest req) {
-        Toast.makeText(this, "Profile "+req.getUserFIO(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(RequestsListActivity.this, ProfileActivity.class);
+        intent.putExtra("request", req);
+        intent.putExtra("userID", req.getUserID());
+
+        startActivity(intent);
     }
 
     @Override

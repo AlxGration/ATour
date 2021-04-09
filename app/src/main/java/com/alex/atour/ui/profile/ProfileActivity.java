@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.ui.login.LoginActivity;
@@ -57,12 +58,20 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         User u = (User) getIntent().getSerializableExtra("userInfo");
-        if (u == null){                                                     //если открываю свой провиль
-            String userID = getIntent().getStringExtra("userID");
+        MembershipRequest req = (MembershipRequest) getIntent().getSerializableExtra("request");
+        String userID = getIntent().getStringExtra("userID");
+
+        if (req != null){   //если пришли на этот экран для просмотра документов/заявки
+            //todo:show MembershipRequest + requestUserInfo by userID
             viewModel.loadProfile(userID);
-            btnSignOut.setVisibility(View.VISIBLE);
-        }else{                                                              //если чей то другой
-            viewModel.setUserInfo(u);
+
+        }else {
+            if (u == null) {                                                     //если открываю свой провиль
+                viewModel.loadProfile(userID);
+                btnSignOut.setVisibility(View.VISIBLE);
+            } else {                                                              //если чей то другой
+                viewModel.setUserInfo(u);
+            }
         }
     }
 
