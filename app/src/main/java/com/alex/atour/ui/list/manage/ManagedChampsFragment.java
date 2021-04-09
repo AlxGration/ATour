@@ -4,23 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.R;
 import com.alex.atour.models.ChampsListRecyclerAdapter;
 import com.alex.atour.ui.list.ChampsListViewModel;
 import com.alex.atour.ui.list.MainActivity;
-
-import java.util.ArrayList;
 
 
 public class ManagedChampsFragment extends Fragment{
@@ -36,10 +31,10 @@ public class ManagedChampsFragment extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_champs_list, container, false);
+        View view = inflater.inflate(R.layout.list, container, false);
 
         TextView tvError = view.findViewById(R.id.tv_error);
-        RecyclerView recyclerView = view.findViewById(R.id.rv_champs_list);
+        RecyclerView recyclerView = view.findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         viewModel.getManagedChampsLiveData().observe(getViewLifecycleOwner(), champsList -> {

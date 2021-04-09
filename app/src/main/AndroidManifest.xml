@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.alex.atour">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,8 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ATour">
-        <activity android:name=".ui.create.champ.ChampCreationActivity"
+        <activity android:name=".ui.requests.RequestsListActivity"
             android:theme="@style/Theme.ATour.NoActionBar"/>
+        <activity
+            android:name=".ui.create.champ.ChampCreationActivity"
+            android:theme="@style/Theme.ATour.NoActionBar" />
         <activity
             android:name=".ui.list.MainActivity"
             android:theme="@style/Theme.ATour.NoActionBar" />
@@ -39,7 +44,5 @@
             android:label="@string/request"
             android:theme="@style/Theme.ATour.NoActionBar" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

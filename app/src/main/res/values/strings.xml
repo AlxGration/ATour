@@ -37,6 +37,9 @@
     <string name="list">Список</string>
     <string name="manage">Управляю</string>
     <string name="sign_out">Выйти</string>
+    <string name="deny">Отказать</string>
+    <string name="accept">Принять</string>
+    <string name="requests">Заявки</string>
 
     <string-array name="statuses">
         <item>Чемпионат</item>

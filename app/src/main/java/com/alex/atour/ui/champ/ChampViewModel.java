@@ -13,13 +13,19 @@ public class ChampViewModel extends BaseViewModel {
     private final ChampModel model;
 
     private final MutableLiveData<User> admin;
+    private final MutableLiveData<Integer> role;
+    private final MutableLiveData<Integer> state;
 
     public ChampViewModel(){
         admin = new MutableLiveData<>();
+        state = new MutableLiveData<>();
+        role = new MutableLiveData<>();
         model = new ChampModel(this);
     }
 
     public MutableLiveData<User> getAdminLiveData() { return admin; }
+    public MutableLiveData<Integer> getRoleLiveData() { return role; }
+    public MutableLiveData<Integer> getStateLiveData() { return state; }
 
     public void requestAdminData(String adminID){
         setIsLoading(true);
@@ -34,5 +40,12 @@ public class ChampViewModel extends BaseViewModel {
     void requestError(String msg){
         setIsLoading(false);
         setErrorMessage(msg);
+    }
+
+    void setRole(int role){
+        this.role.setValue(role);
+    }
+    void setState(int state){
+        this.state.setValue(state);
     }
 }

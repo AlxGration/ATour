@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 public class FirebaseDB extends DBManager{
 
+    private static final int LIMIT_RECS_COUNT = 30;
     private final String USER_TABLE = "Users";// таблица пользователей
     private final String REQUEST_TABLE = "Requests";// запросы на участие чемпионате
     private final String CHAMP_TABLE = "Champs";//основная таблица чемпионата(документы,судьи,участници,заявки,оценки)
@@ -44,17 +45,20 @@ public class FirebaseDB extends DBManager{
                 .addOnCompleteListener(getExecutor(), task ->  {
                         if (task.isSuccessful()) {
                             user = getUser();
+                            getPrefs().setUserID(user.getUid());
                             if (listener!=null) listener.onSuccess();
                         } else {
                             if (listener!=null) listener.onFailed("Ошибка аутентификации");
                         }
                     }
                 );
+
     }
 
     public void signOut(){
         getAuth().signOut();
         user = null;
+        getPrefs().clearUserData();
     }
 
     public void registration(User _user, String password, IRequestListener listener) {
@@ -80,30 +84,42 @@ public class FirebaseDB extends DBManager{
 
     @Override
     public void sendMembershipRequest(MembershipRequest memReq, IRequestListener listener) {
-        DatabaseReference ref = getDbRef().child(REQUEST_TABLE);
-        String keyID = ref.push().getKey();
 
-        user = getUser();
-        memReq.setId(keyID);
-        memReq.setUserID(user.getUid());
+        String userID = getUser().getUid();
 
-        RequestLinks tmp = new RequestLinks(memReq.getChampID(), memReq.getUserID());
+        Query query = getDbRef().child(USER_TABLE).child(userID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User u = snapshot.getValue(User.class);
+                DatabaseReference ref = getDbRef().child(REQUEST_TABLE);
+                String keyID = ref.push().getKey();
+                memReq.setId(keyID);
+                memReq.setUserFIO(u.getFio());
+                memReq.setUserID(userID);
+                RequestLinks tmp = new RequestLinks(memReq.getChampID(), memReq.getUserID());
 
-        ref.child(keyID).setValue(tmp).addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                DatabaseReference champRef = getDbRef().child(CHAMP_TABLE).child(memReq.getChampID()).child(REQUEST_TABLE);
-                champRef.child(keyID).setValue(memReq).addOnCompleteListener(t -> {
-                    if (t.isSuccessful()){
-                        if (listener!=null) listener.onSuccess();
+                ref.child(keyID).setValue(tmp).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        DatabaseReference champRef = getDbRef().child(CHAMP_TABLE).child(memReq.getChampID()).child(REQUEST_TABLE);
+                        champRef.child(keyID).setValue(memReq).addOnCompleteListener(t -> {
+                            if (t.isSuccessful()){
+                                if (listener!=null) listener.onSuccess();
+                            }else{
+                                if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
+                            }
+                        });
                     }else{
                         if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
                     }
                 });
-            }else{
-                if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
             }
         });
-
     }
 
     @Override
@@ -159,7 +175,7 @@ public class FirebaseDB extends DBManager{
 
     @Override
     public void getChampsList(IChampsInfoListener listener) {
-        Query query = getDbRef().child(CHAMP_INFO_TABLE);
+        Query query = getDbRef().child(CHAMP_INFO_TABLE).limitToLast(LIMIT_RECS_COUNT);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -254,6 +270,28 @@ public class FirebaseDB extends DBManager{
             }
         });
     }
+
+    @Override
+    public void getMembershipRequestsList(String champID, IMembershipRequestsListListener listener) {
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(REQUEST_TABLE);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<MembershipRequest> list = new ArrayList<>((int)snapshot.getChildrenCount());
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
+                    list.add(snap.getValue(MembershipRequest.class));
+                }
+
+                if (listener!=null) listener.onSuccess(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
+            }
+        });
+    }
+
 
     private FirebaseUser getUser(){
         if (user == null){ user = getAuth().getCurrentUser(); }

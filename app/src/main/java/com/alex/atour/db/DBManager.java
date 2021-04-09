@@ -13,6 +13,7 @@ public abstract class DBManager {
 
     private static DBManager db;
     private Activity executor;
+    private PrefsDB prefs;
 
     public Activity getExecutor() {
         return executor;
@@ -20,12 +21,15 @@ public abstract class DBManager {
 
     public void setExecutor(Activity executor) {
         this.executor = executor;
+        prefs = new PrefsDB(executor.getApplicationContext());
     }
 
     public static DBManager getInstance(){
         if (db == null) db =  new FirebaseDB();
         return db;
     }
+
+    public PrefsDB getPrefs(){return prefs;}
 
     public abstract boolean checkUserAuth();
     public abstract void signOut();
@@ -39,18 +43,22 @@ public abstract class DBManager {
     public abstract void getChampsList(String searchRequest, IChampsInfoListener listener);//общий список чемпионатов
     public abstract void getManagedChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
     public abstract void getMyChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
+    public abstract void getMembershipRequestsList(String champID, IMembershipRequestsListListener listener);//заявки на чемпионат(для админа)
 
     public interface IRequestListener {
         void onSuccess();
         void onFailed(String msg);
     }
-
     public interface IUserInfoListener {
         void onSuccess(User user);
         void onFailed(String msg);
     }
     public interface IChampsInfoListener{
         void onSuccess(ArrayList<ChampInfo> champsList);
+        void onFailed(String msg);
+    }
+    public interface IMembershipRequestsListListener{
+        void onSuccess(ArrayList<MembershipRequest> requests);
         void onFailed(String msg);
     }
 

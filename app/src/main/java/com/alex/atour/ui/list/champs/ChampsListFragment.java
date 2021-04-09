@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,10 +31,10 @@ public class ChampsListFragment extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_champs_list, container, false);
+        View view = inflater.inflate(R.layout.list, container, false);
 
         TextView tvError = view.findViewById(R.id.tv_error);
-        RecyclerView recyclerView = view.findViewById(R.id.rv_champs_list);
+        RecyclerView recyclerView = view.findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         viewModel.getChampsLiveData().observe(getViewLifecycleOwner(), champsList -> {

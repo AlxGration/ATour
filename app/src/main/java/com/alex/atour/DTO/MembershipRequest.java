@@ -1,7 +1,7 @@
 package com.alex.atour.DTO;
 
 public class MembershipRequest {
-    String id, userID, comment, cloudLink, docsLink, champID;
+    String id, userID, comment, cloudLink, docsLink, champID, userFIO;
     int role;
     boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
 
@@ -9,6 +9,14 @@ public class MembershipRequest {
 
     public String getId() {
         return id;
+    }
+
+    public String getUserFIO() {
+        return userFIO;
+    }
+
+    public void setUserFIO(String userFIO) {
+        this.userFIO = userFIO;
     }
 
     public void setId(String id) {

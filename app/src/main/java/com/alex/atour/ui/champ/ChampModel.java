@@ -1,5 +1,7 @@
 package com.alex.atour.ui.champ;
 
+import android.util.Log;
+
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
@@ -21,6 +23,11 @@ public class ChampModel {
             @Override
             public void onSuccess(User user) {
                 viewModel.setAdminData(user);
+                //todo: remove this code from here
+                String curUserID = db.getPrefs().getUserID();
+                if (curUserID.equals(user.getId())){  //если айди совпадают, то админ-мод
+                    viewModel.setRole(0);
+                }
             }
             @Override
             public void onFailed(String msg) {
@@ -28,4 +35,14 @@ public class ChampModel {
             }
         });
     }
+
+    //todo: запрос статуса чела в этом ЧМ
+
+    /*
+
+    User curUser = db.getPrefs().getUserInfo();
+                if (curUser.getId().equals(user.getId())){  //если айди совпадают, то админ-мод
+                    viewModel.setRole(0);
+                }
+     */
 }

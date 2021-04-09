@@ -2,7 +2,6 @@ package com.alex.atour.ui.champ;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -17,15 +16,16 @@ import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
-import com.google.firebase.auth.FirebaseAuth;
+import com.alex.atour.ui.requests.RequestsListActivity;
 
 public class ChampActivity extends AppCompatActivity {
 
-    private TextView tvResultInfo, tvAdminFio;
+    private TextView tvMessage, tvAdminFio;
     private Button btnSendRequest;
     private ProgressBar pBar;
     private ChampInfo info;
     private User admin;
+    private int role, state;
 
     private ChampViewModel viewModel;
 
@@ -39,7 +39,7 @@ public class ChampActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(ChampViewModel.class);
 
         //init ui
-        tvResultInfo = findViewById(R.id.tv_result_info);
+        tvMessage = findViewById(R.id.tv_message);
         btnSendRequest = findViewById(R.id.btn_send_request);
         tvAdminFio = findViewById(R.id.tv_fio);
         TextView tvError = findViewById(R.id.tv_error);
@@ -59,6 +59,40 @@ public class ChampActivity extends AppCompatActivity {
             );
         });
         viewModel.getErrorMessage().observe(this, tvError::setText);
+
+        //TODO: доделать логику показа экранов в зависимости от роли
+        viewModel.getRoleLiveData().observe(this, role->{
+            this.role = role;
+
+            if (role == 0){         // admin mode
+                btnSendRequest.setOnClickListener(onClickRequests);
+                btnSendRequest.setText("Заявки");
+            }
+        });
+
+        viewModel.getStateLiveData().observe(this, state->{
+            this.state = state;
+
+            //TODO: доделать логику показа экранов в зависимости от роли
+
+            switch (state){
+                case 1:// подал заявку
+                    tvMessage.setText(R.string.request_pending); break;
+                case 2:// заявка не принята
+                    tvMessage.setText(R.string.request_not_accepted); break;
+                case 3:// прием документов
+
+                    break;
+                case 4:// документы приняты, ожидайте результатов
+                    tvMessage.setText(R.string.results_waiting);
+                    if (role == 1){//участникам выводятся результаты
+
+                    }else{//судьям приходят отчеты
+
+                    }
+                    break;
+            }
+        });
     }
 
     public void onClickBackBtn(View view) {
@@ -67,7 +101,7 @@ public class ChampActivity extends AppCompatActivity {
 
     public void onClickMemRequestBtn(View view) {
         Intent intent = new Intent(this, MembershipRequestActivity.class);
-        intent.putExtra("chamID", info.getChampID());
+        intent.putExtra("champID", info.getChampID());
         startActivityForResult(intent, 1);
     }
 
@@ -77,7 +111,8 @@ public class ChampActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null){
             //todo: different views for roles
             // for member
-            tvResultInfo.setText(R.string.request_pending);
+            // $send one more request to approve state$
+            tvMessage.setText(R.string.request_pending);
             btnSendRequest.setVisibility(View.INVISIBLE);
         }
     }
@@ -133,4 +168,14 @@ public class ChampActivity extends AppCompatActivity {
         //request admin info
         viewModel.requestAdminData(info.getAdminID());
     }
+
+    // Для админа, переход на активность для просмотра заявок на чемпионат
+    private View.OnClickListener onClickRequests = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(ChampActivity.this, RequestsListActivity.class);
+            intent.putExtra("champID", info.getChampID());
+            startActivity(intent);
+        }
+    };
 }

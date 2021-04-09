@@ -32,12 +32,12 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_champs_list, container, false);
+        View view = inflater.inflate(R.layout.list, container, false);
 
         TextView tvError = view.findViewById(R.id.tv_error);
         ProgressBar pBar = view.findViewById(R.id.progress_bar);
 
-        RecyclerView recyclerView = view.findViewById(R.id.rv_champs_list);
+        RecyclerView recyclerView = view.findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         viewModel.getFoundChampsListLiveData().observe(getViewLifecycleOwner(), champsList -> {

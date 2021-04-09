@@ -36,7 +36,8 @@ public class MembershipRequestActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(MemReqViewModel.class);
 
         memReq = new MembershipRequest();
-        memReq.setChampID(getIntent().getStringExtra("chamID"));
+        memReq.setChampID(getIntent().getStringExtra("champID"));
+        memReq.setRole(1);//по умолчанию это участник
 
         //init ui
         TextView tvError = findViewById(R.id.tv_error);
@@ -49,9 +50,8 @@ public class MembershipRequestActivity extends AppCompatActivity {
         rgRole.setOnCheckedChangeListener((radioGroup, id)->{
             isReferee = (id==R.id.rb_referee);
 
-            memReq.setRole(isReferee? 2: 1);//2 - referee, 1 - member
-            etLink.setVisibility(
-                    isReferee?
+            memReq.setRole(isReferee? 2: 1);//1 - member, 2 - referee
+            etLink.setVisibility( isReferee?
                             View.INVISIBLE:
                             View.VISIBLE
             );
