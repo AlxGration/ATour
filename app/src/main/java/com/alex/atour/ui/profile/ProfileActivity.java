@@ -1,6 +1,7 @@
 package com.alex.atour.ui.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -22,9 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ProfileActivity extends AppCompatActivity {
 
     private ProfileViewModel viewModel;
-    private ProgressBar pBar;
-    private Button btnSignOut;
-    private TextView tvError, tvName, tvSecName, tvCity, tvEmail, tvPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +31,19 @@ public class ProfileActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
-        btnSignOut = findViewById(R.id.btn_sign_out);
-        tvError = findViewById(R.id.tv_error);
-        tvName = findViewById(R.id.tv_name);
-        tvSecName = findViewById(R.id.tv_sec_name);
-        tvCity = findViewById(R.id.tv_city);
-        tvEmail = findViewById(R.id.tv_email);
-        tvPhone = findViewById(R.id.tv_phone);
-        pBar = findViewById(R.id.progress_bar);
+        Button btnSignOut = findViewById(R.id.btn_sign_out);
+        TextView tvError = findViewById(R.id.tv_error);
+        TextView tvName = findViewById(R.id.tv_name);
+        TextView tvSecName = findViewById(R.id.tv_sec_name);
+        TextView tvCity = findViewById(R.id.tv_city);
+        TextView tvEmail = findViewById(R.id.tv_email);
+        TextView tvPhone = findViewById(R.id.tv_phone);
+        ProgressBar pBar = findViewById(R.id.progress_bar);
 
         viewModel.getIsLoading().observe(this, isLoading->{
-            pBar.setVisibility(
-                    isLoading? View.VISIBLE: View.INVISIBLE
+            pBar.setVisibility(isLoading?
+                    View.VISIBLE:
+                    View.INVISIBLE
             );
         });
         viewModel.getErrorMessage().observe(this, tvError::setText);
@@ -62,14 +61,13 @@ public class ProfileActivity extends AppCompatActivity {
         String userID = getIntent().getStringExtra("userID");
 
         if (req != null){   //если пришли на этот экран для просмотра документов/заявки
-            //todo:show MembershipRequest + requestUserInfo by userID
-            viewModel.loadProfile(userID);
-
+            viewModel.loadProfile(userID);  // показ регистрационных данных пользователя
+            showRequest(req);               // показ заявки на участие / доков
         }else {
-            if (u == null) {                                                     //если открываю свой провиль
+            if (u == null) {                              // если открываю свой профиль
                 viewModel.loadProfile(userID);
                 btnSignOut.setVisibility(View.VISIBLE);
-            } else {                                                              //если чей то другой
+            } else {                                      // если чей то другой(напр, админа)
                 viewModel.setUserInfo(u);
             }
         }
@@ -85,5 +83,35 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    private void showRequest(MembershipRequest req){
+        TextView tvLink = findViewById(R.id.tv_link);
+        TextView tvComment = findViewById(R.id.tv_comment);
+
+        tvLink.setText(req.getCloudLink());
+        tvComment.setText(req.getComment());
+
+        //role
+        TextView tvTitle = findViewById(R.id.tv_title);
+        if (req.getRole() == 1){
+            tvTitle.setText(R.string.member);
+        }else{
+            tvTitle.setText(R.string.referee);
+        }
+
+        //types
+        if (req.isTypeWalk()) findViewById(R.id.cp_walk).setVisibility(View.VISIBLE);
+        if (req.isTypeSki()) findViewById(R.id.cp_ski).setVisibility(View.VISIBLE);
+        if (req.isTypeHike()) findViewById(R.id.cp_hike).setVisibility(View.VISIBLE);
+        if (req.isTypeWater()) findViewById(R.id.cp_water).setVisibility(View.VISIBLE);
+
+        if (req.isTypeSpeleo()) findViewById(R.id.cp_speleo).setVisibility(View.VISIBLE);
+        if (req.isTypeBike()) findViewById(R.id.cp_bike).setVisibility(View.VISIBLE);
+        if (req.isTypeAuto()) findViewById(R.id.cp_auto).setVisibility(View.VISIBLE);
+        if (req.isTypeOther()) findViewById(R.id.cp_other).setVisibility(View.VISIBLE);
+
+        ConstraintLayout layout = findViewById(R.id.layout);
+        layout.setVisibility(View.VISIBLE);
     }
 }

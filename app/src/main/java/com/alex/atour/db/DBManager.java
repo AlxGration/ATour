@@ -45,6 +45,9 @@ public abstract class DBManager {
     public abstract void getMyChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
     public abstract void getMembershipRequestsList(String champID, IMembershipRequestsListListener listener);//заявки на чемпионат(для админа)
 
+    public abstract void acceptRequest(MembershipRequest req, IRequestListener listener);// одобрение заявки админом
+    public abstract void denyRequest(MembershipRequest req, IRequestListener listener);// отмена заявки админом
+
     public interface IRequestListener {
         void onSuccess();
         void onFailed(String msg);

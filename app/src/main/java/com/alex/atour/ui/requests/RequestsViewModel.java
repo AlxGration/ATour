@@ -45,4 +45,23 @@ public class RequestsViewModel extends BaseViewModel {
         setIsLoading(false);
         setErrorMessage(msg);
     }
+
+    public void acceptRequest(MembershipRequest req){
+        db.acceptRequest(req, new DBManager.IRequestListener() {
+            @Override
+            public void onSuccess() { }
+
+            @Override
+            public void onFailed(String msg) { setErrorMessage(msg); }
+        });
+    }
+    public void denyRequest(MembershipRequest req){
+        db.denyRequest(req, new DBManager.IRequestListener() {
+            @Override
+            public void onSuccess() { }
+
+            @Override
+            public void onFailed(String msg) { setErrorMessage(msg); }
+        });
+    }
 }

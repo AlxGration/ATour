@@ -2,6 +2,7 @@ package com.alex.atour.ui.profile;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.BaseViewModel;
 
@@ -17,10 +18,11 @@ public class ProfileViewModel extends BaseViewModel {
 
     public ProfileViewModel(){
         secName = new MutableLiveData<>();
-        name = new MutableLiveData<>();
-        city = new MutableLiveData<>();
         email = new MutableLiveData<>();
         phone = new MutableLiveData<>();
+        name = new MutableLiveData<>();
+        city = new MutableLiveData<>();
+
         model = new ProfileModel(this);
     }
 

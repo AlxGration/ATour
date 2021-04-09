@@ -41,8 +41,9 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
         champID = getIntent().getStringExtra("champID");
 
         viewModel.getIsLoading().observe(this, isLoading->{
-            pBar.setVisibility(
-                    isLoading? View.VISIBLE: View.INVISIBLE
+            pBar.setVisibility(isLoading?
+                    View.VISIBLE:
+                    View.INVISIBLE
             );
         });
         viewModel.getErrorMessage().observe(this, tvError::setText);
@@ -67,13 +68,15 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
     }
 
     @Override
-    public void acceptRequest(String reqID) {
-        Toast.makeText(this, "acceptRequest "+reqID, Toast.LENGTH_SHORT).show();
+    public void acceptRequest(MembershipRequest req) {
+        viewModel.acceptRequest(req);
+        Toast.makeText(this, "acceptRequest", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void denyRequest(String reqID) {
-        Toast.makeText(this, "denyRequest "+reqID, Toast.LENGTH_SHORT).show();
+    public void denyRequest(MembershipRequest req) {
+        viewModel.denyRequest(req);
+        Toast.makeText(this, "denyRequest", Toast.LENGTH_SHORT).show();
     }
 
     public void onClickBackBtn(View view) {

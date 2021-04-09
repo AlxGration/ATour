@@ -187,4 +187,11 @@ public class MainActivity extends AppCompatActivity implements
         searchFragment.setSearchQuery("");
         etSearch.setText("");
     }
+
+    @Override
+    public void onBackPressed() {
+        if (etSearch.getText().toString().isEmpty())
+            super.onBackPressed();
+        else onClickCancel(null);
+    }
 }

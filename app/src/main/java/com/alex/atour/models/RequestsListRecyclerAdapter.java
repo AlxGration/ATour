@@ -87,10 +87,10 @@ public class RequestsListRecyclerAdapter extends RecyclerView.Adapter<RequestsLi
             }
         });
         holder.btnAccept.setOnClickListener(v -> {
-            if (listener != null) {listener.acceptRequest(request.getId());}
+            if (listener != null) {listener.acceptRequest(request);}
         });
         holder.btnDeny.setOnClickListener(v -> {
-            if (listener != null) {listener.denyRequest(request.getId());}
+            if (listener != null) {listener.denyRequest(request);}
         });
     }
 
@@ -106,8 +106,8 @@ public class RequestsListRecyclerAdapter extends RecyclerView.Adapter<RequestsLi
     public interface IonItemClickListener{
         void startProfileActivityWith(MembershipRequest req);
 
-        void acceptRequest(String reqID);
-        void denyRequest(String reqID);
+        void acceptRequest(MembershipRequest req);
+        void denyRequest(MembershipRequest req);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
