@@ -13,9 +13,9 @@ import com.alex.atour.ui.list.my.MyChampsFragment;
 
 public class MembersPagerAdapter extends FragmentPagerAdapter {
 
-    private String tabTitles[] = new String[] { "Участники", "Судьи" };
+    private final String tabTitles[] = new String[] { "Участники", "Судьи" };
 
-    public MembersPagerAdapter(FragmentManager fm) {
+    public MembersPagerAdapter( FragmentManager fm) {
         super(fm);
     }
 

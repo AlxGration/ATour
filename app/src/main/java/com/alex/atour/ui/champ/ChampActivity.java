@@ -202,7 +202,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
 
     MembersFragment membersFragment;
     private MembersFragment getMembersListFragment(){
-        if (membersFragment == null) membersFragment = new MembersFragment();
+        if (membersFragment == null) membersFragment = new MembersFragment(info.getChampID());
         return membersFragment;
     }
 }

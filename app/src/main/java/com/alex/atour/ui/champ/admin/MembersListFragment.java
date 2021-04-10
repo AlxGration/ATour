@@ -1,6 +1,7 @@
 package com.alex.atour.ui.champ.admin;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +21,13 @@ import com.alex.atour.ui.list.champs.MembersViewModel;
 public class MembersListFragment extends Fragment {
 
     private MembersViewModel viewModel;
-    public static final String MEM_LIST = "MEM_LIST";
+    public static final String ROLE = "ROLE";
     private int role;
 
 
-    public static MembersListFragment newInstance(int role) {
+    public static MembersListFragment newInstance( int role) {
         Bundle args = new Bundle();
-        args.putInt(MEM_LIST, role);
+        args.putInt(ROLE, role);
         MembersListFragment fragment = new MembersListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -37,7 +38,7 @@ public class MembersListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(getActivity()).get(MembersViewModel.class);
         if (getArguments() != null) {
-            role = getArguments().getInt(MEM_LIST);
+            role = getArguments().getInt(ROLE);
         }
     }
 
@@ -52,21 +53,20 @@ public class MembersListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         if (role == 1) {//участники
-            viewModel.getMembersLiveData().observe(getViewLifecycleOwner(), champsList -> {
-                MembersListRecyclerAdapter adapter = new MembersListRecyclerAdapter(champsList);
+            viewModel.getMembersLiveData().observe(getViewLifecycleOwner(), members -> {
+                MembersListRecyclerAdapter adapter = new MembersListRecyclerAdapter(members);
                 MembersListRecyclerAdapter.setOnItemClickListener(((ChampActivity) getActivity()));
                 recyclerView.setAdapter(adapter);
             });
         }else{          //судьи
-            viewModel.getRefereesLiveData().observe(getViewLifecycleOwner(), champsList -> {
-                MembersListRecyclerAdapter adapter = new MembersListRecyclerAdapter(champsList);
+            viewModel.getRefereesLiveData().observe(getViewLifecycleOwner(), members -> {
+                MembersListRecyclerAdapter adapter = new MembersListRecyclerAdapter(members);
                 MembersListRecyclerAdapter.setOnItemClickListener(((ChampActivity) getActivity()));
                 recyclerView.setAdapter(adapter);
             });
         }
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);
 
-        viewModel.requestMembersList(role);
         return view;
     }
 }

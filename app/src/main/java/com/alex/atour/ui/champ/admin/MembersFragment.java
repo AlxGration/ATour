@@ -18,6 +18,11 @@ import com.google.android.material.tabs.TabLayout;
 public class MembersFragment extends Fragment {
 
     private MembersViewModel viewModel;
+    private final String champID;
+
+    public MembersFragment(String champID){
+        this.champID = champID;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +44,7 @@ public class MembersFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
 
         //get all members
-        viewModel.requestMembersList();
+        viewModel.requestMembersList(champID);
         return view;
     }
 }

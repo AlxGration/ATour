@@ -346,14 +346,37 @@ public class FirebaseDB extends DBManager{
         // remove MembershipRequest from Champ->Requests
         ref.child(REQUEST_TABLE).child(req.getId()).removeValue().addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()){
-                //todo: remove request from Request table
-                ref.child(MEMBER_TABLE).child(req.getUserID()).child("state").setValue(MembershipState.DENIED.ordinal());
+                //todo: remove request from Request table, Member table
+                //ref.child(MEMBER_TABLE).child(req.getUserID()).child("state").setValue(MembershipState.DENIED.ordinal());
+                // remove user data from MEMBERS table
+                ref.child(MEMBER_TABLE).child(req.getUserID()).removeValue();
+                // remove user data from REQUESTS table
                 DatabaseReference reqRef = getDbRef().child(REQUEST_TABLE).child(req.getId());
                 reqRef.removeValue();
 
                 if (listener!=null) listener.onSuccess();
             }else{
                 if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
+            }
+        });
+    }
+
+    // get Champ->Members wha has state >= ACCEPTED
+    public void getMembers(String champID, IMembersListListener listener){
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").startAt(MembershipState.ACCEPTED.ordinal());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Member> list = new ArrayList<>((int)snapshot.getChildrenCount());
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
+                    Log.e("TAG", "getMembers "+ snap.toString());
+                    list.add(snap.getValue(Member.class));
+                }
+                if (listener!=null) listener.onSuccess(list);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
             }
         });
     }
