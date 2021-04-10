@@ -14,6 +14,8 @@
     <color name="grey_pressed">#FFF0F4F7</color>
     <color name="green">#FF24B25D</color>
     <color name="red">#FFB00020</color>
+    <color name="yellow">#FFFFEE58</color>
+
 
     <color name="colorError">#FFB00020</color>
 </resources>

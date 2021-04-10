@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements
         ChampsListRecyclerAdapter.IonItemClickListener{
 
     private ViewPager viewPager;
-    private SectionsPagerAdapter sectionsPagerAdapter;
+    private ChampsPagerAdapter champsPagerAdapter;
     private TextView tvList, tvMy, tvManage;
     private ImageView imgSearch;
     private ImageButton imgCancel;
@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        champsPagerAdapter = new ChampsPagerAdapter(getSupportFragmentManager());
         viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setAdapter(champsPagerAdapter);
 
         tvMy = findViewById(R.id.tv_tab_1);
         tvList = findViewById(R.id.tv_tab_2);

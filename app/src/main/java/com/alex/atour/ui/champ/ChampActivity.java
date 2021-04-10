@@ -6,19 +6,23 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alex.atour.DTO.ChampInfo;
+import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
+import com.alex.atour.models.MembersListRecyclerAdapter;
+import com.alex.atour.ui.champ.admin.MembersFragment;
 import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
 import com.alex.atour.ui.requests.RequestsListActivity;
 
-public class ChampActivity extends AppCompatActivity {
+public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener {
 
     private TextView tvMessage, tvAdminFio;
     private Button btnSendRequest;
@@ -67,6 +71,7 @@ public class ChampActivity extends AppCompatActivity {
             if (role == 0){         // admin mode
                 btnSendRequest.setOnClickListener(onClickRequests);
                 btnSendRequest.setText("Заявки");
+                showMembersFragment();
             }
         });
 
@@ -178,4 +183,26 @@ public class ChampActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
+    @Override
+    public void startProfileActivityWith(Member req) {
+        //todo:startProfileActivityWith member (for admin)
+    }
+
+    private void showMembersFragment(){ // (for admin)
+        //show FrameLayout
+        findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
+        // and fragment
+        Log.e("TAG", "showMembersFragment for admin");
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout,  getMembersListFragment())
+                .commitNow();
+    }
+
+    MembersFragment membersFragment;
+    private MembersFragment getMembersListFragment(){
+        if (membersFragment == null) membersFragment = new MembersFragment();
+        return membersFragment;
+    }
 }

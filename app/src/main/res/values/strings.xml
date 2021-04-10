@@ -41,6 +41,8 @@
     <string name="accept">Принять</string>
     <string name="requests">Заявки</string>
     <string name="no_requests">На данный момент новых заявок не найдено</string>
+    <string name="members">Участники</string>
+    <string name="referees">Судьи</string>
 
     <string-array name="statuses">
         <item>Чемпионат</item>
