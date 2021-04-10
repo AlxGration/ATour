@@ -25,7 +25,9 @@ public class RequestsViewModel extends BaseViewModel {
     public MutableLiveData<ArrayList<MembershipRequest>> getRequestsLiveData() { return requests; }
 
     public void getRequests(String champID){
+        setErrorMessage("");
         setIsLoading(true);
+
         db.getMembershipRequestsList(champID, new DBManager.IMembershipRequestsListListener() {
             @Override
             public void onSuccess(ArrayList<MembershipRequest> requests) {
@@ -37,9 +39,9 @@ public class RequestsViewModel extends BaseViewModel {
     }
 
     void setRequestsList(ArrayList<MembershipRequest> requests){
-        this.requests.setValue(requests);
         setIsLoading(false);
         setErrorMessage("");
+        this.requests.setValue(requests);
     }
     void requestError(String msg){
         setIsLoading(false);

@@ -48,11 +48,12 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
         });
         viewModel.getErrorMessage().observe(this, tvError::setText);
         viewModel.getRequestsLiveData().observe(this, requests -> {
+            if (requests.size() == 0) tvError.setText(R.string.no_requests);
+
             RequestsListRecyclerAdapter adapter = new RequestsListRecyclerAdapter(requests);
             RequestsListRecyclerAdapter.setOnItemClickListener(this);
             recyclerView.setAdapter(adapter);
         });
-
 
         //ЗАПРОС СПИСКА ЗАЯВОК
         viewModel.getRequests(champID);

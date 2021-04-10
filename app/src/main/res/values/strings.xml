@@ -40,6 +40,7 @@
     <string name="deny">Отказать</string>
     <string name="accept">Принять</string>
     <string name="requests">Заявки</string>
+    <string name="no_requests">На данный момент новых заявок не найдено</string>
 
     <string-array name="statuses">
         <item>Чемпионат</item>

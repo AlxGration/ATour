@@ -2,9 +2,11 @@ package com.alex.atour.ui.create.champ;
 
 import android.util.Log;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.MutableLiveData;
 
 import com.alex.atour.DTO.ChampInfo;
+import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.models.BaseViewModel;
 import com.alex.atour.models.StatusConverter;

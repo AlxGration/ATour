@@ -19,6 +19,21 @@ public class MemReqViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> getIsRequestSuccess() { return isRequestSuccess; }
 
     public void sendMembershipRequest(MembershipRequest memReq){
+        //data validation
+        if (!(memReq.isTypeWalk() || memReq.isTypeSki() ||
+                memReq.isTypeHike() || memReq.isTypeWater() ||
+                memReq.isTypeSpeleo() || memReq.isTypeBike() ||
+                memReq.isTypeAuto() || memReq.isTypeOther())
+        ){
+            setErrorMessage("Выберите хотя бы один вид");
+            return;
+        }
+        if (memReq.getRole() == 1 && memReq.getCloudLink().isEmpty()){
+            setErrorMessage("Пожалуйста, оставьте ссылку на файл");
+            return;
+        }
+
+
         setIsLoading(true);
         db.sendMembershipRequest(memReq, new DBManager.IRequestListener() {
             @Override
