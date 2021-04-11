@@ -27,9 +27,10 @@ public class ChampViewModel extends BaseViewModel {
     public MutableLiveData<Integer> getRoleLiveData() { return role; }
     public MutableLiveData<Integer> getStateLiveData() { return state; }
 
-    public void requestAdminData(String adminID){
+
+    public void loadPage(String adminID, String champID){
         setIsLoading(true);
-        model.requestUserData(adminID);
+        model.loadPage(adminID, champID);
     }
 
     void setAdminData(User user){

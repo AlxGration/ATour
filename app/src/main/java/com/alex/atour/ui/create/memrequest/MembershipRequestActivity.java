@@ -70,8 +70,6 @@ public class MembershipRequestActivity extends AppCompatActivity {
         viewModel.getErrorMessage().observe(this, tvError::setText);
         viewModel.getIsRequestSuccess().observe(this, isRequestSuccess->{
             if (isRequestSuccess){  //если запрос отправлен успешно, то активность закрывается и выходит на экран чемпионата
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -117,6 +115,4 @@ public class MembershipRequestActivity extends AppCompatActivity {
                 break;
         }
     }
-
-
 }

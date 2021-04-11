@@ -26,7 +26,7 @@
     <string name="data_from">Дата начала</string>
     <string name="data_to">Дата окончания</string>
     <string name="request_pending">Заявка на рассмотрении</string>
-    <string name="request_not_accepted">Заявка не принята</string>
+    <string name="request_denied">Заявка не принята</string>
     <string name="results_waiting">Документы приняты, ожидайте результатов</string>
     <string name="profile">Профиль</string>
     <string name="search">Поиск</string>

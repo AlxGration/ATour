@@ -17,6 +17,7 @@ import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.models.MembersListRecyclerAdapter;
+import com.alex.atour.models.MembershipState;
 import com.alex.atour.ui.champ.admin.MembersFragment;
 import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
@@ -50,7 +51,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         pBar = findViewById(R.id.progress_bar);
 
         //setting ChampInfo on UI
-        setDataOnUI((ChampInfo) getIntent().getSerializableExtra("champInfo"));
+        setChampInfoOnUI((ChampInfo) getIntent().getSerializableExtra("champInfo"));
 
         //setting adminInfo
         viewModel.getAdminLiveData().observe(this, user -> {
@@ -64,40 +65,19 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         });
         viewModel.getErrorMessage().observe(this, tvError::setText);
 
-        //TODO: доделать логику показа экранов в зависимости от роли
         viewModel.getRoleLiveData().observe(this, role->{
             this.role = role;
-
-            if (role == 0){         // admin mode
-                btnSendRequest.setOnClickListener(onClickRequests);
-                btnSendRequest.setText("Заявки");
-                showMembersFragment();
-            }
+            showLayoutDependsOnRoleAndState(role, -1);
         });
 
         viewModel.getStateLiveData().observe(this, state->{
             this.state = state;
-
-            //TODO: доделать логику показа экранов в зависимости от роли
-
-            switch (state){
-                case 1:// подал заявку
-                    tvMessage.setText(R.string.request_pending); break;
-                case 2:// заявка не принята
-                    tvMessage.setText(R.string.request_not_accepted); break;
-                case 3:// прием документов
-
-                    break;
-                case 4:// документы приняты, ожидайте результатов
-                    tvMessage.setText(R.string.results_waiting);
-                    if (role == 1){//участникам выводятся результаты
-
-                    }else{//судьям приходят отчеты
-
-                    }
-                    break;
-            }
+            showLayoutDependsOnRoleAndState(role, state);
         });
+
+        //request admin info
+        // and user status and role (admin, referee, member)
+        viewModel.loadPage(info.getAdminID(), info.getChampID());
     }
 
     public void onClickBackBtn(View view) {
@@ -107,20 +87,9 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     public void onClickMemRequestBtn(View view) {
         Intent intent = new Intent(this, MembershipRequestActivity.class);
         intent.putExtra("champID", info.getChampID());
-        startActivityForResult(intent, 1);
+        startActivity(intent);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null){
-            //todo: different views for roles
-            // for member
-            // $send one more request to approve state$
-            tvMessage.setText(R.string.request_pending);
-            btnSendRequest.setVisibility(View.INVISIBLE);
-        }
-    }
 
     public void onClickShowProfile(View view){
         if (admin == null) {
@@ -133,7 +102,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         startActivity(intent);
     }
 
-    private void setDataOnUI(ChampInfo info){
+    private void setChampInfoOnUI(ChampInfo info){
         if (info == null) {
             viewModel.requestError("Не удалось загрузить информацию");
             return;
@@ -168,14 +137,10 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         if (info.isTypeBike()) findViewById(R.id.cp_bike).setVisibility(View.VISIBLE);
         if (info.isTypeAuto()) findViewById(R.id.cp_auto).setVisibility(View.VISIBLE);
         if (info.isTypeOther()) findViewById(R.id.cp_other).setVisibility(View.VISIBLE);
-
-
-        //request admin info
-        viewModel.requestAdminData(info.getAdminID());
     }
 
     // Для админа, переход на активность для просмотра заявок на чемпионат
-    private View.OnClickListener onClickRequests = new View.OnClickListener() {
+    private final View.OnClickListener onClickRequests = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(ChampActivity.this, RequestsListActivity.class);
@@ -189,12 +154,66 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         //todo:startProfileActivityWith member (for admin)
     }
 
-    private void showMembersFragment(){ // (for admin)
+    //todo:use me
+    private void showLayoutDependsOnRoleAndState(int role, int state){
+        Log.e("TAG", "RS "+ role+" "+state);
+
+        if (role == 0){//admin
+            btnSendRequest.setOnClickListener(onClickRequests);
+            btnSendRequest.setText("Заявки");
+            showMembersFragment();
+        }
+        if (role == 1 && state != -1){//member
+            switch (state){
+                case 0://MembershipState.WAIT
+                    tvMessage.setText(R.string.request_pending);
+                    btnSendRequest.setVisibility(View.INVISIBLE);
+                    break;
+                case 1://MembershipState.DENIED
+                    tvMessage.setText(R.string.request_denied);
+                    btnSendRequest.setVisibility(View.VISIBLE);
+                    break;
+                case 2://MembershipState.ACCEPTED
+                    tvMessage.setText("");
+                    btnSendRequest.setVisibility(View.INVISIBLE);
+                    showDocsSendingFragment();
+                    break;
+                case 3://MembershipState.DOCS_SUBMISSION
+                    tvMessage.setText(R.string.results_waiting);
+                    break;
+                case 4://MembershipState.RESULTS
+                    showResultsFragment();
+                    break;
+            }
+        }
+        if (role == 2  && state != -1) {//referee
+            switch (state){
+                case 0://MembershipState.WAIT
+                    tvMessage.setText(R.string.request_pending);
+                    btnSendRequest.setVisibility(View.INVISIBLE);
+                    break;
+                case 1://MembershipState.DENIED
+                    tvMessage.setText(R.string.request_denied);
+                    btnSendRequest.setVisibility(View.VISIBLE);
+                    break;
+                case 2://MembershipState.ACCEPTED
+                    tvMessage.setText("");
+                    btnSendRequest.setVisibility(View.INVISIBLE);
+                    showDocsFragment();
+                    break;
+                case 4://MembershipState.RESULTS
+                    //todo:check me
+                    showResultsFragment();
+                    break;
+            }
+        }
+    }
+
+    // (for admin)
+    private void showMembersFragment(){
         //show FrameLayout
         findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
         // and fragment
-        Log.e("TAG", "showMembersFragment for admin");
-
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_layout,  getMembersListFragment())
                 .commitNow();
@@ -204,5 +223,22 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private MembersFragment getMembersListFragment(){
         if (membersFragment == null) membersFragment = new MembersFragment(info.getChampID());
         return membersFragment;
+    }
+
+    // (for members)
+    private void showDocsSendingFragment(){
+        //todo:create me
+        tvMessage.setText("members: showDocsSendingFragment");
+    }
+    // (for members and referees)
+    private void showResultsFragment(){
+        //todo:create me
+        tvMessage.setText(": showResultsFragment");
+    }
+
+    // (for referee)
+    private void showDocsFragment(){
+        //todo:create me
+        tvMessage.setText("referee: showDocsFragment");
     }
 }
