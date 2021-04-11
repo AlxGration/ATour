@@ -15,6 +15,7 @@
     <color name="green">#FF24B25D</color>
     <color name="red">#FFB00020</color>
     <color name="yellow">#FFFFEE58</color>
+    <color name="yellow_dark">#FFDBC02D</color>
 
 
     <color name="colorError">#FFB00020</color>

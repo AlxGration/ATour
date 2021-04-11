@@ -43,7 +43,7 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
         viewModel.getIsLoading().observe(this, isLoading->{
             pBar.setVisibility(isLoading?
                     View.VISIBLE:
-                    View.INVISIBLE
+                    View.GONE
             );
         });
         viewModel.getErrorMessage().observe(this, tvError::setText);
