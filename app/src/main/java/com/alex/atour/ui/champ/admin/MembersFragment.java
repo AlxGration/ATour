@@ -7,26 +7,41 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import com.alex.atour.DTO.Member;
 import com.alex.atour.R;
-import com.alex.atour.ui.list.champs.MembersViewModel;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
 
 public class MembersFragment extends Fragment {
 
     private MembersViewModel viewModel;
-    private final String champID;
+    public static final String CHAMP_ID = "CHAMP_ID";
+    private String champID;
 
-    public MembersFragment(String champID){
-        this.champID = champID;
+    public static MembersFragment getInstance(String champID) {
+        Bundle args = new Bundle();
+        args.putString(CHAMP_ID, champID);
+        MembersFragment fragment = new MembersFragment();
+        fragment.setArguments(args);
+
+        return fragment;
     }
+
+    private MembersFragment(){    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(getActivity()).get(MembersViewModel.class);
+
+        if (getArguments() != null) {
+            champID = getArguments().getString(CHAMP_ID);
+        }
     }
 
     @Override

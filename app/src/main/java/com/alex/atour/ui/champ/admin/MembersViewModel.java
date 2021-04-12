@@ -1,4 +1,4 @@
-package com.alex.atour.ui.list.champs;
+package com.alex.atour.ui.champ.admin;
 
 import androidx.lifecycle.MutableLiveData;
 

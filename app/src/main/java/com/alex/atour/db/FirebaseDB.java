@@ -198,64 +198,19 @@ public class FirebaseDB extends DBManager{
     @Override
     public void getChampsList(IChampsInfoListener listener) {
         Query query = getDbRef().child(CHAMP_INFO_TABLE).limitToLast(LIMIT_RECS_COUNT);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<ChampInfo> list = new ArrayList<ChampInfo>((int)snapshot.getChildrenCount());
-                for (DataSnapshot snap: snapshot.getChildren()){ // iterate champs
-                    list.add(snap.getValue(ChampInfo.class));
-                }
-
-                if (listener!=null) listener.onSuccess(list);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                if (listener!=null) listener.onFailed(error.getMessage());
-            }
-        });
+        champsInfoListQuery(query, listener);
     }
 
     @Override
     public void getChampsList(String searchRequest,IChampsInfoListener listener) {
         Query query = getDbRef().child(CHAMP_INFO_TABLE).orderByChild("title").startAt(searchRequest);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<ChampInfo> list = new ArrayList<ChampInfo>((int)snapshot.getChildrenCount());
-                for (DataSnapshot snap: snapshot.getChildren()){ // iterate champs
-                    list.add(snap.getValue(ChampInfo.class));
-                }
-
-                if (listener!=null) listener.onSuccess(list);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                if (listener!=null) listener.onFailed(error.getMessage());
-            }
-        });
+        champsInfoListQuery(query, listener);
     }
 
     @Override
     public void getManagedChampsList(IChampsInfoListener listener) {
         Query query = getDbRef().child(CHAMP_INFO_TABLE).orderByChild("adminID").equalTo(getUser().getUid());
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<ChampInfo> list = new ArrayList<ChampInfo>((int)snapshot.getChildrenCount());
-                for (DataSnapshot snap: snapshot.getChildren()){ // iterate champs
-                    list.add(snap.getValue(ChampInfo.class));
-                }
-
-                if (listener!=null) listener.onSuccess(list);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                if (listener!=null) listener.onFailed(error.getMessage());
-            }
-        });
+        champsInfoListQuery(query, listener);
     }
 
     @Override
@@ -365,11 +320,29 @@ public class FirebaseDB extends DBManager{
     @Override
     public void getMemberByID(String userID, String champID, IMembersListListener listener){
         Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("userID").equalTo(userID);
+        membersListQuery(query, listener);
+    }
+
+    // get Champ->Members who has state >= ACCEPTED
+    @Override
+    public void getMembers(String champID, IMembersListListener listener){
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").startAt(MembershipState.ACCEPTED.ordinal());
+        membersListQuery(query, listener);
+    }
+
+    // get members who sent docs and waiting results
+
+    public void getDocsSentMembers(String champID, IMembersListListener listener){
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").equalTo(MembershipState.DOCS_SUBMISSION.ordinal());
+        membersListQuery(query, listener);
+    }
+
+    private void membersListQuery(Query query, IMembersListListener listener){
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<Member> list = new ArrayList<>((int)snapshot.getChildrenCount());
-                for (DataSnapshot snap: snapshot.getChildren()){
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
                     list.add(snap.getValue(Member.class));
                 }
                 if (listener!=null) listener.onSuccess(list);
@@ -381,16 +354,13 @@ public class FirebaseDB extends DBManager{
         });
     }
 
-    // get Champ->Members who has state >= ACCEPTED
-    @Override
-    public void getMembers(String champID, IMembersListListener listener){
-        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").startAt(MembershipState.ACCEPTED.ordinal());
+    private void champsInfoListQuery(Query query, IChampsInfoListener listener){
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Member> list = new ArrayList<>((int)snapshot.getChildrenCount());
-                for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
-                    list.add(snap.getValue(Member.class));
+                ArrayList<ChampInfo> list = new ArrayList<ChampInfo>((int)snapshot.getChildrenCount());
+                for (DataSnapshot snap: snapshot.getChildren()){
+                    list.add(snap.getValue(ChampInfo.class));
                 }
                 if (listener!=null) listener.onSuccess(list);
             }

@@ -43,6 +43,7 @@ public abstract class DBManager {
     public abstract void getChampsList(IChampsInfoListener listener);//общий список чемпионатов
     public abstract void getMembers(String champID, IMembersListListener listener);//весь список участников чемпионата, включая подавших только заявки
     public abstract void getMemberByID(String userID, String champID, IMembersListListener listener);//участник чемпионата по ID
+    public abstract void getDocsSentMembers(String champID, IMembersListListener listener);//участник чемпионата, которые отправили документы
     public abstract void getChampsList(String searchRequest, IChampsInfoListener listener);//общий список чемпионатов
     public abstract void getManagedChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
     public abstract void getMyChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь

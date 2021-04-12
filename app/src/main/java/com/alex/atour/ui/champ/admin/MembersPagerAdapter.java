@@ -17,7 +17,7 @@ public class MembersPagerAdapter extends FragmentPagerAdapter {
 
         // 1 - участники
         // 2 - судьи
-        return MembersListFragment.newInstance(position + 1);
+        return MembersListFragment.newInstance(position+1);
     }
 
 

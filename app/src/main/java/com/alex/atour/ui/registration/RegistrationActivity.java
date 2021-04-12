@@ -20,7 +20,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText etFIO, etPhone, etEmail, etPass;
     private Spinner spCity;
     private RegViewModel viewModel;
-    private ProgressBar pBar;
     private Button btnSend;
 
     @Override
@@ -37,14 +36,13 @@ public class RegistrationActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.et_phone);
         etEmail = findViewById(R.id.et_email);
         spCity = findViewById(R.id.spin_city);
-        pBar = findViewById(R.id.progress_bar);
         btnSend = findViewById(R.id.btn_send);
+        ProgressBar pBar = findViewById(R.id.progress_bar);
         TextView tvError = findViewById(R.id.tv_error);
 
         //observers
         viewModel.getIsLoading().observe(this, isLoading->{
-            pBar.setVisibility(
-                    isLoading?
+            pBar.setVisibility(isLoading?
                             View.VISIBLE:
                             View.INVISIBLE
             );
@@ -63,10 +61,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void onClickShowHidePassword(View view) {
         isPasswordHidden = !isPasswordHidden;
-        etPass.setInputType(
-                isPasswordHidden ?
-                        InputType.TYPE_CLASS_TEXT
-                        :
+        etPass.setInputType(isPasswordHidden ?
+                        InputType.TYPE_CLASS_TEXT :
                         InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
         );
     }

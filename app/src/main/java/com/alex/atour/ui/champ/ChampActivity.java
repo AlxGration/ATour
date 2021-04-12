@@ -15,6 +15,7 @@ import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.models.MembersListRecyclerAdapter;
 import com.alex.atour.ui.champ.admin.MembersFragment;
+import com.alex.atour.ui.champ.referee.MembersForRefereeFragment;
 import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
 import com.alex.atour.ui.requests.RequestsListActivity;
@@ -145,8 +146,8 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     };
 
     @Override
-    public void startProfileActivityWith(Member req) {
-        //todo:startProfileActivityWith member (for admin)
+    public void startProfileActivityWith(Member member) {
+        //todo:startProfileActivityWith member (for admin, referee)
     }
 
     //todo:use me
@@ -210,14 +211,8 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
         // and fragment
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_layout,  getMembersListFragment())
+                .replace(R.id.frame_layout,  MembersFragment.getInstance(info.getChampID()))
                 .commitNow();
-    }
-
-    MembersFragment membersFragment;
-    private MembersFragment getMembersListFragment(){
-        if (membersFragment == null) membersFragment = new MembersFragment(info.getChampID());
-        return membersFragment;
     }
 
     // (for members)
@@ -234,6 +229,11 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     // (for referee)
     private void showDocsFragment(){
         //todo:create me
-        tvMessage.setText("referee: showDocsFragment");
+        //show FrameLayout
+        findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
+        // and fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout,  MembersForRefereeFragment.getInstance(info.getChampID()))
+                .commitNow();
     }
 }

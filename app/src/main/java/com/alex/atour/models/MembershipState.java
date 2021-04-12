@@ -4,6 +4,6 @@ public enum MembershipState{
     WAIT,
     DENIED,
     ACCEPTED,
-    DOCS_SUBMISSION,
+    DOCS_SUBMISSION,    //only for members, who sent docs
     RESULTS
 }
