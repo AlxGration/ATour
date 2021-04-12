@@ -5,13 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.R;
-
 import java.util.ArrayList;
 
 public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRecyclerAdapter.ViewHolder> {
@@ -25,7 +22,7 @@ public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRe
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Create a new view, which defines the UI of the list item
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_champ, parent, false);
 
@@ -34,8 +31,6 @@ public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRe
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Get element from your _data_ at this position and replace the
-        // contents of the view with that element
         ChampInfo info = data.get(position);
 
         // покрас списка в виде "зебры"

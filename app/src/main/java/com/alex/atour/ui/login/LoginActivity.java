@@ -2,17 +2,14 @@ package com.alex.atour.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.alex.atour.R;
 import com.alex.atour.ui.list.MainActivity;
 import com.alex.atour.ui.registration.RegistrationActivity;
@@ -51,8 +48,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         viewModel.getIsLoading().observe(this, isLoading->{
-            pBar.setVisibility(
-                    isLoading?
+            pBar.setVisibility(isLoading?
                             View.VISIBLE:
                             View.INVISIBLE
             );
@@ -70,10 +66,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickShowHidePassword(View view) {
         isPasswordHidden = !isPasswordHidden;
-        etPass.setInputType(
-                isPasswordHidden ?
-                        InputType.TYPE_CLASS_TEXT
-                        :
+        etPass.setInputType(isPasswordHidden ?
+                        InputType.TYPE_CLASS_TEXT :
                         InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
         );
     }

@@ -2,7 +2,6 @@ package com.alex.atour.ui.create.champ;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,10 +14,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.R;
-
 import java.util.Calendar;
 
 public class ChampCreationActivity extends AppCompatActivity {

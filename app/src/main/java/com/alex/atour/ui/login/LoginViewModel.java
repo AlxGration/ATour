@@ -1,18 +1,9 @@
 package com.alex.atour.ui.login;
 
 import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.alex.atour.models.BaseViewModel;
 import com.alex.atour.models.ValueFormatter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.concurrent.Executor;
 
 public class LoginViewModel extends BaseViewModel {
 

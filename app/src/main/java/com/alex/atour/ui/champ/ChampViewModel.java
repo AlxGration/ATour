@@ -1,12 +1,9 @@
 package com.alex.atour.ui.champ;
 
 import androidx.lifecycle.MutableLiveData;
-
-import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.BaseViewModel;
 
-import java.util.ArrayList;
 
 public class ChampViewModel extends BaseViewModel {
 

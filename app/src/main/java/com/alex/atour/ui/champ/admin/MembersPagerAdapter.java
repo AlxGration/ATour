@@ -1,15 +1,8 @@
-package com.alex.atour.ui.champ;
-
+package com.alex.atour.ui.champ.admin;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-
-import com.alex.atour.ui.champ.admin.MembersFragment;
-import com.alex.atour.ui.champ.admin.MembersListFragment;
-import com.alex.atour.ui.list.champs.ChampsListFragment;
-import com.alex.atour.ui.list.manage.ManagedChampsFragment;
-import com.alex.atour.ui.list.my.MyChampsFragment;
 
 public class MembersPagerAdapter extends FragmentPagerAdapter {
 

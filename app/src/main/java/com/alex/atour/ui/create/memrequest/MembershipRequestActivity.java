@@ -2,8 +2,6 @@ package com.alex.atour.ui.create.memrequest;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,10 +11,9 @@ import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
+import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.R;
-
 
 public class MembershipRequestActivity extends AppCompatActivity {
 
@@ -36,7 +33,9 @@ public class MembershipRequestActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(MemReqViewModel.class);
 
         memReq = new MembershipRequest();
-        memReq.setChampID(getIntent().getStringExtra("champID"));
+        ChampInfo info = (ChampInfo) getIntent().getSerializableExtra("champInfo");
+        enableNeededTypes(info);
+        memReq.setChampID(info.getChampID());
         memReq.setRole(1);//по умолчанию это участник
 
         //init ui
@@ -89,30 +88,37 @@ public class MembershipRequestActivity extends AppCompatActivity {
         boolean isChecked = ((ToggleButton)view).isChecked();
 
         switch (view.getId()){
-            case R.id.tb_walk:
-                memReq.setTypeWalk(isChecked);
+            case R.id.tb_walk: memReq.setTypeWalk(isChecked);
                 break;
-            case R.id.tb_ski:
-                memReq.setTypeSki(isChecked);
+            case R.id.tb_ski: memReq.setTypeSki(isChecked);
                 break;
-            case R.id.tb_hike:
-                memReq.setTypeHike(isChecked);
+            case R.id.tb_hike: memReq.setTypeHike(isChecked);
                 break;
-            case R.id.tb_water:
-                memReq.setTypeWater(isChecked);
+            case R.id.tb_water: memReq.setTypeWater(isChecked);
                 break;
-            case R.id.tb_speleo:
-                memReq.setTypeSpeleo(isChecked);
+            case R.id.tb_speleo: memReq.setTypeSpeleo(isChecked);
                 break;
-            case R.id.tb_bike:
-                memReq.setTypeBike(isChecked);
+            case R.id.tb_bike: memReq.setTypeBike(isChecked);
                 break;
-            case R.id.tb_auto:
-                memReq.setTypeAuto(isChecked);
+            case R.id.tb_auto: memReq.setTypeAuto(isChecked);
                 break;
-            case R.id.tb_other:
-                memReq.setTypeOther(isChecked);
+            case R.id.tb_other: memReq.setTypeOther(isChecked);
                 break;
         }
     }
+
+    //todo:is it worth?
+    private void enableNeededTypes(ChampInfo info){
+        if (!info.isTypeWalk()) findViewById(R.id.tb_walk).setEnabled(false);
+        if (!info.isTypeSki()) findViewById(R.id.tb_ski).setEnabled(false);
+        if (!info.isTypeHike()) findViewById(R.id.tb_hike).setEnabled(false);
+        if (!info.isTypeWater()) findViewById(R.id.tb_water).setEnabled(false);
+
+        if (!info.isTypeSpeleo()) findViewById(R.id.tb_speleo).setEnabled(false);
+        if (!info.isTypeBike()) findViewById(R.id.tb_bike).setEnabled(false);
+        if (!info.isTypeAuto()) findViewById(R.id.tb_auto).setEnabled(false);
+        if (!info.isTypeOther()) findViewById(R.id.tb_other).setEnabled(false);
+    }
+
+
 }

@@ -1,9 +1,7 @@
 package com.alex.atour.ui.champ;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,13 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.models.MembersListRecyclerAdapter;
-import com.alex.atour.models.MembershipState;
 import com.alex.atour.ui.champ.admin.MembersFragment;
 import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
@@ -34,7 +30,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
 
     private ChampViewModel viewModel;
 
-    //todo: hide btnSendRequest
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +70,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
             showLayoutDependsOnRoleAndState(role, state);
         });
 
-        //request admin info
+        // request admin info
         // and user status and role (admin, referee, member)
         viewModel.loadPage(info.getAdminID(), info.getChampID());
     }
@@ -86,7 +81,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
 
     public void onClickMemRequestBtn(View view) {
         Intent intent = new Intent(this, MembershipRequestActivity.class);
-        intent.putExtra("champID", info.getChampID());
+        intent.putExtra("champInfo", info);
         startActivity(intent);
     }
 

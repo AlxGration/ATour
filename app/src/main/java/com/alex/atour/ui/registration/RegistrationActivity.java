@@ -1,10 +1,7 @@
 package com.alex.atour.ui.registration;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.InputType;
@@ -15,10 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.alex.atour.R;
-
-import java.util.concurrent.Executor;
 
 public class RegistrationActivity extends AppCompatActivity {
 

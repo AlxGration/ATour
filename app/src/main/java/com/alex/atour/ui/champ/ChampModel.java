@@ -1,12 +1,8 @@
 package com.alex.atour.ui.champ;
 
-import android.util.Log;
-
-import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
-
 import java.util.ArrayList;
 
 public class ChampModel {

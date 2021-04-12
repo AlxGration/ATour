@@ -4,20 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.R;
-import com.alex.atour.models.ChampsListRecyclerAdapter;
 import com.alex.atour.models.RequestsListRecyclerAdapter;
-import com.alex.atour.ui.list.MainActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
 
 public class RequestsListActivity extends AppCompatActivity implements RequestsListRecyclerAdapter.IonItemClickListener {

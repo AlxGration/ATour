@@ -1,12 +1,7 @@
 package com.alex.atour.ui.create.champ;
 
-import android.util.Log;
-
-import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.MutableLiveData;
-
 import com.alex.atour.DTO.ChampInfo;
-import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.models.BaseViewModel;
 import com.alex.atour.models.StatusConverter;
@@ -34,21 +29,20 @@ public class ChampViewModel extends BaseViewModel {
             ChampInfo champInfo
     ){
         //data validating
-        Log.e("TAG", title+" "+dataFrom+" "+dataTo+" "+city);
 
         String[] splittedDate = dataFrom.split("\\.");
         Calendar date1 = Calendar.getInstance();
-        date1.set(Calendar.YEAR, Integer.valueOf(splittedDate[2]));
-        date1.set(Calendar.MONTH, Integer.valueOf(splittedDate[1]));
-        date1.set(Calendar.DAY_OF_MONTH, Integer.valueOf(splittedDate[0]));
+        date1.set(Calendar.YEAR, Integer.parseInt(splittedDate[2]));
+        date1.set(Calendar.MONTH, Integer.parseInt(splittedDate[1]));
+        date1.set(Calendar.DAY_OF_MONTH, Integer.parseInt(splittedDate[0]));
 
         dataFrom = splittedDate[2] +"."+splittedDate[1]+"."+splittedDate[0];
 
         splittedDate = dataTo.split("\\.");
         Calendar date2 = Calendar.getInstance();
-        date2.set(Calendar.YEAR, Integer.valueOf(splittedDate[2]));
-        date2.set(Calendar.MONTH, Integer.valueOf(splittedDate[1]));
-        date2.set(Calendar.DAY_OF_MONTH, Integer.valueOf(splittedDate[0]));
+        date2.set(Calendar.YEAR, Integer.parseInt(splittedDate[2]));
+        date2.set(Calendar.MONTH, Integer.parseInt(splittedDate[1]));
+        date2.set(Calendar.DAY_OF_MONTH, Integer.parseInt(splittedDate[0]));
 
         if (title.isEmpty() || date1.after(date2)) {
             setErrorMessage("Некорректные данные");

@@ -9,7 +9,7 @@ import com.alex.atour.models.BaseViewModel;
 public class MemReqViewModel extends BaseViewModel {
 
     private final MutableLiveData<Boolean> isRequestSuccess;
-    private DBManager db;
+    private final DBManager db;
 
     public MemReqViewModel(){
         isRequestSuccess = new MutableLiveData<>();

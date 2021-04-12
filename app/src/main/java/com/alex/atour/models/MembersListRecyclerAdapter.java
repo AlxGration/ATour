@@ -3,17 +3,12 @@ package com.alex.atour.models;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.alex.atour.DTO.Member;
-import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.R;
-
 import java.util.ArrayList;
 
 public class MembersListRecyclerAdapter extends RecyclerView.Adapter<MembersListRecyclerAdapter.ViewHolder> {
@@ -27,7 +22,6 @@ public class MembersListRecyclerAdapter extends RecyclerView.Adapter<MembersList
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_member, parent, false);
 
@@ -36,8 +30,7 @@ public class MembersListRecyclerAdapter extends RecyclerView.Adapter<MembersList
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Get element from your _data_ at this position and replace the
-        // contents of the view with that element
+
         Member request = data.get(position);
 
         // покрас списка в виде "зебры"

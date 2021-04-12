@@ -1,10 +1,7 @@
 package com.alex.atour.ui.profile;
 
-import android.app.Activity;
-
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
-import com.alex.atour.ui.registration.RegViewModel;
 
 public class ProfileModel {
 

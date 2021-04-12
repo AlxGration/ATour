@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.alex.atour.R;
-import com.alex.atour.ui.champ.MembersPagerAdapter;
 import com.alex.atour.ui.list.champs.MembersViewModel;
 import com.google.android.material.tabs.TabLayout;
 

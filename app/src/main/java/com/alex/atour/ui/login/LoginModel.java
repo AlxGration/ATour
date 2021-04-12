@@ -1,7 +1,6 @@
 package com.alex.atour.ui.login;
 
 import android.app.Activity;
-
 import com.alex.atour.db.DBManager;
 
 public class LoginModel {

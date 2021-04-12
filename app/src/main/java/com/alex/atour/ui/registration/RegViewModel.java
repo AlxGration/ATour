@@ -1,15 +1,9 @@
 package com.alex.atour.ui.registration;
 
 import android.app.Activity;
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.alex.atour.models.BaseViewModel;
 import com.alex.atour.models.ValueFormatter;
-
-import java.util.concurrent.Executor;
 
 public class RegViewModel extends BaseViewModel {
 

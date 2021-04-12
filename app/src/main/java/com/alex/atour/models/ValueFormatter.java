@@ -1,7 +1,5 @@
 package com.alex.atour.models;
 
-import android.util.Log;
-
 import java.util.regex.Pattern;
 
 public class ValueFormatter {

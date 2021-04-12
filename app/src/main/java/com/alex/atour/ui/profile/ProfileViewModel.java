@@ -1,8 +1,6 @@
 package com.alex.atour.ui.profile;
 
 import androidx.lifecycle.MutableLiveData;
-
-import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.BaseViewModel;
 

@@ -1,7 +1,6 @@
 package com.alex.atour.ui.registration;
 
 import android.app.Activity;
-
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
 
