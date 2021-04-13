@@ -1,9 +1,11 @@
 package com.alex.atour.DTO;
 
-public class Member {
-    String userID, userFIO, requestID;
-    int role, state;
-    boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
+import java.io.Serializable;
+
+public class Member implements Serializable {
+    private String userID, userFIO, requestID;
+    private int role, state;
+    private boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
 
     public Member(){}
 

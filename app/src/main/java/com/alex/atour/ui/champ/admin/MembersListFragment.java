@@ -50,13 +50,13 @@ public class MembersListFragment extends Fragment {
         if (role == 1) {//участники
             viewModel.getMembersLiveData().observe(getViewLifecycleOwner(), members -> {
                 MembersListRecyclerAdapter adapter = new MembersListRecyclerAdapter(members);
-                MembersListRecyclerAdapter.setOnItemClickListener(((ChampActivity) getActivity()));
+                MembersListRecyclerAdapter.setOnItemClickListener(1, ((ChampActivity) getActivity()));
                 recyclerView.setAdapter(adapter);
             });
         }else{          //судьи
             viewModel.getRefereesLiveData().observe(getViewLifecycleOwner(), members -> {
                 MembersListRecyclerAdapter adapter = new MembersListRecyclerAdapter(members);
-                MembersListRecyclerAdapter.setOnItemClickListener(((ChampActivity) getActivity()));
+                MembersListRecyclerAdapter.setOnItemClickListener(1, ((ChampActivity) getActivity()));
                 recyclerView.setAdapter(adapter);
             });
         }

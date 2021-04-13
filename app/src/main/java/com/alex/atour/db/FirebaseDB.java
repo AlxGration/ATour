@@ -331,32 +331,45 @@ public class FirebaseDB extends DBManager{
     }
 
     // get members who sent docs and waiting results
-
+    @Override
     public void getDocsSentMembers(String champID, IMembersListListener listener){
 
-
+        // get referee info (for return specified by type members)
         getMemberByID(getUser().getUid(), champID, new IMembersListListener() {
             @Override
             public void onSuccess(ArrayList<Member> members) {
                 Member me = members.get(0);
+                // get all docs sent members
                 Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").equalTo(MembershipState.DOCS_SUBMISSION.ordinal());
-//todo::error here
+                membersListQuery(query, new IMembersListListener() {
+                    @Override
+                    public void onSuccess(ArrayList<Member> members) {
+                        ArrayList<Member> result = new ArrayList<>(members.size()/2);
 
-                if (me.isTypeWalk()) query.orderByChild("typeWalk").equalTo(true);
-                if (me.isTypeSki()) query.orderByChild("typeSki").equalTo(true);
-                if (me.isTypeHike()) query.orderByChild("typeHike").equalTo(true);
-                if (me.isTypeWater()) query.orderByChild("typeWater").equalTo(true);
+                        // and extract only needed
+                        for(Member m: members) {
+                            if (me.isTypeWalk())    {result.add(m); continue;}
+                            if (me.isTypeSki())     {result.add(m); continue;}
+                            if (me.isTypeHike())    {result.add(m); continue;}
+                            if (me.isTypeWater())   {result.add(m); continue;}
 
-                if (me.isTypeSpeleo()) query.orderByChild("typeSpeleo").equalTo(true);
-                if (me.isTypeBike()) query.orderByChild("typeBike").equalTo(true);
-                if (me.isTypeAuto()) query.orderByChild("typeAuto").equalTo(true);
-                if (me.isTypeOther()) query.orderByChild("typeOther").equalTo(true);
+                            if (me.isTypeSpeleo())  {result.add(m); continue;}
+                            if (me.isTypeBike())    {result.add(m); continue;}
+                            if (me.isTypeAuto())    {result.add(m); continue;}
+                            if (me.isTypeOther())   result.add(m);
+                        }
+                        if (listener!=null) listener.onSuccess(result);
+                    }
 
-                membersListQuery(query, listener);
+                    @Override
+                    public void onFailed(String msg) {
+                        if (listener!=null) listener.onFailed(msg);
+                    }
+                });
             }
 
             @Override
-            public void onFailed(String msg) {            }
+            public void onFailed(String msg) { if (listener!=null) listener.onFailed(msg);  }
         });
     }
 

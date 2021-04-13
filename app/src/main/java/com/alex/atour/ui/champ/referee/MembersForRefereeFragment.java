@@ -53,7 +53,7 @@ public class MembersForRefereeFragment extends Fragment {
 
         viewModel.getMembersLiveData().observe(getViewLifecycleOwner(), members -> {
             MembersListRecyclerAdapter adapter = new MembersListRecyclerAdapter(members);
-            MembersListRecyclerAdapter.setOnItemClickListener(((ChampActivity) getActivity()));
+            MembersListRecyclerAdapter.setOnItemClickListener(2, ((ChampActivity) getActivity()));
             recyclerView.setAdapter(adapter);
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);

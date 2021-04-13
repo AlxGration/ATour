@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 public class MembersViewModel extends BaseViewModel {
 
-    private DBManager db;
+    private final DBManager db;
     private final MutableLiveData<ArrayList<Member>> members;
 
     public MembersViewModel(){
         db = DBManager.getInstance();
-        members = new MutableLiveData<>(new ArrayList<Member>());
+        members = new MutableLiveData<>(new ArrayList<>());
     }
 
     public MutableLiveData<ArrayList<Member>> getMembersLiveData() { return members; }

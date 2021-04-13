@@ -58,8 +58,7 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
     public void startProfileActivityWith(MembershipRequest req) {
         Intent intent = new Intent(RequestsListActivity.this, ProfileActivity.class);
         intent.putExtra("request", req);
-        intent.putExtra("userID", req.getUserID());
-
+        intent.putExtra("comeFrom", 2);//show membership request (for admin)
         startActivity(intent);
     }
 

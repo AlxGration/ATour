@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class MembersListRecyclerAdapter extends RecyclerView.Adapter<MembersListRecyclerAdapter.ViewHolder> {
 
-    ArrayList<Member> data;
+    private ArrayList<Member> data;
 
     public MembersListRecyclerAdapter(ArrayList<Member> data){
         this.data = data;
@@ -77,7 +77,7 @@ public class MembersListRecyclerAdapter extends RecyclerView.Adapter<MembersList
         holder.itemView.setOnClickListener(view -> {
             if (listener != null) {
                 Member req = data.get(((int)view.getTag()));
-                listener.startProfileActivityWith(req);
+                listener.startProfileActivityWith(role, req);
             }
         });
     }
@@ -88,11 +88,14 @@ public class MembersListRecyclerAdapter extends RecyclerView.Adapter<MembersList
     }
 
     public static IonItemClickListener listener;
-    public static void setOnItemClickListener(IonItemClickListener lis){
+    private static int role = -1;
+    //role - от чьего имени открывается экран
+    public static void setOnItemClickListener(int _role, IonItemClickListener lis){
+        role = _role;
         listener = lis;
     }
     public interface IonItemClickListener{
-        void startProfileActivityWith(Member req);
+        void startProfileActivityWith(int role, Member req);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

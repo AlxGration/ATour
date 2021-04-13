@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.ui.login.LoginActivity;
+
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -49,21 +52,32 @@ public class ProfileActivity extends AppCompatActivity {
         viewModel.getPhone().observe(this, tvPhone::setText);
 
 
-
-        User u = (User) getIntent().getSerializableExtra("userInfo");
-        MembershipRequest req = (MembershipRequest) getIntent().getSerializableExtra("request");
-        String userID = getIntent().getStringExtra("userID");
-
-        if (req != null){   //если пришли на этот экран для просмотра документов/заявки
-            viewModel.loadProfile(userID);  // показ регистрационных данных пользователя
-            showRequest(req);               // показ заявки на участие / доков
-        }else {
-            if (u == null) {                              // если открываю свой профиль
+        int comeFrom = getIntent().getIntExtra("comeFrom", -1);
+        String userID;
+        switch (comeFrom){
+            case 1://my profile
+                userID = getIntent().getStringExtra("userID");
                 viewModel.loadProfile(userID);
                 btnSignOut.setVisibility(View.VISIBLE);
-            } else {                                      // если чей то другой(напр, админа)
+                break;
+            case 2://show membership request (for admin)
+                MembershipRequest req = (MembershipRequest) getIntent().getSerializableExtra("request");
+                userID = req.getUserID();
+                viewModel.loadProfile(userID);  // показ регистрационных данных пользователя
+                showRequest(req);               // показ заявки на участие / доков
+                break;
+            case 3://show admin info
+                User u = (User) getIntent().getSerializableExtra("userInfo");
                 viewModel.setUserInfo(u);
-            }
+                break;
+            case 4://show docs (for referee)
+                //todo::realise me
+                Member mem = (Member) getIntent().getSerializableExtra("member");
+                viewModel.setUserName(mem.getUserFIO());
+                String champID = getIntent().getStringExtra("champID");
+                viewModel.loadDocs(champID, mem.getUserID());
+                showEstimationLayut(mem);
+                break;
         }
     }
 
@@ -105,7 +119,27 @@ public class ProfileActivity extends AppCompatActivity {
         if (req.isTypeAuto()) findViewById(R.id.cp_auto).setVisibility(View.VISIBLE);
         if (req.isTypeOther()) findViewById(R.id.cp_other).setVisibility(View.VISIBLE);
 
-        ConstraintLayout layout = findViewById(R.id.layout);
+        ConstraintLayout layout = findViewById(R.id.layout_request);
         layout.setVisibility(View.VISIBLE);
     }
+
+    private void showEstimationLayut(Member req){
+        //types
+        if (req.isTypeWalk()) findViewById(R.id.cp_walk).setVisibility(View.VISIBLE);
+        if (req.isTypeSki()) findViewById(R.id.cp_ski).setVisibility(View.VISIBLE);
+        if (req.isTypeHike()) findViewById(R.id.cp_hike).setVisibility(View.VISIBLE);
+        if (req.isTypeWater()) findViewById(R.id.cp_water).setVisibility(View.VISIBLE);
+
+        if (req.isTypeSpeleo()) findViewById(R.id.cp_speleo).setVisibility(View.VISIBLE);
+        if (req.isTypeBike()) findViewById(R.id.cp_bike).setVisibility(View.VISIBLE);
+        if (req.isTypeAuto()) findViewById(R.id.cp_auto).setVisibility(View.VISIBLE);
+        if (req.isTypeOther()) findViewById(R.id.cp_other).setVisibility(View.VISIBLE);
+
+        ConstraintLayout layoutDocs = findViewById(R.id.layout_request);
+        layoutDocs.setVisibility(View.VISIBLE);
+
+        LinearLayout layoutEstim = findViewById(R.id.layout_estim);
+        layoutEstim.setVisibility(View.VISIBLE);
+    }
+
 }

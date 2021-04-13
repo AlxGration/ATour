@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onClickProfile(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra("userID", User.MyID);//userID or "MY" (comparing in FirebaseDB.class)
+        intent.putExtra("comeFrom", 1);//show my info
         startActivity(intent);
     }
 

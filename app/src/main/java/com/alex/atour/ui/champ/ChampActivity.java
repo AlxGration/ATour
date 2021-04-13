@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.alex.atour.DTO.Champ;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.User;
@@ -27,7 +29,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private ProgressBar pBar;
     private ChampInfo info;
     private User admin;
-    private int role, state;
+    private int role;
 
     private ChampViewModel viewModel;
 
@@ -67,7 +69,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         });
 
         viewModel.getStateLiveData().observe(this, state->{
-            this.state = state;
             showLayoutDependsOnRoleAndState(role, state);
         });
 
@@ -95,6 +96,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
 
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra("userInfo", admin);
+        intent.putExtra("comeFrom", 3);//show admin info
         startActivity(intent);
     }
 
@@ -146,7 +148,15 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     };
 
     @Override
-    public void startProfileActivityWith(Member member) {
+    public void startProfileActivityWith(int role, Member member) {
+        //role - от чьего имени открывается экран
+        if (role == 2){
+            Intent intent = new Intent(ChampActivity.this, ProfileActivity.class);
+            intent.putExtra("member", member);
+            intent.putExtra("champID", info.getChampID());
+            intent.putExtra("comeFrom", 4);//show docs (for referee)
+            startActivity(intent);
+        }
         //todo:startProfileActivityWith member (for admin, referee)
     }
 

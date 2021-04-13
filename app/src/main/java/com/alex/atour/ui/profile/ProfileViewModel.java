@@ -33,8 +33,11 @@ public class ProfileViewModel extends BaseViewModel {
     public void loadProfile(String userID){
         setIsLoading(true);
         setErrorMessage("");
-
         model.requestUserProfile(userID);
+    }
+
+    public void loadDocs(String champID, String userID){
+        //todo::realize me
     }
 
     void requestProfileError(String msg){
@@ -46,9 +49,7 @@ public class ProfileViewModel extends BaseViewModel {
         setIsLoading(false);
         setErrorMessage("");
 
-        String[] fio = user.getFio().split(" ");
-        secName.setValue(fio[0]);
-        name.setValue(fio[1]+" "+fio[2]);
+        setUserName(user.getFio());
         city.setValue(user.getCity());
         email.setValue(user.getEmail());
         phone.setValue("+7 "+user.getPhone());
@@ -56,5 +57,11 @@ public class ProfileViewModel extends BaseViewModel {
 
     void signOut(){
         model.signOut();
+    }
+
+    public void setUserName(String userName){
+        String[] fio = userName.split(" ");
+        secName.setValue(fio[0]);
+        name.setValue(fio[1]+" "+fio[2]);
     }
 }

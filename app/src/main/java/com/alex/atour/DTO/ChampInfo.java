@@ -3,9 +3,9 @@ package com.alex.atour.DTO;
 import java.io.Serializable;
 
 public class ChampInfo implements Serializable {
-    String title, champID, dataFrom, dataTo, city, adminID;
-    int status;
-    boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
+    private String title, champID, dataFrom, dataTo, city, adminID;
+    private int status;
+    private boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
 
     public ChampInfo(){}
 

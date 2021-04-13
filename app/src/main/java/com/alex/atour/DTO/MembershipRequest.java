@@ -3,9 +3,9 @@ package com.alex.atour.DTO;
 import java.io.Serializable;
 
 public class MembershipRequest implements Serializable {
-    String id, userID, comment, cloudLink, docsLink, champID, userFIO;
-    int role;
-    boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
+    private String id, userID, comment, cloudLink, docsLink, champID, userFIO;
+    private int role;
+    private boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
 
     public MembershipRequest(){}
 

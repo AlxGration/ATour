@@ -186,7 +186,7 @@
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout"
+                    android:id="@+id/layout_request"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/padding"
@@ -369,6 +369,16 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_estim"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding"
+                android:layout_marginEnd="@dimen/padding"
+                android:visibility="invisible">
+                <include layout="@layout/layout_estimation"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
