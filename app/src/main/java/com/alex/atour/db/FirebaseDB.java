@@ -333,8 +333,31 @@ public class FirebaseDB extends DBManager{
     // get members who sent docs and waiting results
 
     public void getDocsSentMembers(String champID, IMembersListListener listener){
-        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").equalTo(MembershipState.DOCS_SUBMISSION.ordinal());
-        membersListQuery(query, listener);
+
+
+        getMemberByID(getUser().getUid(), champID, new IMembersListListener() {
+            @Override
+            public void onSuccess(ArrayList<Member> members) {
+                Member me = members.get(0);
+                Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").equalTo(MembershipState.DOCS_SUBMISSION.ordinal());
+//todo::error here
+
+                if (me.isTypeWalk()) query.orderByChild("typeWalk").equalTo(true);
+                if (me.isTypeSki()) query.orderByChild("typeSki").equalTo(true);
+                if (me.isTypeHike()) query.orderByChild("typeHike").equalTo(true);
+                if (me.isTypeWater()) query.orderByChild("typeWater").equalTo(true);
+
+                if (me.isTypeSpeleo()) query.orderByChild("typeSpeleo").equalTo(true);
+                if (me.isTypeBike()) query.orderByChild("typeBike").equalTo(true);
+                if (me.isTypeAuto()) query.orderByChild("typeAuto").equalTo(true);
+                if (me.isTypeOther()) query.orderByChild("typeOther").equalTo(true);
+
+                membersListQuery(query, listener);
+            }
+
+            @Override
+            public void onFailed(String msg) {            }
+        });
     }
 
     private void membersListQuery(Query query, IMembersListListener listener){

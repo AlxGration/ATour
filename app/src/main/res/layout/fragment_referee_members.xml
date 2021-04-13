@@ -13,10 +13,14 @@
         app:tabIndicatorColor="@color/yellow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ожидают оценки"/>
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
+    <include
+        layout="@layout/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

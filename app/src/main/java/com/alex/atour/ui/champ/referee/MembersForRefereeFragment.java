@@ -45,7 +45,7 @@ public class MembersForRefereeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.list, container, false);
+        View view = inflater.inflate(R.layout.fragment_referee_members, container, false);
 
         TextView tvError = view.findViewById(R.id.tv_error);
         RecyclerView recyclerView = view.findViewById(R.id.rv_list);
