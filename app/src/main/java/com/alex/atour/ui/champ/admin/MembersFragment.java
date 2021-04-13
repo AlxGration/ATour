@@ -20,28 +20,18 @@ import java.util.ArrayList;
 public class MembersFragment extends Fragment {
 
     private MembersViewModel viewModel;
-    public static final String CHAMP_ID = "CHAMP_ID";
-    private String champID;
+    private final String champID;
 
-    public static MembersFragment getInstance(String champID) {
-        Bundle args = new Bundle();
-        args.putString(CHAMP_ID, champID);
-        MembersFragment fragment = new MembersFragment();
-        fragment.setArguments(args);
-
-        return fragment;
+    public static MembersFragment newInstance(String champID) {
+        return new MembersFragment(champID);
     }
 
-    private MembersFragment(){    }
+    private MembersFragment(String champID){this.champID = champID;}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(getActivity()).get(MembersViewModel.class);
-
-        if (getArguments() != null) {
-            champID = getArguments().getString(CHAMP_ID);
-        }
     }
 
     @Override

@@ -10,13 +10,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.alex.atour.DTO.Champ;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.models.MembersListRecyclerAdapter;
 import com.alex.atour.ui.champ.admin.MembersFragment;
+import com.alex.atour.ui.champ.member.DocsFragment;
 import com.alex.atour.ui.champ.referee.MembersForRefereeFragment;
 import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
@@ -221,29 +221,33 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
         // and fragment
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_layout,  MembersFragment.getInstance(info.getChampID()))
+                .replace(R.id.frame_layout,  MembersFragment.newInstance(info.getChampID()))
                 .commitNow();
     }
 
     // (for members)
     private void showDocsSendingFragment(){
-        //todo:create me
-        tvMessage.setText("members: showDocsSendingFragment");
+        //show FrameLayout
+        findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
+        // and fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout,  DocsFragment.newInstance(info.getChampID()))
+                .commitNow();
     }
     // (for members and referees)
     private void showResultsFragment(){
         //todo:create me
+        findViewById(R.id.frame_layout).setVisibility(View.GONE);
         tvMessage.setText(": showResultsFragment");
     }
 
     // (for referee)
     private void showDocsFragment(){
-        //todo:create me
         //show FrameLayout
         findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
         // and fragment
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_layout,  MembersForRefereeFragment.getInstance(info.getChampID()))
+                .replace(R.id.frame_layout,  MembersForRefereeFragment.newInstance(info.getChampID()))
                 .commitNow();
     }
 }

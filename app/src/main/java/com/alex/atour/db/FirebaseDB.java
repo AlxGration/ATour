@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.alex.atour.DTO.Champ;
 import com.alex.atour.DTO.ChampInfo;
+import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.RequestLinks;
@@ -24,16 +25,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-
 public class FirebaseDB extends DBManager{
 
     private static final int LIMIT_RECS_COUNT = 30;
     private final String USER_TABLE = "Users";// таблица пользователей
     private final String REQUEST_TABLE = "Requests";// запросы на участие чемпионате
-    private final String CHAMP_TABLE = "Champs";//основная таблица чемпионата(документы,судьи,участници,заявки,оценки)
-    private final String CHAMP_INFO_TABLE = "ChampsInfo";//информация о чемпионате
-    private final String MEMBER_TABLE = "Members";//информация о чемпионате
-    private final String ACCEPTED_REQUEST_TABLE = "Accepted";//информация о чемпионате
+    private final String CHAMP_TABLE = "Champs";// основная таблица чемпионата(документы,судьи,участници,заявки,оценки)
+    private final String CHAMP_INFO_TABLE = "ChampsInfo";// информация о чемпионате
+    private final String MEMBER_TABLE = "Members";// заявки пользователей
+    private final String ACCEPTED_REQUEST_TABLE = "Accepted";// одобренные заявки пользователей
+    private final String DOCUMENTS = "Docs";// таблица документов
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -75,7 +76,7 @@ public class FirebaseDB extends DBManager{
                         Log.e("TAG", "userUID: "+userID);
 
                         _user.setId(userID);
-                        //adding info to my "public" db
+                        //adding info to my db
                         DatabaseReference ref = getDbRef();
                         ref.child(USER_TABLE).child(userID).setValue(_user);
 
@@ -282,7 +283,7 @@ public class FirebaseDB extends DBManager{
                 ref.child(REQUEST_TABLE).child(req.getId()).removeValue().addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()){
                         //todo: change state in MEMBER TABLE
-                        ref.child(MEMBER_TABLE).child(req.getUserID()).child("state").setValue(MembershipState.ACCEPTED.ordinal());
+                        changeUserState(req.getChampID(), req.getUserID(), MembershipState.ACCEPTED.ordinal());
                         if (listener!=null) listener.onSuccess();
                     }else{
                         if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
@@ -292,7 +293,6 @@ public class FirebaseDB extends DBManager{
         });
     }
 
-
     // Удаление Request из таблиццы Champ->Requests, Requests
     // смена статуса пользователя Champ->Members на DENIED
     @Override
@@ -301,8 +301,6 @@ public class FirebaseDB extends DBManager{
         // remove MembershipRequest from Champ->Requests
         ref.child(REQUEST_TABLE).child(req.getId()).removeValue().addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()){
-                //todo: remove request from Request table, Member table
-                //ref.child(MEMBER_TABLE).child(req.getUserID()).child("state").setValue(MembershipState.DENIED.ordinal());
                 // remove user data from MEMBERS table
                 ref.child(MEMBER_TABLE).child(req.getUserID()).removeValue();
                 // remove user data from REQUESTS table
@@ -312,6 +310,46 @@ public class FirebaseDB extends DBManager{
                 if (listener!=null) listener.onSuccess();
             }else{
                 if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
+            }
+        });
+    }
+
+    // add Document to Champ->Documents
+    @Override
+    public void sendDocument(String champID, Document document, IRequestListener listener){
+        DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(DOCUMENTS);
+
+        //send docs
+        ref.push().setValue(document).addOnCompleteListener(task1 -> {
+            if (task1.isSuccessful()){
+
+                //and change user state (to show results)
+                changeUserState(champID, document.getUserID(), MembershipState.RESULTS.ordinal());
+
+                if (listener!=null) listener.onSuccess();
+            }else{
+                if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
+            }
+        });
+    }
+
+    @Override
+    public void getDocumentByUserID(String champID, String userID, IDocumentListener listener){
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(DOCUMENTS).orderByChild("userID").equalTo(userID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.e("TAG", "getDocumentByUserID: "+snapshot.toString());
+
+                ArrayList<Document> list = new ArrayList<>((int)snapshot.getChildrenCount());
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
+                    list.add(snap.getValue(Document.class));
+                }
+                if (listener!=null) listener.onSuccess(list.get(0));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
             }
         });
     }
@@ -435,5 +473,9 @@ public class FirebaseDB extends DBManager{
         member.setTypeAuto(req.isTypeAuto());
         member.setTypeOther(req.isTypeOther());
         return member;
+    }
+    private void changeUserState(String champID, String userID, int state){
+        getDbRef().child(CHAMP_TABLE).child(champID)
+                .child(MEMBER_TABLE).child(userID).child("state").setValue(state);
     }
 }

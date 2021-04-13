@@ -19,27 +19,18 @@ import com.alex.atour.ui.champ.ChampActivity;
 public class MembersForRefereeFragment extends Fragment {
 
     private MembersViewModel viewModel;
-    public static final String CHAMP_ID = "CHAMP_ID";
-    private String champID;
+    private final String champID;
 
-    public static MembersForRefereeFragment getInstance(String champID) {
-        Bundle args = new Bundle();
-        args.putString(CHAMP_ID, champID);
-        MembersForRefereeFragment fragment = new MembersForRefereeFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public static MembersForRefereeFragment newInstance(String champID) {
+        return new MembersForRefereeFragment(champID);
     }
 
-    private MembersForRefereeFragment(){    }
+    private MembersForRefereeFragment(String champID){this.champID = champID;}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(MembersViewModel.class);
-
-        if (getArguments() != null) {
-            champID = getArguments().getString(CHAMP_ID);
-        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.alex.atour.db;
 import android.app.Activity;
 
 import com.alex.atour.DTO.ChampInfo;
+import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
@@ -49,6 +50,9 @@ public abstract class DBManager {
     public abstract void getMyChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
     public abstract void getMembershipRequestsList(String champID, IMembershipRequestsListListener listener);//заявки на чемпионат(для админа)
 
+    public abstract void sendDocument(String champID, Document document, IRequestListener listener); // добавить документ
+    public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
+
     public abstract void acceptRequest(MembershipRequest req, IRequestListener listener);// одобрение заявки админом
     public abstract void denyRequest(MembershipRequest req, IRequestListener listener);// отмена заявки админом
 
@@ -70,6 +74,10 @@ public abstract class DBManager {
     }
     public interface IMembersListListener{
         void onSuccess(ArrayList<Member> members);
+        void onFailed(String msg);
+    }
+    public interface IDocumentListener{
+        void onSuccess(Document document);
         void onFailed(String msg);
     }
 }

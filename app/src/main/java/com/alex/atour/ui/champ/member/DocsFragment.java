@@ -14,14 +14,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.alex.atour.R;
+import com.alex.atour.ui.champ.admin.MembersFragment;
 import com.alex.atour.ui.champ.admin.MembersViewModel;
 
 public class DocsFragment extends Fragment {
 
     private DocsViewModel viewModel;
-    private String champID;
+    private final String champID;
 
-    public DocsFragment(String champID){this.champID = champID;}
+    public static DocsFragment newInstance(String champID) {
+        return new DocsFragment(champID);
+    }
+
+    private DocsFragment(String champID){this.champID = champID;}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +37,7 @@ public class DocsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_docs_sending, container, false);
+        View view = inflater.inflate(R.layout.fragment_docs_send, container, false);
 
         EditText etLink = view.findViewById(R.id.et_link);
         EditText etComment = view.findViewById(R.id.et_comment);
@@ -49,7 +54,7 @@ public class DocsFragment extends Fragment {
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading->{
             pBar.setVisibility(isLoading?
                     View.VISIBLE:
-                    View.INVISIBLE
+                    View.GONE
             );
             btnSend.setEnabled(!isLoading);
         });
