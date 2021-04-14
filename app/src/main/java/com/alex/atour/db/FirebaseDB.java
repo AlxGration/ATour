@@ -252,6 +252,15 @@ public class FirebaseDB extends DBManager{
     @Override
     public void getMembershipRequestsList(String champID, IMembershipRequestsListListener listener) {
         Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(REQUEST_TABLE);
+        getMembershipRequests(query, listener);
+    }
+    @Override
+    public void getMembershipRequestByID(String champID, String userID, IMembershipRequestsListListener listener) {
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(ACCEPTED_REQUEST_TABLE).orderByChild("userID").equalTo(userID);
+        getMembershipRequests(query, listener);
+    }
+
+    private void getMembershipRequests(Query query, IMembershipRequestsListListener listener){
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

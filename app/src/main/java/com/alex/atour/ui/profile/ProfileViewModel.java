@@ -3,6 +3,7 @@ package com.alex.atour.ui.profile;
 import androidx.lifecycle.MutableLiveData;
 
 import com.alex.atour.DTO.Document;
+import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.BaseViewModel;
 
@@ -16,8 +17,8 @@ public class ProfileViewModel extends BaseViewModel {
     private final MutableLiveData<String> email;
     private final MutableLiveData<String> phone;
 
-    private final MutableLiveData<String> link;
-    private final MutableLiveData<String> comment;
+    private final MutableLiveData<Document> document;
+    private final MutableLiveData<MembershipRequest> memReq;
 
     public ProfileViewModel(){
         secName = new MutableLiveData<>();
@@ -25,8 +26,8 @@ public class ProfileViewModel extends BaseViewModel {
         phone = new MutableLiveData<>();
         name = new MutableLiveData<>();
         city = new MutableLiveData<>();
-        link = new MutableLiveData<>();
-        comment = new MutableLiveData<>();
+        document = new MutableLiveData<>();
+        memReq = new MutableLiveData<>();
 
         model = new ProfileModel(this);
     }
@@ -36,13 +37,19 @@ public class ProfileViewModel extends BaseViewModel {
     public MutableLiveData<String> getCity() { return city; }
     public MutableLiveData<String> getEmail() { return email; }
     public MutableLiveData<String> getPhone() { return phone; }
-    public MutableLiveData<String> getLink() { return link; }
-    public MutableLiveData<String> getComment() { return comment; }
+    public MutableLiveData<Document> getDocument() { return document; }
+    public MutableLiveData<MembershipRequest> getMembershipRequest() { return memReq; }
 
     public void loadProfile(String userID){
         setIsLoading(true);
         setErrorMessage("");
         model.requestUserProfile(userID);
+    }
+
+    public void loadMembershipRequest(String champID, String userID){
+        setIsLoading(true);
+        setErrorMessage("");
+        model.requestMembershipRequest(champID, userID);
     }
 
     public void loadDocs(String champID, String userID){
@@ -57,8 +64,13 @@ public class ProfileViewModel extends BaseViewModel {
     }
 
     void setDocument(Document doc){
-        link.setValue(doc.getLink());
-        comment.setValue(doc.getComment());
+        document.setValue(doc);
+        setIsLoading(false);
+        setErrorMessage("");
+    }
+
+    void setMembershipRequest(MembershipRequest req){
+        memReq.setValue(req);
         setIsLoading(false);
         setErrorMessage("");
     }
@@ -80,11 +92,5 @@ public class ProfileViewModel extends BaseViewModel {
         String[] fio = userName.split(" ");
         secName.setValue(fio[0]);
         name.setValue(fio[1]+" "+fio[2]);
-    }
-    public void setComment(String comment){
-        this.comment.setValue(comment);
-    }
-    public void setLink(String link){
-        this.link.setValue(link);
     }
 }

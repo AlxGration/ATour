@@ -19,8 +19,6 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
 
     private RequestsViewModel viewModel;
 
-    private String champID;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +31,7 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
         RecyclerView recyclerView = findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        champID = getIntent().getStringExtra("champID");
+        String champID = getIntent().getStringExtra("champID");
 
         viewModel.getIsLoading().observe(this, isLoading->{
             pBar.setVisibility(isLoading?

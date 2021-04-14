@@ -1,13 +1,11 @@
 package com.alex.atour.ui.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.alex.atour.DTO.Member;
@@ -35,8 +33,8 @@ public class ProfileActivity extends AppCompatActivity {
         TextView tvEmail = findViewById(R.id.tv_email);
         TextView tvPhone = findViewById(R.id.tv_phone);
         ProgressBar pBar = findViewById(R.id.progress_bar);
-        TextView tvLink = findViewById(R.id.tv_link);
-        TextView tvComment = findViewById(R.id.tv_comment);
+        TextView tvDLink = findViewById(R.id.tv_d_link);
+        TextView tvDComment = findViewById(R.id.tv_d_comment);
 
         viewModel.getIsLoading().observe(this, isLoading->{
             pBar.setVisibility(isLoading?
@@ -51,12 +49,18 @@ public class ProfileActivity extends AppCompatActivity {
         viewModel.getCity().observe(this, tvCity::setText);
         viewModel.getEmail().observe(this, tvEmail::setText);
         viewModel.getPhone().observe(this, tvPhone::setText);
-        viewModel.getLink().observe(this, tvLink::setText);
-        viewModel.getComment().observe(this, tvComment::setText);
+        viewModel.getDocument().observe(this, document -> {
+            showLayout(R.id.layout_docs, View.VISIBLE);
+            tvDLink.setText(document.getLink());
+            tvDComment.setText(document.getComment());
+        });
+        // показ заявки на участие
+        viewModel.getMembershipRequest().observe(this, this::showRequest);
 
 
         int comeFrom = getIntent().getIntExtra("comeFrom", -1);
-        String userID;
+        String champID, userID;
+        Member mem;
         switch (comeFrom){
             case 1://my profile
                 userID = getIntent().getStringExtra("userID");
@@ -68,19 +72,25 @@ public class ProfileActivity extends AppCompatActivity {
                 userID = req.getUserID();
                 viewModel.loadProfile(userID);  // показ регистрационных данных пользователя
                 showRequest(req);               // показ заявки на участие
-                                                            //todo:: fix setting request data and docs to the same tvLink, tvComment
-                viewModel.loadDocs(req.getChampID(), req.getUserID());  // показ документов
                 break;
             case 3://show admin info
                 User u = (User) getIntent().getSerializableExtra("userInfo");
                 viewModel.setUserInfo(u);
                 break;
             case 4://show docs (for referee)
-                Member mem = (Member) getIntent().getSerializableExtra("member");
+                mem = (Member) getIntent().getSerializableExtra("member");
                 viewModel.setUserName(mem.getUserFIO());
-                String champID = getIntent().getStringExtra("champID");
-                viewModel.loadDocs(champID, mem.getUserID());//todo:: fix setting request data and docs to the same tvLink, tvComment
+                champID = getIntent().getStringExtra("champID");
+                viewModel.loadDocs(champID, mem.getUserID());
                 showEstimationLayout(mem);
+                break;
+            case 5://show request and docs (for admin)
+                mem = (Member) getIntent().getSerializableExtra("member");
+                userID = mem.getUserID();
+                champID = getIntent().getStringExtra("champID");
+                viewModel.loadProfile(userID);          // показ регистрационных данных пользователя
+                viewModel.loadDocs(champID, userID);    // показ документов
+                viewModel.loadMembershipRequest(champID, userID);
                 break;
         }
     }
@@ -89,7 +99,8 @@ public class ProfileActivity extends AppCompatActivity {
         onBackPressed();
     }
 
-    public void onClickSignOut(View view) {// выход из аккаунта
+    // выход из аккаунта
+    public void onClickSignOut(View view) {
         viewModel.signOut();
 
         Intent intent = new Intent(this, LoginActivity.class);
@@ -98,8 +109,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showRequest(MembershipRequest req){
-        viewModel.setLink(req.getCloudLink());
-        viewModel.setComment(req.getComment());
+        ((TextView)findViewById(R.id.tv_link)).setText(req.getCloudLink());
+        ((TextView)findViewById(R.id.tv_comment)).setText(req.getComment());
 
         //role
         TextView tvTitle = findViewById(R.id.tv_title);
@@ -120,8 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (req.isTypeAuto()) findViewById(R.id.cp_auto).setVisibility(View.VISIBLE);
         if (req.isTypeOther()) findViewById(R.id.cp_other).setVisibility(View.VISIBLE);
 
-        ConstraintLayout layout = findViewById(R.id.layout_request);
-        layout.setVisibility(View.VISIBLE);
+        showLayout(R.id.layout_request, View.VISIBLE);
     }
 
     private void showEstimationLayout(Member req){
@@ -136,15 +146,15 @@ public class ProfileActivity extends AppCompatActivity {
         if (req.isTypeAuto()) findViewById(R.id.cp_auto).setVisibility(View.VISIBLE);
         if (req.isTypeOther()) findViewById(R.id.cp_other).setVisibility(View.VISIBLE);
 
-        ConstraintLayout layoutDocs = findViewById(R.id.layout_request);
-        layoutDocs.setVisibility(View.VISIBLE);
-
-        LinearLayout layoutEstim = findViewById(R.id.layout_estim);
-        layoutEstim.setVisibility(View.VISIBLE);
+        showLayout(R.id.layout_docs, View.VISIBLE);
+        showLayout(R.id.layout_estim, View.VISIBLE);
 
         (findViewById(R.id.img_title_city)).setVisibility(View.GONE);
         (findViewById(R.id.tv_title_email)).setVisibility(View.GONE);
         (findViewById(R.id.tv_title_phone)).setVisibility(View.GONE);
     }
 
+    private void showLayout(int id, int visibility){
+        findViewById(id).setVisibility(visibility);
+    }
 }

@@ -157,6 +157,13 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
             intent.putExtra("comeFrom", 4);//show docs (for referee)
             startActivity(intent);
         }
+        if (role == 1){
+            Intent intent = new Intent(ChampActivity.this, ProfileActivity.class);
+            intent.putExtra("member", member);
+            intent.putExtra("champID", info.getChampID());
+            intent.putExtra("comeFrom", 5);//show request and docs (for admin)
+            startActivity(intent);
+        }
         //todo:startProfileActivityWith member (for admin, referee)
     }
 

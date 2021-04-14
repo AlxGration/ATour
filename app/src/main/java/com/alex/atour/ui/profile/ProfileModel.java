@@ -1,8 +1,11 @@
 package com.alex.atour.ui.profile;
 
 import com.alex.atour.DTO.Document;
+import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
+
+import java.util.ArrayList;
 
 public class ProfileModel {
 
@@ -20,7 +23,6 @@ public class ProfileModel {
             public void onSuccess(User user) {
                 viewModel.setUserInfo(user);
             }
-
             @Override
             public void onFailed(String msg) {
                 viewModel.requestError(msg);
@@ -34,7 +36,6 @@ public class ProfileModel {
             public void onSuccess(Document document) {
                 viewModel.setDocument(document);
             }
-
             @Override
             public void onFailed(String msg) {
                 viewModel.requestError(msg);
@@ -42,7 +43,19 @@ public class ProfileModel {
         });
     }
 
-    public void signOut(){
-        db.signOut();
+    public void requestMembershipRequest(String champID, String userID){
+        //todo:realize me
+        //todo:load from Champ->Accepted
+        db.getMembershipRequestByID(champID, userID, new DBManager.IMembershipRequestsListListener() {
+            @Override
+            public void onSuccess(ArrayList<MembershipRequest> requests) {
+                viewModel.setMembershipRequest(requests.get(0));
+            }
+            @Override
+            public void onFailed(String msg) { viewModel.requestError(msg); }
+        });
+
     }
+
+    public void signOut(){ db.signOut(); }
 }
