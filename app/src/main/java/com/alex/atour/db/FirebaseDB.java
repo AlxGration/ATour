@@ -378,7 +378,7 @@ public class FirebaseDB extends DBManager{
             public void onSuccess(ArrayList<Member> members) {
                 Member me = members.get(0);
                 // get all docs sent members
-                Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").equalTo(MembershipState.DOCS_SUBMISSION.ordinal());
+                Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").equalTo(MembershipState.RESULTS.ordinal());
                 membersListQuery(query, new IMembersListListener() {
                     @Override
                     public void onSuccess(ArrayList<Member> members) {

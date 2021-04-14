@@ -1,6 +1,8 @@
 package com.alex.atour.ui.profile;
 
 import androidx.lifecycle.MutableLiveData;
+
+import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.BaseViewModel;
 
@@ -14,12 +16,17 @@ public class ProfileViewModel extends BaseViewModel {
     private final MutableLiveData<String> email;
     private final MutableLiveData<String> phone;
 
+    private final MutableLiveData<String> link;
+    private final MutableLiveData<String> comment;
+
     public ProfileViewModel(){
         secName = new MutableLiveData<>();
         email = new MutableLiveData<>();
         phone = new MutableLiveData<>();
         name = new MutableLiveData<>();
         city = new MutableLiveData<>();
+        link = new MutableLiveData<>();
+        comment = new MutableLiveData<>();
 
         model = new ProfileModel(this);
     }
@@ -29,6 +36,8 @@ public class ProfileViewModel extends BaseViewModel {
     public MutableLiveData<String> getCity() { return city; }
     public MutableLiveData<String> getEmail() { return email; }
     public MutableLiveData<String> getPhone() { return phone; }
+    public MutableLiveData<String> getLink() { return link; }
+    public MutableLiveData<String> getComment() { return comment; }
 
     public void loadProfile(String userID){
         setIsLoading(true);
@@ -37,12 +46,18 @@ public class ProfileViewModel extends BaseViewModel {
     }
 
     public void loadDocs(String champID, String userID){
-        //todo::realize me
+        setIsLoading(true);
+        model.requestDocuments(champID, userID);
     }
 
-    void requestProfileError(String msg){
+    void requestError(String msg){
         setIsLoading(false);
         setErrorMessage(msg);
+    }
+
+    void setDocument(Document doc){
+        link.setValue(doc.getLink());
+        comment.setValue(doc.getComment());
     }
 
     void setUserInfo(User user){
@@ -63,5 +78,11 @@ public class ProfileViewModel extends BaseViewModel {
         String[] fio = userName.split(" ");
         secName.setValue(fio[0]);
         name.setValue(fio[1]+" "+fio[2]);
+    }
+    public void setComment(String comment){
+        this.comment.setValue(comment);
+    }
+    public void setLink(String link){
+        this.link.setValue(link);
     }
 }

@@ -1,5 +1,6 @@
 package com.alex.atour.ui.profile;
 
+import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
 
@@ -22,7 +23,21 @@ public class ProfileModel {
 
             @Override
             public void onFailed(String msg) {
-                viewModel.requestProfileError(msg);
+                viewModel.requestError(msg);
+            }
+        });
+    }
+
+    public void requestDocuments(String champID, String userID){
+        db.getDocumentByUserID(champID, userID, new DBManager.IDocumentListener() {
+            @Override
+            public void onSuccess(Document document) {
+                viewModel.setDocument(document);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                viewModel.requestError(msg);
             }
         });
     }

@@ -36,6 +36,8 @@ public class ProfileActivity extends AppCompatActivity {
         TextView tvEmail = findViewById(R.id.tv_email);
         TextView tvPhone = findViewById(R.id.tv_phone);
         ProgressBar pBar = findViewById(R.id.progress_bar);
+        TextView tvLink = findViewById(R.id.tv_link);
+        TextView tvComment = findViewById(R.id.tv_comment);
 
         viewModel.getIsLoading().observe(this, isLoading->{
             pBar.setVisibility(isLoading?
@@ -50,6 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
         viewModel.getCity().observe(this, tvCity::setText);
         viewModel.getEmail().observe(this, tvEmail::setText);
         viewModel.getPhone().observe(this, tvPhone::setText);
+        viewModel.getLink().observe(this, tvLink::setText);
+        viewModel.getComment().observe(this, tvComment::setText);
 
 
         int comeFrom = getIntent().getIntExtra("comeFrom", -1);
@@ -76,7 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
                 viewModel.setUserName(mem.getUserFIO());
                 String champID = getIntent().getStringExtra("champID");
                 viewModel.loadDocs(champID, mem.getUserID());
-                showEstimationLayut(mem);
+                showEstimationLayout(mem);
                 break;
         }
     }
@@ -94,11 +98,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showRequest(MembershipRequest req){
-        TextView tvLink = findViewById(R.id.tv_link);
-        TextView tvComment = findViewById(R.id.tv_comment);
-
-        tvLink.setText(req.getCloudLink());
-        tvComment.setText(req.getComment());
+        viewModel.setLink(req.getCloudLink());
+        viewModel.setComment(req.getComment());
 
         //role
         TextView tvTitle = findViewById(R.id.tv_title);
@@ -123,7 +124,7 @@ public class ProfileActivity extends AppCompatActivity {
         layout.setVisibility(View.VISIBLE);
     }
 
-    private void showEstimationLayut(Member req){
+    private void showEstimationLayout(Member req){
         //types
         if (req.isTypeWalk()) findViewById(R.id.cp_walk).setVisibility(View.VISIBLE);
         if (req.isTypeSki()) findViewById(R.id.cp_ski).setVisibility(View.VISIBLE);
@@ -140,6 +141,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         LinearLayout layoutEstim = findViewById(R.id.layout_estim);
         layoutEstim.setVisibility(View.VISIBLE);
+
+        (findViewById(R.id.img_title_city)).setVisibility(View.GONE);
+        (findViewById(R.id.tv_title_email)).setVisibility(View.GONE);
+        (findViewById(R.id.tv_title_phone)).setVisibility(View.GONE);
     }
 
 }
