@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.alex.atour.DTO.Member;
 import com.alex.atour.R;
+import com.alex.atour.ui.champ.ChampActivity;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ public class MembersFragment extends Fragment {
 
         //get all members
         viewModel.requestMembersList(champID);
+
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), ((ChampActivity)getActivity())::showLoadingProcess);
         return view;
     }
 }

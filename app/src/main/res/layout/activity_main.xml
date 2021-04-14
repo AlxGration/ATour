@@ -61,6 +61,16 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:scaleType="centerInside"/>
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:indeterminateOnly="true"
+                    android:indeterminateTint="@color/black"
+                    android:visibility="invisible"
+                    android:layout_marginEnd="8dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"/>
             </RelativeLayout>
 
             <ImageView

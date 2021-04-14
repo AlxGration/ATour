@@ -16,7 +16,6 @@ import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.ui.login.LoginActivity;
 
-
 public class ProfileActivity extends AppCompatActivity {
 
     private ProfileViewModel viewModel;
@@ -68,18 +67,19 @@ public class ProfileActivity extends AppCompatActivity {
                 MembershipRequest req = (MembershipRequest) getIntent().getSerializableExtra("request");
                 userID = req.getUserID();
                 viewModel.loadProfile(userID);  // показ регистрационных данных пользователя
-                showRequest(req);               // показ заявки на участие / доков
+                showRequest(req);               // показ заявки на участие
+                                                            //todo:: fix setting request data and docs to the same tvLink, tvComment
+                viewModel.loadDocs(req.getChampID(), req.getUserID());  // показ документов
                 break;
             case 3://show admin info
                 User u = (User) getIntent().getSerializableExtra("userInfo");
                 viewModel.setUserInfo(u);
                 break;
             case 4://show docs (for referee)
-                //todo::realise me
                 Member mem = (Member) getIntent().getSerializableExtra("member");
                 viewModel.setUserName(mem.getUserFIO());
                 String champID = getIntent().getStringExtra("champID");
-                viewModel.loadDocs(champID, mem.getUserID());
+                viewModel.loadDocs(champID, mem.getUserID());//todo:: fix setting request data and docs to the same tvLink, tvComment
                 showEstimationLayout(mem);
                 break;
         }

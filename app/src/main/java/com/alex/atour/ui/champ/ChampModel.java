@@ -44,8 +44,10 @@ public class ChampModel {
         db.getMemberByID(curUserID, champID, new DBManager.IMembersListListener() {
             @Override
             public void onSuccess(ArrayList<Member> members) {
-                if (members == null || members.size() == 0) return;//new user
-
+                if (members == null || members.size() == 0) {
+                    viewModel.setRole(-1);
+                    return;//new user
+                }
                 Member member = members.get(0);
                 viewModel.setRole(member.getRole());
                 viewModel.setState(member.getState());

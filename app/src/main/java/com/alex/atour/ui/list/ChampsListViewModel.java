@@ -30,13 +30,14 @@ public class ChampsListViewModel extends BaseViewModel {
     public MutableLiveData<ArrayList<ChampInfo>> getFoundChampsListLiveData() { return foundChamps; }
 
     public void requestChampsList(){
+        setIsLoading(true);
         model.requestChampsList();
     }
     public void requestManagedChampsList(){
-        model.requestManagedChampsList();
+        setIsLoading(true); model.requestManagedChampsList();
     }
     public void requestMyChampsList(){
-        model.requestMyChampsList();
+        setIsLoading(true); model.requestMyChampsList();
     }
     public void requestChampsList(String searchRequest){
         setIsLoading(true);

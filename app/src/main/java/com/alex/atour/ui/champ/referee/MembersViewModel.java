@@ -32,9 +32,9 @@ public class MembersViewModel extends BaseViewModel {
 
 
     void setMembersList(ArrayList<Member> members){
+        this.members.setValue(members);
         setIsLoading(false);
         setErrorMessage("");
-        this.members.setValue(members);
     }
 
     void requestError(String msg){

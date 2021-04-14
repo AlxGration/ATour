@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.atour.R;
 import com.alex.atour.models.ChampsListRecyclerAdapter;
+import com.alex.atour.ui.champ.ChampActivity;
 import com.alex.atour.ui.list.ChampsListViewModel;
 import com.alex.atour.ui.list.MainActivity;
 
@@ -43,6 +44,7 @@ public class ChampsListFragment extends Fragment{
             recyclerView.setAdapter(adapter);
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), ((MainActivity)getActivity())::showLoadingProcess);
 
         viewModel.requestChampsList();
         return view;

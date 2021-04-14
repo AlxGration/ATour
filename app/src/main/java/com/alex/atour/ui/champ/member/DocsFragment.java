@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.alex.atour.R;
+import com.alex.atour.ui.champ.ChampActivity;
 import com.alex.atour.ui.champ.admin.MembersFragment;
 import com.alex.atour.ui.champ.admin.MembersViewModel;
 
@@ -41,7 +42,6 @@ public class DocsFragment extends Fragment {
 
         EditText etLink = view.findViewById(R.id.et_link);
         EditText etComment = view.findViewById(R.id.et_comment);
-        ProgressBar pBar = view.findViewById(R.id.progress_bar);
         TextView tvError = view.findViewById(R.id.tv_error);
 
         Button btnSend = view.findViewById(R.id.btn_send);
@@ -51,11 +51,8 @@ public class DocsFragment extends Fragment {
                 etLink.getText().toString()
         ));
 
-        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading->{
-            pBar.setVisibility(isLoading?
-                    View.VISIBLE:
-                    View.GONE
-            );
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            ((ChampActivity)getActivity()).showLoadingProcess(isLoading);
             btnSend.setEnabled(!isLoading);
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);

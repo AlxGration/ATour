@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class MembersViewModel extends BaseViewModel {
 
-    private DBManager db;
+    private final DBManager db;
 
     private final MutableLiveData<ArrayList<Member>> all;
     private final MutableLiveData<ArrayList<Member>> referees;
@@ -48,28 +48,23 @@ public class MembersViewModel extends BaseViewModel {
                 refereesList.add(mem);
             }
         }
-
         setMembersList(membersList);
         setRefereesList(refereesList);
     }
 
-
     void setAllList(ArrayList<Member> members){
-        setIsLoading(false);
-        setErrorMessage("");
         this.all.setValue(members);
         splitMembers();
     }
-
     void setRefereesList(ArrayList<Member> members){
+        this.referees.setValue(members);
         setIsLoading(false);
         setErrorMessage("");
-        this.referees.setValue(members);
     }
     void setMembersList(ArrayList<Member> members){
+        this.members.setValue(members);
         setIsLoading(false);
         setErrorMessage("");
-        this.members.setValue(members);
     }
 
     void requestError(String msg){

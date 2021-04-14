@@ -43,6 +43,7 @@ public class MyChampsFragment extends Fragment{
             recyclerView.setAdapter(adapter);
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), ((MainActivity)getActivity())::showLoadingProcess);
 
         viewModel.requestMyChampsList();
         return view;

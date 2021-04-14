@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alex.atour.DTO.ChampInfo;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements
     private ConstraintLayout tabsLayout;
     private FrameLayout frameLayout;
     private SearchFragment searchFragment;
+    private ProgressBar pBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +56,14 @@ public class MainActivity extends AppCompatActivity implements
 
         tvMy = findViewById(R.id.tv_tab_1);
         tvList = findViewById(R.id.tv_tab_2);
+        pBar = findViewById(R.id.progress_bar);
         tvManage = findViewById(R.id.tv_tab_3);
         etSearch = findViewById(R.id.et_search);
         imgCancel = findViewById(R.id.img_cancel);
         imgSearch = findViewById(R.id.img_search);
         tabsLayout = findViewById(R.id.tabs_layout);
         frameLayout = findViewById(R.id.frame_layout);
+
 
         tvMy.setOnClickListener(view -> viewPager.setCurrentItem(0));
         tvList.setOnClickListener(view -> viewPager.setCurrentItem(1));
@@ -110,6 +114,11 @@ public class MainActivity extends AppCompatActivity implements
             }
             return false;
         });
+    }
+
+    public void showLoadingProcess(boolean isLoading){
+        pBar.setVisibility(isLoading?
+                View.VISIBLE: View.INVISIBLE);
     }
 
     private void setActiveTab(TextView tv){

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,14 +27,12 @@ public class SearchFragment extends Fragment {
         viewModel = new ViewModelProvider(getActivity()).get(ChampsListViewModel.class);
     }
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.list, container, false);
 
         TextView tvError = view.findViewById(R.id.tv_error);
-        ProgressBar pBar = view.findViewById(R.id.progress_bar);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -46,12 +43,7 @@ public class SearchFragment extends Fragment {
             recyclerView.setAdapter(adapter);
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);
-        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading->{
-            pBar.setVisibility(isLoading?
-                            View.VISIBLE:
-                            View.GONE
-            );
-        });
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), ((MainActivity)getActivity())::showLoadingProcess);
 
         return view;
     }

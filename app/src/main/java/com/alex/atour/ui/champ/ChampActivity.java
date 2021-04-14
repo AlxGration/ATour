@@ -33,7 +33,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
 
     private ChampViewModel viewModel;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +79,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     public void onClickBackBtn(View view) {
         finish();
     }
+    public void showLoadingProcess(boolean isLoading){viewModel.setIsLoading(isLoading);}
 
     public void onClickMemRequestBtn(View view) {
         Intent intent = new Intent(this, MembershipRequestActivity.class);
@@ -164,7 +164,13 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private void showLayoutDependsOnRoleAndState(int role, int state){
         Log.e("TAG", "RS "+ role+" "+state);
 
+        if (role == -1){
+            btnSendRequest.setVisibility(View.VISIBLE);
+            return;
+        }
+
         if (role == 0){//admin
+            btnSendRequest.setVisibility(View.VISIBLE);
             btnSendRequest.setOnClickListener(onClickRequests);
             btnSendRequest.setText("Заявки");
             showMembersFragment();

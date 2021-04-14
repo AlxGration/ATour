@@ -341,7 +341,13 @@ public class FirebaseDB extends DBManager{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.e("TAG", "getDocumentByUserID: "+snapshot.toString());
 
-                ArrayList<Document> list = new ArrayList<>((int)snapshot.getChildrenCount());
+                int n = (int)snapshot.getChildrenCount();
+                if (n < 1){
+                    if (listener!=null) listener.onFailed("Документов не найдено");
+                    return;
+                }
+
+                ArrayList<Document> list = new ArrayList<>(n);
                 for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
                     list.add(snap.getValue(Document.class));
                 }

@@ -48,6 +48,7 @@ public class MembersForRefereeFragment extends Fragment {
             recyclerView.setAdapter(adapter);
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), ((ChampActivity)getActivity())::showLoadingProcess);
 
         viewModel.requestMembersList(champID);
         return view;

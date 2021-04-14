@@ -43,9 +43,9 @@ public class ManagedChampsFragment extends Fragment{
             recyclerView.setAdapter(adapter);
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), ((MainActivity)getActivity())::showLoadingProcess);
 
         viewModel.requestManagedChampsList();
-
         return view;
     }
 }

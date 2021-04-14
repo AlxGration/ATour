@@ -42,7 +42,6 @@ public class MembersListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.list, container, false);
 
-
         TextView tvError = view.findViewById(R.id.tv_error);
         RecyclerView recyclerView = view.findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
