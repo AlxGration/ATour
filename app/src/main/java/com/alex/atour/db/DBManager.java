@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Document;
+import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
@@ -52,6 +53,7 @@ public abstract class DBManager {
     public abstract void getMembershipRequestByID(String champID, String userID, IMembershipRequestsListListener listener);//заявка одобренная на чемпионат(для админа)
 
     public abstract void sendDocument(String champID, Document document, IRequestListener listener); // добавить документ
+    public abstract void sendEstimation(String champID, Estimation estim); // добавить оценку
     public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
 
     public abstract void acceptRequest(MembershipRequest req, IRequestListener listener);// одобрение заявки админом

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.alex.atour.DTO.Member;
@@ -17,6 +18,8 @@ import com.alex.atour.ui.login.LoginActivity;
 public class ProfileActivity extends AppCompatActivity {
 
     private ProfileViewModel viewModel;
+    private EstimationViewModel estimVM;
+    private String champID, userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        estimVM = new ViewModelProvider(this).get(EstimationViewModel.class);
 
         Button btnSignOut = findViewById(R.id.btn_sign_out);
         TextView tvError = findViewById(R.id.tv_error);
@@ -59,7 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         int comeFrom = getIntent().getIntExtra("comeFrom", -1);
-        String champID, userID;
+
         Member mem;
         switch (comeFrom){
             case 1://my profile
@@ -78,7 +82,8 @@ public class ProfileActivity extends AppCompatActivity {
                 viewModel.setUserInfo(u);
                 break;
             case 4://show docs (for referee)
-                mem = (Member) getIntent().getSerializableExtra("member");
+                mem = (Member) getIntent().getSerializableExtra("member");//участник
+                userID = mem.getUserID();
                 viewModel.setUserName(mem.getUserFIO());
                 champID = getIntent().getStringExtra("champID");
                 viewModel.loadDocs(champID, mem.getUserID());
@@ -89,8 +94,10 @@ public class ProfileActivity extends AppCompatActivity {
                 userID = mem.getUserID();
                 champID = getIntent().getStringExtra("champID");
                 viewModel.loadProfile(userID);          // показ регистрационных данных пользователя
-                viewModel.loadDocs(champID, userID);    // показ документов
                 viewModel.loadMembershipRequest(champID, userID);
+                if (mem.getRole() == 1)
+                    viewModel.loadDocs(champID, userID);    // показ документов
+                else showEstimations(champID, userID);
                 break;
         }
     }
@@ -108,6 +115,7 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // show membership request
     private void showRequest(MembershipRequest req){
         ((TextView)findViewById(R.id.tv_link)).setText(req.getCloudLink());
         ((TextView)findViewById(R.id.tv_comment)).setText(req.getComment());
@@ -134,6 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
         showLayout(R.id.layout_request, View.VISIBLE);
     }
 
+    // for referee (to estimate member)
     private void showEstimationLayout(Member req){
         //types
         if (req.isTypeWalk()) findViewById(R.id.cp_walk).setVisibility(View.VISIBLE);
@@ -156,5 +165,26 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showLayout(int id, int visibility){
         findViewById(id).setVisibility(visibility);
+    }
+
+    //показ всех оценок, которые выставил судья
+    private void showEstimations(String champID, String userID){
+        //todo:: create me
+    }
+
+    //send estimation (referee)
+    public void onClickSendBtn(View v){
+        estimVM.sendEstimation(
+                champID,
+                userID, //участник
+                ((EditText)findViewById(R.id.et_complexity)).getText().toString(),
+                ((EditText)findViewById(R.id.et_novelty)).getText().toString(),
+                ((EditText)findViewById(R.id.et_strategy)).getText().toString(),
+                ((EditText)findViewById(R.id.et_tactics)).getText().toString(),
+                ((EditText)findViewById(R.id.et_technique)).getText().toString(),
+                ((EditText)findViewById(R.id.et_tension)).getText().toString(),
+                ((EditText)findViewById(R.id.et_informativeness)).getText().toString(),
+                ((EditText)findViewById(R.id.et_comment)).getText().toString()
+        );
     }
 }

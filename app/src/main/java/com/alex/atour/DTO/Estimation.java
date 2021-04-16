@@ -1,89 +1,89 @@
 package com.alex.atour.DTO;
 
 public class Estimation {
-    private int id, memberID, refereeID;
-    private int complexity, novelty, strategy, tactics, technique, tension, informativeness ;
+    private String id, memberID, refereeID;
+    private float complexity, novelty, strategy, tactics, technique, tension, informativeness ;
     private String comment;
 
     public Estimation(){}
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getMemberID() {
+    public String getMemberID() {
         return memberID;
     }
 
-    public void setMemberID(int memberID) {
+    public void setMemberID(String memberID) {
         this.memberID = memberID;
     }
 
-    public int getRefereeID() {
+    public String getRefereeID() {
         return refereeID;
     }
 
-    public void setRefereeID(int refereeID) {
+    public void setRefereeID(String refereeID) {
         this.refereeID = refereeID;
     }
 
-    public int getComplexity() {
+    public float getComplexity() {
         return complexity;
     }
 
-    public void setComplexity(int complexity) {
+    public void setComplexity(float complexity) {
         this.complexity = complexity;
     }
 
-    public int getNovelty() {
+    public float getNovelty() {
         return novelty;
     }
 
-    public void setNovelty(int novelty) {
+    public void setNovelty(float novelty) {
         this.novelty = novelty;
     }
 
-    public int getStrategy() {
+    public float getStrategy() {
         return strategy;
     }
 
-    public void setStrategy(int strategy) {
+    public void setStrategy(float strategy) {
         this.strategy = strategy;
     }
 
-    public int getTactics() {
+    public float getTactics() {
         return tactics;
     }
 
-    public void setTactics(int tactics) {
+    public void setTactics(float tactics) {
         this.tactics = tactics;
     }
 
-    public int getTechnique() {
+    public float getTechnique() {
         return technique;
     }
 
-    public void setTechnique(int technique) {
+    public void setTechnique(float technique) {
         this.technique = technique;
     }
 
-    public int getTension() {
+    public float getTension() {
         return tension;
     }
 
-    public void setTension(int tension) {
+    public void setTension(float tension) {
         this.tension = tension;
     }
 
-    public int getInformativeness() {
+    public float getInformativeness() {
         return informativeness;
     }
 
-    public void setInformativeness(int informativeness) {
+    public void setInformativeness(float informativeness) {
         this.informativeness = informativeness;
     }
 

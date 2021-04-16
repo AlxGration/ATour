@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.alex.atour.DTO.Champ;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Document;
+import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.RequestLinks;
@@ -35,6 +36,7 @@ public class FirebaseDB extends DBManager{
     private final String MEMBER_TABLE = "Members";// заявки пользователей
     private final String ACCEPTED_REQUEST_TABLE = "Accepted";// одобренные заявки пользователей
     private final String DOCUMENTS = "Docs";// таблица документов
+    private final String ESTIMATIONS = "Estimations";// таблица документов
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -259,6 +261,15 @@ public class FirebaseDB extends DBManager{
         Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(ACCEPTED_REQUEST_TABLE).orderByChild("userID").equalTo(userID);
         getMembershipRequests(query, listener);
     }
+
+
+    public void sendEstimation(String champID, Estimation estim){
+        DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMATIONS);
+        String estimID = ref.push().getKey();
+        estim.setId(estimID);
+        ref.child(estimID).setValue(estim);
+    }
+
 
     private void getMembershipRequests(Query query, IMembershipRequestsListListener listener){
         query.addValueEventListener(new ValueEventListener() {

@@ -48,6 +48,7 @@ public class MembersFragment extends Fragment {
         TabLayout tabLayout = view.findViewById(R.id.tabs_layout);
         tabLayout.setupWithViewPager(viewPager);
 
+
         //get all members
         viewModel.requestMembersList(champID);
 
