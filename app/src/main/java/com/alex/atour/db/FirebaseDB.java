@@ -10,7 +10,7 @@ import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
-import com.alex.atour.DTO.RequestLinks;
+import com.alex.atour.DTO.ShortRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.MembershipState;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -109,7 +109,7 @@ public class FirebaseDB extends DBManager{
                 memReq.setUserID(userID);
 
                 // create table (champID, userID) for list of MY requests(champs)
-                RequestLinks tmp = new RequestLinks(memReq.getChampID(), memReq.getUserID());
+                ShortRequest tmp = new ShortRequest(memReq.getChampID(), memReq.getUserID());
                 ref.child(reqID).setValue(tmp).addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
 
@@ -226,7 +226,7 @@ public class FirebaseDB extends DBManager{
                 ArrayList<ChampInfo> list = new ArrayList<ChampInfo>((int)snapshot.getChildrenCount());
                 DatabaseReference chInfoRef = getDbRef().child(CHAMP_INFO_TABLE);
                 for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
-                    String champInfoID = snap.getValue(RequestLinks.class).champInfoID;
+                    String champInfoID = snap.getValue(ShortRequest.class).champInfoID;
 
                     Query q = chInfoRef.orderByChild("champID").equalTo(champInfoID);
                     q.addValueEventListener(new ValueEventListener() {
@@ -262,12 +262,21 @@ public class FirebaseDB extends DBManager{
         getMembershipRequests(query, listener);
     }
 
-
-    public void sendEstimation(String champID, Estimation estim){
+    // add to Champ->Estimation and Champ->Docs->memberID->Estimations->(refereeID)
+    @Override
+    public void sendEstimation(String champID, Estimation estim, IRequestListener listener){
         DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMATIONS);
         String estimID = ref.push().getKey();
         estim.setId(estimID);
-        ref.child(estimID).setValue(estim);
+
+        ref.child(estimID).setValue(estim).addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+                if (listener!=null) listener.onSuccess();
+        });
+
+        // чтобы не показывать участника судье после оценивания
+        ref = getDbRef().child(CHAMP_TABLE).child(champID).child(DOCUMENTS).child(estim.getMemberID()).child(ESTIMATIONS).child(estim.getRefereeID());
+        ref.push().setValue("");
     }
 
 
@@ -337,10 +346,10 @@ public class FirebaseDB extends DBManager{
     // add Document to Champ->Documents
     @Override
     public void sendDocument(String champID, Document document, IRequestListener listener){
-        DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(DOCUMENTS);
+        DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(DOCUMENTS).child(document.getUserID());
 
         //send docs
-        ref.push().setValue(document).addOnCompleteListener(task1 -> {
+        ref.setValue(document).addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()){
 
                 //and change user state (to show results)
@@ -399,35 +408,43 @@ public class FirebaseDB extends DBManager{
     public void getDocsSentMembers(String champID, IMembersListListener listener){
 
         // get referee info (for return specified by type members)
-        getMemberByID(getUser().getUid(), champID, new IMembersListListener() {
+        String refereeID = getUser().getUid();
+        getMemberByID(refereeID, champID, new IMembersListListener() {
             @Override
             public void onSuccess(ArrayList<Member> members) {
-                Member me = members.get(0);
+                Member me = members.get(0);//this is referee
                 // get all docs sent members
+                //todo::maybe change state to DOCS_SUBMIT?
                 Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").equalTo(MembershipState.RESULTS.ordinal());
-                membersListQuery(query, new IMembersListListener() {
+                query.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onSuccess(ArrayList<Member> members) {
-                        ArrayList<Member> result = new ArrayList<>(members.size()/2);
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<Member> members = new ArrayList<>((int)snapshot.getChildrenCount());
+                        for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
+                            //check is this referee has estimated this member
+                            //чтобы не показывать судье уже оцененного участника
+                            //Log.e("TAG", "docs: "+snap.toString());
+                            //if (snap.hasChild(ESTIMATIONS)){
+                            //    Log.e("TAG", "docs_e: "+snap.child(ESTIMATIONS).toString());
+                            //    if (snap.child(ESTIMATIONS).hasChild(refereeID))continue;
+                            //}
+                            //check type(show member to referee only if they have common types)
+                            Member m = snap.getValue(Member.class);
+                            if (me.isTypeWalk())    {members.add(m); continue;}
+                            if (me.isTypeSki())     {members.add(m); continue;}
+                            if (me.isTypeHike())    {members.add(m); continue;}
+                            if (me.isTypeWater())   {members.add(m); continue;}
 
-                        // and extract only needed
-                        for(Member m: members) {
-                            if (me.isTypeWalk())    {result.add(m); continue;}
-                            if (me.isTypeSki())     {result.add(m); continue;}
-                            if (me.isTypeHike())    {result.add(m); continue;}
-                            if (me.isTypeWater())   {result.add(m); continue;}
-
-                            if (me.isTypeSpeleo())  {result.add(m); continue;}
-                            if (me.isTypeBike())    {result.add(m); continue;}
-                            if (me.isTypeAuto())    {result.add(m); continue;}
-                            if (me.isTypeOther())   result.add(m);
+                            if (me.isTypeSpeleo())  {members.add(m); continue;}
+                            if (me.isTypeBike())    {members.add(m); continue;}
+                            if (me.isTypeAuto())    {members.add(m); continue;}
+                            if (me.isTypeOther())   members.add(m);
                         }
-                        if (listener!=null) listener.onSuccess(result);
+                        if (listener!=null) listener.onSuccess(members);
                     }
-
                     @Override
-                    public void onFailed(String msg) {
-                        if (listener!=null) listener.onFailed(msg);
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        if (listener!=null) listener.onFailed(error.getMessage());
                     }
                 });
             }

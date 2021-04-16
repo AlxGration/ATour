@@ -46,6 +46,16 @@ public class ProfileActivity extends AppCompatActivity {
                     View.INVISIBLE
             );
         });
+        estimVM.getIsLoading().observe(this, isLoading->{
+            pBar.setVisibility(isLoading?
+                    View.VISIBLE:
+                    View.INVISIBLE
+            );
+        });
+        estimVM.getIsSuccess().observe(this, isSuccess->{
+            if (isSuccess){ finish(); }
+        });
+        estimVM.getErrorMessage().observe(this, tvError::setText);
         viewModel.getErrorMessage().observe(this, tvError::setText);
         viewModel.getSecName().observe(this, tvSecName::setText);
         viewModel.getSecName().observe(this, tvSecName::setText);
@@ -97,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
                 viewModel.loadMembershipRequest(champID, userID);
                 if (mem.getRole() == 1)
                     viewModel.loadDocs(champID, userID);    // показ документов
-                else showEstimations(champID, userID);
+                else showEstimations(champID, userID);      // показ оценок рефери
                 break;
         }
     }

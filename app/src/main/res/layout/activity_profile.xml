@@ -443,6 +443,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/padding"
                 android:layout_marginEnd="@dimen/padding"
+                android:paddingBottom="@dimen/padding"
                 android:visibility="gone">
                 <include layout="@layout/layout_estimation"/>
             </LinearLayout>
