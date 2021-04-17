@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:gravity="center_horizontal">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="С"
+        android:textSize="@dimen/main_text_size"
+        android:textColor="@color/black"
+        android:layout_toLeftOf="@id/et_complexity"
+        android:layout_marginStart="8dp"/>
     <EditText
         android:id="@+id/et_complexity"
         android:layout_width="wrap_content"
@@ -13,10 +19,16 @@
         android:ems="13"
         android:hint="Сложность [1..120]"
         android:inputType="numberDecimal|numberSigned"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Нв"
+        android:textSize="@dimen/main_text_size"
+        android:textColor="@color/black"
+        android:layout_toLeftOf="@id/et_complexity"
+        android:layout_marginStart="8dp"
+        android:layout_below="@id/et_complexity"/>
     <EditText
         android:id="@+id/et_novelty"
         android:layout_width="wrap_content"
@@ -24,10 +36,17 @@
         android:ems="13"
         android:hint="Новизна [0..24]"
         android:inputType="numberDecimal|numberSigned"
-        app:layout_constraintTop_toBottomOf="@+id/et_complexity"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        android:layout_below="@id/et_complexity"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ст"
+        android:textSize="@dimen/main_text_size"
+        android:textColor="@color/black"
+        android:layout_toLeftOf="@id/et_complexity"
+        android:layout_marginStart="8dp"
+        android:layout_below="@id/et_novelty"/>
     <EditText
         android:id="@+id/et_strategy"
         android:layout_width="wrap_content"
@@ -35,10 +54,17 @@
         android:ems="13"
         android:hint="Стратегия [-15..6]"
         android:inputType="numberDecimal|numberSigned"
-        app:layout_constraintTop_toBottomOf="@+id/et_novelty"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        android:layout_below="@id/et_novelty"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Тк"
+        android:textSize="@dimen/main_text_size"
+        android:textColor="@color/black"
+        android:layout_toLeftOf="@id/et_complexity"
+        android:layout_marginStart="8dp"
+        android:layout_below="@id/et_strategy"/>
     <EditText
         android:id="@+id/et_tactics"
         android:layout_width="wrap_content"
@@ -46,10 +72,17 @@
         android:ems="13"
         android:hint="Тактика [-13..7]"
         android:inputType="numberDecimal|numberSigned"
-        app:layout_constraintTop_toBottomOf="@+id/et_strategy"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        android:layout_below="@id/et_strategy"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Т"
+        android:textSize="@dimen/main_text_size"
+        android:textColor="@color/black"
+        android:layout_toLeftOf="@id/et_complexity"
+        android:layout_marginStart="8dp"
+        android:layout_below="@id/et_tactics"/>
     <EditText
         android:id="@+id/et_technique"
         android:layout_width="wrap_content"
@@ -57,9 +90,17 @@
         android:ems="13"
         android:hint="Техника [-12..5]"
         android:inputType="numberDecimal|numberSigned"
-        app:layout_constraintTop_toBottomOf="@+id/et_tactics"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_below="@id/et_tactics"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Н"
+        android:textSize="@dimen/main_text_size"
+        android:textColor="@color/black"
+        android:layout_toLeftOf="@id/et_complexity"
+        android:layout_marginStart="8dp"
+        android:layout_below="@id/et_technique"/>
     <EditText
         android:id="@+id/et_tension"
         android:layout_width="wrap_content"
@@ -67,9 +108,17 @@
         android:ems="13"
         android:hint="Напряженность [-6..18]"
         android:inputType="numberDecimal|numberSigned"
-        app:layout_constraintTop_toBottomOf="@+id/et_technique"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_below="@id/et_technique"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="П"
+        android:textSize="@dimen/main_text_size"
+        android:textColor="@color/black"
+        android:layout_toLeftOf="@id/et_complexity"
+        android:layout_marginStart="8dp"
+        android:layout_below="@id/et_tension"/>
     <EditText
         android:id="@+id/et_informativeness"
         android:layout_width="wrap_content"
@@ -77,9 +126,8 @@
         android:ems="13"
         android:hint="Информативность [-1..7]"
         android:inputType="numberDecimal|numberSigned"
-        app:layout_constraintTop_toBottomOf="@+id/et_tension"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_below="@id/et_tension"
+        android:layout_centerHorizontal="true"/>
     <EditText
         android:id="@+id/et_comment"
         android:layout_width="wrap_content"
@@ -87,9 +135,8 @@
         android:ems="13"
         android:hint="Комментарий"
         android:inputType="textMultiLine"
-        app:layout_constraintTop_toBottomOf="@+id/et_informativeness"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_below="@id/et_informativeness"
+        android:layout_centerHorizontal="true"/>
 
     <Button
         android:id="@+id/btn_send"
@@ -100,5 +147,6 @@
         android:layout_marginTop="5dp"
         style="@style/BlackButton"
         android:text="@string/send"
-        android:onClick="onClickSendBtn" />
-</LinearLayout>
+        android:onClick="onClickSendBtn"
+        android:layout_below="@id/et_comment"/>
+</RelativeLayout>

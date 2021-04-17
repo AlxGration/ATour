@@ -10,6 +10,7 @@ import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
+import com.alex.atour.DTO.ShortEstimation;
 import com.alex.atour.DTO.ShortRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.MembershipState;
@@ -36,7 +37,8 @@ public class FirebaseDB extends DBManager{
     private final String MEMBER_TABLE = "Members";// заявки пользователей
     private final String ACCEPTED_REQUEST_TABLE = "Accepted";// одобренные заявки пользователей
     private final String DOCUMENTS = "Docs";// таблица документов
-    private final String ESTIMATIONS = "Estimations";// таблица документов
+    private final String ESTIMATIONS = "Estimations";// таблица оценок
+    private final String ESTIMS = "Estims";// укороченная таблица оценок
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -275,8 +277,9 @@ public class FirebaseDB extends DBManager{
         });
 
         // чтобы не показывать участника судье после оценивания
-        ref = getDbRef().child(CHAMP_TABLE).child(champID).child(DOCUMENTS).child(estim.getMemberID()).child(ESTIMATIONS).child(estim.getRefereeID());
-        ref.push().setValue("");
+        ref = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMS);
+        ShortEstimation est = new ShortEstimation(estim.getMemberID(), estim.getRefereeID());
+        ref.push().setValue(est);
     }
 
 
@@ -420,16 +423,9 @@ public class FirebaseDB extends DBManager{
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         ArrayList<Member> members = new ArrayList<>((int)snapshot.getChildrenCount());
-                        for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
-                            //check is this referee has estimated this member
-                            //чтобы не показывать судье уже оцененного участника
-                            //Log.e("TAG", "docs: "+snap.toString());
-                            //if (snap.hasChild(ESTIMATIONS)){
-                            //    Log.e("TAG", "docs_e: "+snap.child(ESTIMATIONS).toString());
-                            //    if (snap.child(ESTIMATIONS).hasChild(refereeID))continue;
-                            //}
-                            //check type(show member to referee only if they have common types)
+                        for (DataSnapshot snap: snapshot.getChildren()){
                             Member m = snap.getValue(Member.class);
+                            //type filter (show member to referee only if they have common types)
                             if (me.isTypeWalk())    {members.add(m); continue;}
                             if (me.isTypeSki())     {members.add(m); continue;}
                             if (me.isTypeHike())    {members.add(m); continue;}
@@ -440,7 +436,28 @@ public class FirebaseDB extends DBManager{
                             if (me.isTypeAuto())    {members.add(m); continue;}
                             if (me.isTypeOther())   members.add(m);
                         }
-                        if (listener!=null) listener.onSuccess(members);
+
+                        //check is this referee has estimated this member
+                        //чтобы не показывать судье уже оцененного участника
+                        Query q = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMS).orderByChild("refereeID").equalTo(refereeID);
+                        q.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot snap: snapshot.getChildren()){//перебор оценок, которые дал судья
+                                    ShortEstimation est = snap.getValue(ShortEstimation.class);
+                                    for(Member m: members){//проверка
+                                        if (m.getUserID().equals(est.getMemberID())){ members.remove(m); break; }
+                                    }
+                                }
+
+                                if (listener!=null) listener.onSuccess(members);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                if (listener!=null) listener.onFailed(error.getMessage());
+                            }
+                        });
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {

@@ -52,6 +52,13 @@ public class MembersFragment extends Fragment {
         //get all members
         viewModel.requestMembersList(champID);
 
+        viewModel.getRefereesLiveData().observe(getViewLifecycleOwner(), list ->{
+            tabLayout.getTabAt(1).setText("Судьи ("+list.size()+")");
+        });
+        viewModel.getMembersLiveData().observe(getViewLifecycleOwner(), list->{
+            tabLayout.getTabAt(0).setText("Участники ("+list.size()+")");
+        });
+
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), ((ChampActivity)getActivity())::showLoadingProcess);
         return view;
     }
