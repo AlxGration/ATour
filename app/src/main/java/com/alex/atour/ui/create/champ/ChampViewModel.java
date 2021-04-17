@@ -11,7 +11,7 @@ import java.util.Calendar;
 public class ChampViewModel extends BaseViewModel {
 
     private final MutableLiveData<Boolean> isRequestSuccess;
-    private DBManager db;
+    private final DBManager db;
 
     public ChampViewModel(){
         isRequestSuccess = new MutableLiveData<>();
@@ -72,7 +72,6 @@ public class ChampViewModel extends BaseViewModel {
             public void onSuccess() {
                 isRequestSuccess.setValue(true);
                 setIsLoading(false);
-                setErrorMessage("");
             }
 
             @Override

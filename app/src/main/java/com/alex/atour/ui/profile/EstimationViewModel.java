@@ -60,7 +60,6 @@ public class EstimationViewModel extends BaseViewModel {
         //
 
         setIsLoading(true);
-        setErrorMessage("");
 
         estim.setComment(comment);
         estim.setRefereeID(db.getPrefs().getUserID());

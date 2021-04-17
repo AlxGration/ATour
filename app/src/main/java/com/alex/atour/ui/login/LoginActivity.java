@@ -1,18 +1,24 @@
 package com.alex.atour.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.alex.atour.R;
 import com.alex.atour.ui.list.MainActivity;
 import com.alex.atour.ui.registration.RegistrationActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         etLogin = findViewById(R.id.et_login);
         btnLogin = findViewById(R.id.btn_login);
         pBar = findViewById(R.id.progress_bar);
-        TextView tvError = findViewById(R.id.tv_error);
 
         //observers
         viewModel.getAuthFlag().observe(this, isAuthSuccess->{
@@ -54,8 +59,11 @@ public class LoginActivity extends AppCompatActivity {
             );
             btnLogin.setEnabled(!isLoading);
         });
-        viewModel.getErrorMessage().observe(this, tvError::setText);
+        viewModel.getErrorMessage().observe(this, this::showError);
+    }
 
+    private void showError(String err){
+        Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_SHORT).show();
     }
 
     public void onClickRegistration(View view) {

@@ -16,6 +16,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.R;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.Calendar;
 
 public class ChampCreationActivity extends AppCompatActivity {
@@ -23,7 +25,7 @@ public class ChampCreationActivity extends AppCompatActivity {
     private EditText etTitle;
     private Spinner spCity, spStatus;
     private ProgressBar pBar;
-    private TextView tvDataFrom, tvDataTo, tvError;
+    private TextView tvDataFrom, tvDataTo;
     private ChampInfo champInfo;
     private ChampViewModel viewModel;
 
@@ -36,7 +38,6 @@ public class ChampCreationActivity extends AppCompatActivity {
 
         tvDataFrom = findViewById(R.id.tv_data_from);
         tvDataTo = findViewById(R.id.tv_data_to);
-        tvError = findViewById(R.id.tv_error);
         pBar = findViewById(R.id.progress_bar);
         etTitle = findViewById(R.id.et_title);
         spCity = findViewById(R.id.spin_city);
@@ -53,7 +54,7 @@ public class ChampCreationActivity extends AppCompatActivity {
 
         champInfo = new ChampInfo();
 
-        viewModel.getErrorMessage().observe(this, tvError::setText);
+        viewModel.getErrorMessage().observe(this, this::showError);
         viewModel.getIsLoading().observe(this, isLoading->{
             pBar.setVisibility(isLoading? View.VISIBLE: View.INVISIBLE);
         });
@@ -143,4 +144,8 @@ public class ChampCreationActivity extends AppCompatActivity {
             tvDataTo.setText(i2 + "." + (i1 + 1) + "." + i);
         }
     };
+
+    private void showError(String err){
+        Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_LONG).show();
+    }
 }

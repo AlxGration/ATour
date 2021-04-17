@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.alex.atour.R;
+import com.google.android.material.snackbar.Snackbar;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -38,7 +39,6 @@ public class RegistrationActivity extends AppCompatActivity {
         spCity = findViewById(R.id.spin_city);
         btnSend = findViewById(R.id.btn_send);
         ProgressBar pBar = findViewById(R.id.progress_bar);
-        TextView tvError = findViewById(R.id.tv_error);
 
         //observers
         viewModel.getIsLoading().observe(this, isLoading->{
@@ -54,7 +54,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 finish();
             }
         });
-        viewModel.getErrorMessage().observe(this, tvError::setText);
+        viewModel.getErrorMessage().observe(this, this::showError);
 
         etPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
     }
@@ -79,5 +79,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 etEmail.getText().toString(),
                 etPass.getText().toString()
         );
+    }
+    private void showError(String err){
+        Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_SHORT).show();
     }
 }

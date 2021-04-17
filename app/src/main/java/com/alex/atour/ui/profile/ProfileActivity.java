@@ -14,6 +14,7 @@ import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.ui.login.LoginActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -30,7 +31,6 @@ public class ProfileActivity extends AppCompatActivity {
         estimVM = new ViewModelProvider(this).get(EstimationViewModel.class);
 
         Button btnSignOut = findViewById(R.id.btn_sign_out);
-        TextView tvError = findViewById(R.id.tv_error);
         TextView tvName = findViewById(R.id.tv_name);
         TextView tvSecName = findViewById(R.id.tv_sec_name);
         TextView tvCity = findViewById(R.id.tv_city);
@@ -55,8 +55,8 @@ public class ProfileActivity extends AppCompatActivity {
         estimVM.getIsSuccess().observe(this, isSuccess->{
             if (isSuccess){ finish(); }
         });
-        estimVM.getErrorMessage().observe(this, tvError::setText);
-        viewModel.getErrorMessage().observe(this, tvError::setText);
+        estimVM.getErrorMessage().observe(this, this::showError);
+        viewModel.getErrorMessage().observe(this, this::showError);
         viewModel.getSecName().observe(this, tvSecName::setText);
         viewModel.getSecName().observe(this, tvSecName::setText);
         viewModel.getName().observe(this, tvName::setText);
@@ -196,5 +196,8 @@ public class ProfileActivity extends AppCompatActivity {
                 ((EditText)findViewById(R.id.et_informativeness)).getText().toString(),
                 ((EditText)findViewById(R.id.et_comment)).getText().toString()
         );
+    }
+    private void showError(String err){
+        Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_LONG).show();
     }
 }

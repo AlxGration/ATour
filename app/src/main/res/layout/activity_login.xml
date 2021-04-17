@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@color/white"
+    android:id="@+id/main_layout"
     tools:context=".ui.login.LoginActivity">
 
     <ProgressBar
@@ -22,16 +23,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="100dp"/>
 
-    <TextView
-        android:id="@+id/tv_error"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorError"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/progress_bar"
-        app:layout_constraintStart_toStartOf="parent"/>
-
     <EditText
         android:id="@+id/et_login"
         android:layout_width="wrap_content"
@@ -40,7 +31,8 @@
         android:maxLength="@integer/max_len"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        app:layout_constraintTop_toBottomOf="@id/tv_error"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

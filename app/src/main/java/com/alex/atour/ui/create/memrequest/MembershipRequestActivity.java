@@ -9,11 +9,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.R;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MembershipRequestActivity extends AppCompatActivity {
 
@@ -39,7 +39,6 @@ public class MembershipRequestActivity extends AppCompatActivity {
         memReq.setRole(1);//по умолчанию это участник
 
         //init ui
-        TextView tvError = findViewById(R.id.tv_error);
         etLink = findViewById(R.id.et_link);
         btnSend = findViewById(R.id.btn_send);
         btnOk = findViewById(R.id.btn_ok);
@@ -58,15 +57,14 @@ public class MembershipRequestActivity extends AppCompatActivity {
 
         //observers
         viewModel.getIsLoading().observe(this, isLoading->{
-            pBar.setVisibility(
-                    isLoading?
+            pBar.setVisibility(isLoading?
                             View.VISIBLE:
                             View.INVISIBLE
             );
             btnSend.setEnabled(!isLoading);
             btnOk.setEnabled(!isLoading);
         });
-        viewModel.getErrorMessage().observe(this, tvError::setText);
+        viewModel.getErrorMessage().observe(this, this::showError);
         viewModel.getIsRequestSuccess().observe(this, isRequestSuccess->{
             if (isRequestSuccess){  //если запрос отправлен успешно, то активность закрывается и выходит на экран чемпионата
                 finish();
@@ -107,7 +105,6 @@ public class MembershipRequestActivity extends AppCompatActivity {
         }
     }
 
-    //todo:is it worth?
     private void enableNeededTypes(ChampInfo info){
         if (!info.isTypeWalk()) findViewById(R.id.tb_walk).setEnabled(false);
         if (!info.isTypeSki()) findViewById(R.id.tb_ski).setEnabled(false);
@@ -119,6 +116,7 @@ public class MembershipRequestActivity extends AppCompatActivity {
         if (!info.isTypeAuto()) findViewById(R.id.tb_auto).setEnabled(false);
         if (!info.isTypeOther()) findViewById(R.id.tb_other).setEnabled(false);
     }
-
-
+    private void showError(String err){
+        Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_LONG).show();
+    }
 }

@@ -42,19 +42,16 @@ public class ProfileViewModel extends BaseViewModel {
 
     public void loadProfile(String userID){
         setIsLoading(true);
-        setErrorMessage("");
         model.requestUserProfile(userID);
     }
 
     public void loadMembershipRequest(String champID, String userID){
         setIsLoading(true);
-        setErrorMessage("");
         model.requestMembershipRequest(champID, userID);
     }
 
     public void loadDocs(String champID, String userID){
         setIsLoading(true);
-        setErrorMessage("");
         model.requestDocuments(champID, userID);
     }
 
@@ -66,13 +63,11 @@ public class ProfileViewModel extends BaseViewModel {
     void setDocument(Document doc){
         document.setValue(doc);
         setIsLoading(false);
-        setErrorMessage("");
     }
 
     void setMembershipRequest(MembershipRequest req){
         memReq.setValue(req);
         setIsLoading(false);
-        setErrorMessage("");
     }
 
     void setUserInfo(User user){
@@ -81,7 +76,6 @@ public class ProfileViewModel extends BaseViewModel {
         email.setValue(user.getEmail());
         phone.setValue("+7 "+user.getPhone());
         setIsLoading(false);
-        setErrorMessage("");
     }
 
     void signOut(){

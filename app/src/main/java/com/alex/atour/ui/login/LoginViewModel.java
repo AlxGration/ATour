@@ -39,7 +39,6 @@ public class LoginViewModel extends BaseViewModel {
 
     void loginSuccess(){
         setIsLoading(false);
-        setErrorMessage("");
         authFlag.setValue(true);
     }
     void loginError(String msg){

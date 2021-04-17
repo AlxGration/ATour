@@ -57,7 +57,8 @@ public class ChampsListModel {
         db.getChampsList(searchRequest, new DBManager.IChampsInfoListener() {
             @Override
             public void onSuccess(ArrayList<ChampInfo> champsList) {
-                viewModel.setFoundChampsList(champsList);
+                if (champsList.size() > 0) viewModel.setFoundChampsList(champsList);
+                else viewModel.requestError("Ничего не найдено");
             }
             @Override
             public void onFailed(String msg) {

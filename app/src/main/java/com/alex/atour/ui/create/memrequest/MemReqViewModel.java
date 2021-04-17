@@ -40,7 +40,6 @@ public class MemReqViewModel extends BaseViewModel {
             public void onSuccess() {
                 isRequestSuccess.setValue(true);
                 setIsLoading(false);
-                setErrorMessage("");
             }
 
             @Override
