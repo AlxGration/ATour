@@ -40,4 +40,11 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     implementation 'com.google.firebase:firebase-database-ktx'
+
+    implementation 'org.apache.poi:poi:5.0.0'
+    implementation 'org.apache.poi:poi-ooxml:5.0.0'
+    implementation 'org.apache.poi:poi-ooxml-full:5.0.0'
+    implementation 'org.apache.poi:xmlbeans:5.0.0'
+    implementation 'com.android.support:multidex:1.0.1'
+
 }
