@@ -1,4 +1,4 @@
-package com.alex.atour.DTO;
+package com.alex.atour.models;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -20,6 +20,28 @@ import java.io.OutputStream;
 
 public class ExcelModule {
 
+    /*
+    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            Log.e("TAG", "start process");
+            String [] fios = {
+                    "Винов Александр Сергеевич",
+                    "Команда 2",
+                    "Команда 3",
+                    "Команда 4",
+                    "Команда 5",
+                    "Команда 6",
+                    "Команда 7",
+                    "Команда 8",
+                    "Команда 9",
+            };
+            ExcelModule excelModule = new ExcelModule(this);
+            excelModule.createReportForReferee("refereeAlex.xlsx", fios);
+
+        }else {
+            //запрашиваем разрешение
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+     */
 
     private final String templateRefereeProtocolPath = "protocol_referee.xlsx";
 

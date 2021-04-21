@@ -1,28 +1,16 @@
 package com.alex.atour.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.alex.atour.DTO.ExcelModule;
 import com.alex.atour.R;
 import com.alex.atour.ui.list.MainActivity;
 import com.alex.atour.ui.registration.RegistrationActivity;
@@ -89,36 +77,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClickEnter(View view) {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            Log.e("TAG", "start process");
-            String [] fios = {
-                    "Винов Александр Сергеевич",
-                    "Команда 2",
-                    "Команда 3",
-                    "Команда 4",
-                    "Команда 5",
-                    "Команда 6",
-                    "Команда 7",
-                    "Команда 8",
-                    "Команда 9",
-            };
-            ExcelModule excelModule = new ExcelModule(this);
-            excelModule.createReportForReferee("refereeAlex.xlsx", fios);
-
-        }else {
-            //запрашиваем разрешение
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        }
-
-
-        //todo: !!!uncomment!!!
-        /*
         viewModel.loginRequest(
                 etLogin.getText().toString(),
                 etPass.getText().toString()
         );
-
-         */
     }
 }

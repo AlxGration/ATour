@@ -14,8 +14,6 @@ import com.alex.atour.DTO.ShortEstimation;
 import com.alex.atour.DTO.ShortRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.MembershipState;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

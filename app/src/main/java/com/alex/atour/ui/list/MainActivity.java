@@ -171,7 +171,8 @@ public class MainActivity extends AppCompatActivity implements
                     .replace(R.id.frame_layout,  getSearchFragment())
                     .commitNow();
         }else{
-            searchFragment.setSearchQuery("");
+            if (searchFragment != null)
+                searchFragment.setSearchQuery("");
 
             //hide searchFragment, show main list
             tabsLayout.setVisibility(View.VISIBLE);

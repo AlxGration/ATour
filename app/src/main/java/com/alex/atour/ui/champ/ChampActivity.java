@@ -14,6 +14,7 @@ import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
+import com.alex.atour.models.EstimsRecyclerAdapter;
 import com.alex.atour.models.MembersListRecyclerAdapter;
 import com.alex.atour.ui.champ.admin.MembersFragment;
 import com.alex.atour.ui.champ.member.DocsFragment;
@@ -22,7 +23,7 @@ import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
 import com.alex.atour.ui.requests.RequestsListActivity;
 
-public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener {
+public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener, EstimsRecyclerAdapter.IonItemClickListener {
 
     private TextView tvMessage, tvAdminFio;
     private Button btnSendRequest;

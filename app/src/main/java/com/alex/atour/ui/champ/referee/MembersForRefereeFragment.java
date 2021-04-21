@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.atour.R;
+import com.alex.atour.models.EstimsRecyclerAdapter;
 import com.alex.atour.models.MembersListRecyclerAdapter;
 import com.alex.atour.ui.champ.ChampActivity;
 
@@ -43,8 +44,10 @@ public class MembersForRefereeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         viewModel.getMembersLiveData().observe(getViewLifecycleOwner(), members -> {
-            MembersListRecyclerAdapter adapter = new MembersListRecyclerAdapter(members);
-            MembersListRecyclerAdapter.setOnItemClickListener(2, ((ChampActivity) getActivity()));
+            //MembersListRecyclerAdapter adapter = new MembersListRecyclerAdapter(members);
+            //MembersListRecyclerAdapter.setOnItemClickListener(2, ((ChampActivity) getActivity()));
+            EstimsRecyclerAdapter adapter = new EstimsRecyclerAdapter(members);
+            EstimsRecyclerAdapter.setOnItemClickListener(2, ((ChampActivity) getActivity()));
             recyclerView.setAdapter(adapter);
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);

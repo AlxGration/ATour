@@ -22,6 +22,7 @@
             android:theme="@style/Theme.ATour.NoActionBar" />
         <activity
             android:name=".ui.list.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.ATour.NoActionBar" />
         <activity
             android:name=".ui.profile.ProfileActivity"
@@ -29,6 +30,7 @@
             android:theme="@style/Theme.ATour.NoActionBar" />
         <activity
             android:name=".ui.champ.ChampActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.ATour.NoActionBar" />
         <activity
             android:name=".ui.login.LoginActivity"
