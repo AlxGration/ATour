@@ -19,6 +19,7 @@ android {
 
     buildTypes {
         release {
+            multiDexEnabled true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -41,10 +42,9 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     implementation 'com.google.firebase:firebase-database-ktx'
 
-    implementation 'org.apache.poi:poi:5.0.0'
-    implementation 'org.apache.poi:poi-ooxml:5.0.0'
-    implementation 'org.apache.poi:poi-ooxml-full:5.0.0'
-    implementation 'org.apache.poi:xmlbeans:5.0.0'
-    implementation 'com.android.support:multidex:1.0.1'
 
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+    implementation group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '3.1.0'
+    implementation 'javax.xml.stream:stax-api:1.0'
+    implementation 'com.fasterxml:aalto-xml:1.2.2'
 }
