@@ -4,24 +4,25 @@ package com.alex.atour.ui.profile;
 import androidx.lifecycle.MutableLiveData;
 
 import com.alex.atour.DTO.Estimation;
+import com.alex.atour.DTO.MemberEstimation;
 import com.alex.atour.db.DBManager;
+import com.alex.atour.db.RealmDB;
 import com.alex.atour.models.BaseViewModel;
 
 public class EstimationViewModel extends BaseViewModel {
 
-    private DBManager db;
-    private MutableLiveData<Boolean> isSuccess;
+    private final RealmDB realmDB;
+    private final MutableLiveData<Boolean> isSuccess;
 
     public EstimationViewModel(){
-        db = DBManager.getInstance();
+        realmDB = DBManager.getInstance().getRealmDB() ;
         isSuccess = new MutableLiveData<>();
     }
 
     public MutableLiveData<Boolean> getIsSuccess(){return isSuccess; }
 
-    public void sendEstimation(
-            String champID,
-            String memberID,
+    public void saveEstimation(
+            MemberEstimation mEstim,
             String complexity,
             String novelty,
             String strategy,
@@ -31,9 +32,8 @@ public class EstimationViewModel extends BaseViewModel {
             String informativeness,
             String comment){
 
-        Estimation estim = new Estimation();
-
         //data validation
+        MemberEstimation estim = new MemberEstimation(mEstim);
         float k = 0;
         if (complexity.isEmpty() || (k = Float.parseFloat(complexity)) < 1 || k > 120){
             setErrorMessage("Неверное значение 'Сложность'"); return;
@@ -58,27 +58,11 @@ public class EstimationViewModel extends BaseViewModel {
         }else estim.setInformativeness(k);
 
         //
-
-        setIsLoading(true);
-
         estim.setComment(comment);
-        estim.setRefereeID(db.getPrefs().getUserID());
-        estim.setMemberID(memberID);
 
-        db.sendEstimation(champID, estim, new DBManager.IRequestListener() {
-            @Override
-            public void onSuccess() {
-                setIsLoading(false);
-                setErrorMessage("");
-                isSuccess.setValue(true);
-            }
-
-            @Override
-            public void onFailed(String msg) {
-                setIsLoading(false);
-                setErrorMessage(msg);
-            }
-        });
+        //save to local db
+        realmDB.writeMemberEstimation(estim);
+        isSuccess.setValue(true);
     }
 
 }

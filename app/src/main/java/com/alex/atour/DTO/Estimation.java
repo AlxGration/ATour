@@ -1,19 +1,19 @@
 package com.alex.atour.DTO;
 
-public class Estimation {
-    private String id, memberID, refereeID;
+import com.google.android.gms.common.images.ImageManager;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Estimation extends RealmObject implements Comparable<Estimation>{
+
+    @PrimaryKey
+    private String id;
+    private String champID, memberID, refereeID, memberFIO;
     private float complexity, novelty, strategy, tactics, technique, tension, informativeness ;
     private String comment;
 
     public Estimation(){}
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getMemberID() {
         return memberID;
@@ -93,5 +93,38 @@ public class Estimation {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getChampID() {
+        return champID;
+    }
+
+    public void setChampID(String champID) {
+        this.champID = champID;
+    }
+
+    public String getMemberFIO() {
+        return memberFIO;
+    }
+
+    public void setMemberFIO(String memberFIO) {
+        this.memberFIO = memberFIO;
+    }
+
+    @Override
+    public int compareTo(Estimation o) {
+        int v = getMemberFIO().compareTo(o.getMemberFIO());
+        if (v == 0){
+            return getMemberID().compareTo(o.getMemberID());
+        }
+        return v;
     }
 }

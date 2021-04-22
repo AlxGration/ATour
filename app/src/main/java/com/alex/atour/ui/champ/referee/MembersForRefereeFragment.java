@@ -21,6 +21,7 @@ public class MembersForRefereeFragment extends Fragment {
 
     private MembersViewModel viewModel;
     private final String champID;
+    EstimsRecyclerAdapter adapter;
 
     public static MembersForRefereeFragment newInstance(String champID) {
         return new MembersForRefereeFragment(champID);
@@ -35,6 +36,13 @@ public class MembersForRefereeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.requestMembersList(champID);
+        //viewModel.getMembersFromLocalDB();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_referee_members, container, false);
@@ -43,17 +51,15 @@ public class MembersForRefereeFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+
         viewModel.getMembersLiveData().observe(getViewLifecycleOwner(), members -> {
-            //MembersListRecyclerAdapter adapter = new MembersListRecyclerAdapter(members);
-            //MembersListRecyclerAdapter.setOnItemClickListener(2, ((ChampActivity) getActivity()));
-            EstimsRecyclerAdapter adapter = new EstimsRecyclerAdapter(members);
+            adapter = new EstimsRecyclerAdapter(members);
             EstimsRecyclerAdapter.setOnItemClickListener(2, ((ChampActivity) getActivity()));
             recyclerView.setAdapter(adapter);
         });
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), tvError::setText);
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), ((ChampActivity)getActivity())::showLoadingProcess);
 
-        viewModel.requestMembersList(champID);
         return view;
     }
 }

@@ -7,16 +7,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="С"
-        android:textSize="@dimen/main_text_size"
-        android:textColor="@color/black"
+        android:layout_marginStart="8dp"
         android:layout_toLeftOf="@id/et_complexity"
-        android:layout_marginStart="8dp"/>
+        android:gravity="center"
+        android:text="С"
+        android:textColor="@color/black"
+        android:textSize="@dimen/main_text_size" />
     <EditText
         android:id="@+id/et_complexity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="13"
+        android:ems="10"
         android:hint="Сложность [1..120]"
         android:inputType="numberDecimal|numberSigned"
         android:layout_centerHorizontal="true"/>
@@ -26,6 +27,7 @@
         android:text="Нв"
         android:textSize="@dimen/main_text_size"
         android:textColor="@color/black"
+        android:gravity="center"
         android:layout_toLeftOf="@id/et_complexity"
         android:layout_marginStart="8dp"
         android:layout_below="@id/et_complexity"/>
@@ -33,7 +35,7 @@
         android:id="@+id/et_novelty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="13"
+        android:ems="10"
         android:hint="Новизна [0..24]"
         android:inputType="numberDecimal|numberSigned"
         android:layout_below="@id/et_complexity"
@@ -44,6 +46,7 @@
         android:text="Ст"
         android:textSize="@dimen/main_text_size"
         android:textColor="@color/black"
+        android:gravity="center"
         android:layout_toLeftOf="@id/et_complexity"
         android:layout_marginStart="8dp"
         android:layout_below="@id/et_novelty"/>
@@ -51,7 +54,7 @@
         android:id="@+id/et_strategy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="13"
+        android:ems="10"
         android:hint="Стратегия [-15..6]"
         android:inputType="numberDecimal|numberSigned"
         android:layout_below="@id/et_novelty"
@@ -62,6 +65,7 @@
         android:text="Тк"
         android:textSize="@dimen/main_text_size"
         android:textColor="@color/black"
+        android:gravity="center"
         android:layout_toLeftOf="@id/et_complexity"
         android:layout_marginStart="8dp"
         android:layout_below="@id/et_strategy"/>
@@ -69,7 +73,7 @@
         android:id="@+id/et_tactics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="13"
+        android:ems="10"
         android:hint="Тактика [-13..7]"
         android:inputType="numberDecimal|numberSigned"
         android:layout_below="@id/et_strategy"
@@ -80,6 +84,7 @@
         android:text="Т"
         android:textSize="@dimen/main_text_size"
         android:textColor="@color/black"
+        android:gravity="center"
         android:layout_toLeftOf="@id/et_complexity"
         android:layout_marginStart="8dp"
         android:layout_below="@id/et_tactics"/>
@@ -87,7 +92,7 @@
         android:id="@+id/et_technique"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="13"
+        android:ems="10"
         android:hint="Техника [-12..5]"
         android:inputType="numberDecimal|numberSigned"
         android:layout_below="@id/et_tactics"
@@ -98,6 +103,7 @@
         android:text="Н"
         android:textSize="@dimen/main_text_size"
         android:textColor="@color/black"
+        android:gravity="center"
         android:layout_toLeftOf="@id/et_complexity"
         android:layout_marginStart="8dp"
         android:layout_below="@id/et_technique"/>
@@ -105,7 +111,7 @@
         android:id="@+id/et_tension"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="13"
+        android:ems="10"
         android:hint="Напряженность [-6..18]"
         android:inputType="numberDecimal|numberSigned"
         android:layout_below="@id/et_technique"
@@ -116,6 +122,7 @@
         android:text="П"
         android:textSize="@dimen/main_text_size"
         android:textColor="@color/black"
+        android:gravity="center"
         android:layout_toLeftOf="@id/et_complexity"
         android:layout_marginStart="8dp"
         android:layout_below="@id/et_tension"/>
@@ -123,8 +130,8 @@
         android:id="@+id/et_informativeness"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="13"
-        android:hint="Информативность [-1..7]"
+        android:ems="10"
+        android:hint="Полезность [-1..7]"
         android:inputType="numberDecimal|numberSigned"
         android:layout_below="@id/et_tension"
         android:layout_centerHorizontal="true"/>
@@ -146,7 +153,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         style="@style/BlackButton"
-        android:text="@string/send"
+        android:text="@string/save"
         android:onClick="onClickSendBtn"
         android:layout_below="@id/et_comment"/>
 </RelativeLayout>

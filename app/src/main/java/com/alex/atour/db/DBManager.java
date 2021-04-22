@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public abstract class DBManager {
 
     private static DBManager db;
+    private static RealmDB realmDB;
     private Activity executor;
     private PrefsDB prefs;
 
@@ -25,6 +26,11 @@ public abstract class DBManager {
     public void setExecutor(Activity executor) {
         this.executor = executor;
         prefs = new PrefsDB(executor.getApplicationContext());
+    }
+
+    public RealmDB getRealmDB(){
+        if (realmDB == null) realmDB =  new RealmDB();
+        return realmDB;
     }
 
     public static DBManager getInstance(){
@@ -45,7 +51,7 @@ public abstract class DBManager {
     public abstract void getChampsList(IChampsInfoListener listener);//общий список чемпионатов
     public abstract void getMembers(String champID, IMembersListListener listener);//весь список участников чемпионата, включая подавших только заявки
     public abstract void getMemberByID(String userID, String champID, IMembersListListener listener);//участник чемпионата по ID
-    public abstract void getDocsSentMembers(String champID, IMembersListListener listener);//участник чемпионата, которые отправили документы
+    public abstract void getDocsSentMembers(String champID, String refereeID, IMembersListListener listener);//участник чемпионата, которые отправили документы
     public abstract void getChampsList(String searchRequest, IChampsInfoListener listener);//общий список чемпионатов
     public abstract void getManagedChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
     public abstract void getMyChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь

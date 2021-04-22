@@ -44,6 +44,7 @@
     <string name="members">Участники</string>
     <string name="referees">Судьи</string>
     <string name="documents">Документы</string>
+    <string name="save">Сохранить</string>
 
     <string-array name="statuses">
         <item>Чемпионат</item>

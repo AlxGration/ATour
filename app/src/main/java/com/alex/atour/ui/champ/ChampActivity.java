@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Member;
+import com.alex.atour.DTO.MemberEstimation;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.models.EstimsRecyclerAdapter;
@@ -22,6 +23,7 @@ import com.alex.atour.ui.champ.referee.MembersForRefereeFragment;
 import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
 import com.alex.atour.ui.requests.RequestsListActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener, EstimsRecyclerAdapter.IonItemClickListener {
 
@@ -151,13 +153,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     @Override
     public void startProfileActivityWith(int role, Member member) {
         //role - от чьего имени открывается экран
-        if (role == 2){
-            Intent intent = new Intent(ChampActivity.this, ProfileActivity.class);
-            intent.putExtra("member", member);
-            intent.putExtra("champID", info.getChampID());
-            intent.putExtra("comeFrom", 4);//show docs (for referee)
-            startActivity(intent);
-        }
         if (role == 1){
             Intent intent = new Intent(ChampActivity.this, ProfileActivity.class);
             intent.putExtra("member", member);
@@ -165,7 +160,16 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
             intent.putExtra("comeFrom", 5);//show request and docs (for admin)
             startActivity(intent);
         }
-        //todo:startProfileActivityWith member (for admin, referee)
+    }
+    @Override
+    public void startProfileActivityWith(int role, MemberEstimation member) {
+        //role - от чьего имени открывается экран
+        if (role == 2){
+            Intent intent = new Intent(ChampActivity.this, ProfileActivity.class);
+            intent.putExtra("memberID", member.getId());
+            intent.putExtra("comeFrom", 4);//show docs (for referee)
+            startActivity(intent);
+        }
     }
 
     //todo:use me
@@ -263,5 +267,9 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_layout,  MembersForRefereeFragment.newInstance(info.getChampID()))
                 .commitNow();
+    }
+    @Override
+    public void showError(String err){
+        Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_SHORT).show();
     }
 }

@@ -406,10 +406,9 @@ public class FirebaseDB extends DBManager{
 
     // get members who sent docs and waiting results
     @Override
-    public void getDocsSentMembers(String champID, IMembersListListener listener){
+    public void getDocsSentMembers(String champID, String refereeID, IMembersListListener listener){
 
         // get referee info (for return specified by type members)
-        String refereeID = getUser().getUid();
         getMemberByID(refereeID, champID, new IMembersListListener() {
             @Override
             public void onSuccess(ArrayList<Member> members) {

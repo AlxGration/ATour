@@ -16,6 +16,8 @@ import com.alex.atour.ui.list.MainActivity;
 import com.alex.atour.ui.registration.RegistrationActivity;
 import com.google.android.material.snackbar.Snackbar;
 
+import io.realm.Realm;
+
 public class LoginActivity extends AppCompatActivity {
 
     private boolean isPasswordHidden;
@@ -42,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         //observers
         viewModel.getAuthFlag().observe(this, isAuthSuccess->{
             if (isAuthSuccess){
+                Realm.init(this);
                 startActivity(
                         new Intent(this, MainActivity.class)
                 );
