@@ -15,6 +15,8 @@ public class MembersViewModel extends BaseViewModel {
     private final MutableLiveData<ArrayList<Member>> all;
     private final MutableLiveData<ArrayList<Member>> referees;
     private final MutableLiveData<ArrayList<Member>> members;
+    private final MutableLiveData<Boolean> isEnrollmentOpen;
+
 
     public MembersViewModel(){
         db = DBManager.getInstance();
@@ -22,10 +24,12 @@ public class MembersViewModel extends BaseViewModel {
         all = new MutableLiveData<>(new ArrayList<Member>());
         members = new MutableLiveData<>(new ArrayList<Member>());
         referees = new MutableLiveData<>(new ArrayList<Member>());
+        isEnrollmentOpen = new MutableLiveData<>();
     }
 
     public MutableLiveData<ArrayList<Member>> getRefereesLiveData() { return referees; }
     public MutableLiveData<ArrayList<Member>> getMembersLiveData() { return members; }
+    public MutableLiveData<Boolean> getIsEnrollmentOpenLiveData() { return isEnrollmentOpen; }
 
     public void requestMembersList(String champID){
         setIsLoading(true);
@@ -34,6 +38,15 @@ public class MembersViewModel extends BaseViewModel {
             public void onSuccess(ArrayList<Member> members) { setAllList(members); }
             @Override
             public void onFailed(String msg) { requestError(msg); }
+        });
+    }
+
+    public void closeEnrollment(String champID){
+        db.closeEnrollmentAndCreateRefereeProtocols(champID, new DBManager.IRequestListener() {
+            @Override
+            public void onSuccess() { isEnrollmentOpen.setValue(false); }
+            @Override
+            public void onFailed(String msg) { setErrorMessage(msg); }
         });
     }
 
@@ -51,6 +64,8 @@ public class MembersViewModel extends BaseViewModel {
         setMembersList(membersList);
         setRefereesList(refereesList);
     }
+
+    public void setEnrollment(boolean isOpen){ isEnrollmentOpen.setValue(isOpen);}
 
     void setAllList(ArrayList<Member> members){
         this.all.setValue(members);

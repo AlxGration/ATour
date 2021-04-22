@@ -1,9 +1,9 @@
 package com.alex.atour.models;
 
 public enum MembershipState{
-    WAIT,
-    DENIED,
-    ACCEPTED,
-    DOCS_SUBMISSION,    //only for members, who is sending docs
+    WAIT,               //ожидание одобрения заявки
+    DENIED,             //заявка не принята
+    ACCEPTED,           //заявки одобрена
+    DOCS_SUBMITTED,     //only for referee, who is waiting docs
     RESULTS
 }

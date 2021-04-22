@@ -65,6 +65,7 @@ public class ChampViewModel extends BaseViewModel {
         champInfo.setDataTo(dataTo);
         champInfo.setCity(city);
         champInfo.setStatus(StatusConverter.statusToInt(status));
+        champInfo.setEnrollmentOpen(true);
 
         setIsLoading(true);
         db.createNewChamp(champInfo, new DBManager.IRequestListener() {

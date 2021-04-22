@@ -57,8 +57,9 @@ public abstract class DBManager {
     public abstract void getMyChampsList(IChampsInfoListener listener);//чемпионаты, которые создал пользователь
     public abstract void getMembershipRequestsList(String champID, IMembershipRequestsListListener listener);//заявки на чемпионат(для админа)
     public abstract void getMembershipRequestByID(String champID, String userID, IMembershipRequestsListListener listener);//заявка одобренная на чемпионат(для админа)
-
     public abstract void sendDocument(String champID, Document document, IRequestListener listener); // добавить документ
+
+    public abstract void closeEnrollmentAndCreateRefereeProtocols(String champID, IRequestListener listener);//закрыть прием заявок, сформировать судейские протоколы
     public abstract void sendEstimation(String champID, Estimation estim, IRequestListener listener); // добавить оценку
     public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
 

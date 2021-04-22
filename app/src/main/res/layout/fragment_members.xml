@@ -8,6 +8,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.champ.ChampActivity">
 
+    <Button
+        android:id="@+id/btn_close_enrollment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Закрыть набор"/>
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs_layout"
         app:tabIndicatorColor="@color/yellow"

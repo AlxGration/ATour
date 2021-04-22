@@ -5,9 +5,17 @@ import java.io.Serializable;
 public class ChampInfo implements Serializable {
     private String title, champID, dataFrom, dataTo, city, adminID;
     private int status;
-    private boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther;
+    private boolean typeWalk, typeSki, typeHike, typeWater, typeSpeleo, typeBike, typeAuto, typeOther, isEnrollmentOpen;
 
     public ChampInfo(){}
+
+    public boolean isEnrollmentOpen() {
+        return isEnrollmentOpen;
+    }
+
+    public void setEnrollmentOpen(boolean enrollmentOpen) {
+        this.isEnrollmentOpen = enrollmentOpen;
+    }
 
     public String getAdminID() {
         return adminID;

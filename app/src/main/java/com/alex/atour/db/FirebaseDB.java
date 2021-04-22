@@ -24,6 +24,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FirebaseDB extends DBManager{
 
@@ -262,6 +263,43 @@ public class FirebaseDB extends DBManager{
         getMembershipRequests(query, listener);
     }
 
+    @Override
+    public void closeEnrollmentAndCreateRefereeProtocols(String champID, IRequestListener listener){
+        //change isEnrollmentOpen to false in ChampInfo
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("isEnrollmentOpen", false);
+        getDbRef().child(CHAMP_INFO_TABLE).child(champID).updateChildren(update);
+
+
+        //change members state to DOCS_SUBMITTED
+        changeAllMembersState(champID, MembershipState.DOCS_SUBMITTED.ordinal(), listener);
+    }
+
+    private void changeAllMembersState(String champID, int state, IRequestListener listener){
+        final DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for(DataSnapshot d : snapshot.getChildren()) {
+                        HashMap<String, Object> result = new HashMap<>();
+                        result.put("state", state);
+                        ref.child(String.valueOf(d.getKey())).updateChildren(result);  //update according to keys
+                    }
+                    if (listener!= null)listener.onSuccess();
+                }else{
+                    if (listener!= null)listener.onFailed("Ошибка операции смены статуса");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!= null)listener.onFailed("Ошибка операции смены статуса");
+            }
+        });
+
+    }
+
     // add to Champ->Estimation and Champ->Docs->memberID->Estimations->(refereeID)
     @Override
     public void sendEstimation(String champID, Estimation estim, IRequestListener listener){
@@ -312,7 +350,6 @@ public class FirebaseDB extends DBManager{
                 // delete MembershipRequest from Champ->Requests
                 ref.child(REQUEST_TABLE).child(req.getId()).removeValue().addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()){
-                        //todo: change state in MEMBER TABLE
                         changeUserState(req.getChampID(), req.getUserID(), MembershipState.ACCEPTED.ordinal());
                         if (listener!=null) listener.onSuccess();
                     }else{
@@ -415,7 +452,7 @@ public class FirebaseDB extends DBManager{
                 Member me = members.get(0);//this is referee
                 // get all docs sent members
                 //todo::maybe change state to DOCS_SUBMIT?
-                Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").equalTo(MembershipState.RESULTS.ordinal());
+                Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE).orderByChild("state").equalTo(MembershipState.DOCS_SUBMITTED.ordinal());
                 query.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

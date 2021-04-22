@@ -152,7 +152,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
 
     @Override
     public void startProfileActivityWith(int role, Member member) {
-        //role - от чьего имени открывается экран
+        //администратор хочет посмотреть информацию участника или судьи
         if (role == 1){
             Intent intent = new Intent(ChampActivity.this, ProfileActivity.class);
             intent.putExtra("member", member);
@@ -163,7 +163,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     }
     @Override
     public void startProfileActivityWith(int role, MemberEstimation member) {
-        //role - от чьего имени открывается экран
+        //судья хочет посмотреть документы для оценки участника
         if (role == 2){
             Intent intent = new Intent(ChampActivity.this, ProfileActivity.class);
             intent.putExtra("memberID", member.getId());
@@ -172,12 +172,13 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         }
     }
 
-    //todo:use me
     private void showLayoutDependsOnRoleAndState(int role, int state){
         Log.e("TAG", "RS "+ role+" "+state);
 
-        if (role == -1){
-            btnSendRequest.setVisibility(View.VISIBLE);
+        if (role == -1){// visitor
+            btnSendRequest.setVisibility(
+                    info.isEnrollmentOpen()?  // показать "подать заявку" только если набор продолжается
+                    View.VISIBLE:View.INVISIBLE);
             return;
         }
 
@@ -202,7 +203,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     btnSendRequest.setVisibility(View.INVISIBLE);
                     showDocsSendingFragment();
                     break;
-                case 3://MembershipState.DOCS_SUBMISSION
+                case 3://MembershipState.DOCS_SUBMITTED//todo:mb changing status after docs sent on this?
                     tvMessage.setText(R.string.results_waiting);
                     break;
                 case 4://MembershipState.RESULTS
@@ -221,12 +222,14 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     btnSendRequest.setVisibility(View.VISIBLE);
                     break;
                 case 2://MembershipState.ACCEPTED
-                    tvMessage.setText("");
+                    tvMessage.setText("Продолжается прием заявок.\nСудейские протоколы еще не сформированы.");
                     btnSendRequest.setVisibility(View.INVISIBLE);
+                    break;
+                case 3://MembershipState.DOCS_SUBMITTED
+                    tvMessage.setText("");
                     showDocsFragment();
                     break;
                 case 4://MembershipState.RESULTS
-                    //todo:check me
                     showResultsFragment();
                     break;
             }
@@ -271,5 +274,9 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     @Override
     public void showError(String err){
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_SHORT).show();
+    }
+    public boolean getIsEnrollOpen(){
+        if (info != null) return info.isEnrollmentOpen();
+        return false;
     }
 }
