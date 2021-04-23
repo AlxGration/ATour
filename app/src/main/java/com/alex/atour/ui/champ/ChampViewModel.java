@@ -2,6 +2,7 @@ package com.alex.atour.ui.champ;
 
 import androidx.lifecycle.MutableLiveData;
 import com.alex.atour.DTO.User;
+import com.alex.atour.db.DBManager;
 import com.alex.atour.models.BaseViewModel;
 
 
@@ -12,17 +13,20 @@ public class ChampViewModel extends BaseViewModel {
     private final MutableLiveData<User> admin;
     private final MutableLiveData<Integer> role;
     private final MutableLiveData<Integer> state;
+    private final MutableLiveData<Boolean> isEnrollmentOpen;
 
     public ChampViewModel(){
         admin = new MutableLiveData<>();
         state = new MutableLiveData<>();
         role = new MutableLiveData<>();
         model = new ChampModel(this);
+        isEnrollmentOpen = new MutableLiveData<>();
     }
 
     public MutableLiveData<User> getAdminLiveData() { return admin; }
     public MutableLiveData<Integer> getRoleLiveData() { return role; }
     public MutableLiveData<Integer> getStateLiveData() { return state; }
+    public MutableLiveData<Boolean> getIsEnrollmentOpenLiveData() { return isEnrollmentOpen; }
 
 
     public void loadPage(String adminID, String champID){
@@ -30,6 +34,9 @@ public class ChampViewModel extends BaseViewModel {
         model.loadPage(adminID, champID);
     }
 
+    public void closeEnrollment(String champID){
+        model.closeEnrollment(champID);
+    }
     void setAdminData(User user){
         admin.setValue(user);
         setIsLoading(false);
@@ -46,4 +53,5 @@ public class ChampViewModel extends BaseViewModel {
     void setState(int state){
         this.state.setValue(state);
     }
+    void setInEnrollmentOpen(boolean isOpen){isEnrollmentOpen.setValue(isOpen);}
 }

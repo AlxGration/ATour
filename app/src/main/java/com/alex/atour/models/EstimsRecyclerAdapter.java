@@ -61,9 +61,9 @@ public class EstimsRecyclerAdapter extends RecyclerView.Adapter<EstimsRecyclerAd
 
         holder.tvFIO.setText(estim.getMemberFIO());
         holder.btnSave.setOnClickListener(view->{
-            String complexity = holder.etComplexity.getText().toString();
             //data validation
-            estimsValidation(estim, holder.etComplexity.getText().toString(),
+            MemberEstimation e = new MemberEstimation(estim);
+            String isAnyErr = ValueFormatter.isEstimationOK(e, holder.etComplexity.getText().toString(),
                     holder.etNovelty.getText().toString(),
                     holder.etStrategy.getText().toString(),
                     holder.etTactics.getText().toString(),
@@ -71,6 +71,13 @@ public class EstimsRecyclerAdapter extends RecyclerView.Adapter<EstimsRecyclerAd
                     holder.etTension.getText().toString(),
                     holder.etInformativeness.getText().toString()
             );
+            if (isAnyErr == null){
+                realmDB.writeMemberEstimation(e);
+                listener.showError("Сохранено");
+            }else {
+                Log.e("TAG", "can't save "+estim.getMemberFIO());
+                listener.showError(isAnyErr);
+            }
         });
         
         holder.itemView.setTag(position);
@@ -130,41 +137,5 @@ public class EstimsRecyclerAdapter extends RecyclerView.Adapter<EstimsRecyclerAd
             if (view == null) return;
             view.setBackgroundResource(R.drawable.bg_white);
         }
-    }
-    private void estimsValidation(MemberEstimation mEstim,
-                                     String complexity,
-                                     String novelty,
-                                     String strategy,
-                                     String tactics,
-                                     String technique,
-                                     String tension,
-                                     String informativeness){
-        MemberEstimation estim = new MemberEstimation(mEstim);
-        float k = 0;
-        if (complexity.isEmpty() || (k = Float.parseFloat(complexity)) < 1 || k > 120){
-            listener.showError("Неверное значение 'Сложность'"); return;
-        }else estim.setComplexity(k);
-        if (novelty.isEmpty() || (k = Float.parseFloat(novelty)) < 0 || k > 24){
-            listener.showError("Неверное значение 'Новизна'");return;
-        }else estim.setNovelty(k);
-        if (strategy.isEmpty() || (k = Float.parseFloat(strategy)) < -15 || k > 6){
-            listener.showError("Неверное значение 'Стратегия'");return;
-        }else estim.setStrategy(k);
-        if (tactics.isEmpty() || (k = Float.parseFloat(tactics)) < -13 || k > 7){
-            listener.showError("Неверное значение 'Тактика'");return;
-        }else estim.setTactics(k);
-        if (technique.isEmpty() || (k = Float.parseFloat(technique)) < -12 || k > 5){
-            listener.showError("Неверное значение 'Техника'");return;
-        }else estim.setTechnique(k);
-        if (tension.isEmpty() || (k = Float.parseFloat(tension)) < -6 || k > 18){
-            listener.showError("Неверное значение 'Напряженность'");return;
-        }else estim.setTension(k);
-        if (informativeness.isEmpty() || (k = Float.parseFloat(informativeness)) < -1 || k > 7){
-            listener.showError("Неверное значение 'Информативность'");return;
-        }else estim.setInformativeness(k);
-        //todo: save to local db
-        Log.e("TAG", "save "+estim.getMemberFIO());
-        realmDB.writeMemberEstimation(estim);
-        listener.showError("Сохранено");
     }
 }

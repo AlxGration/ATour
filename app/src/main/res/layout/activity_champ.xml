@@ -13,63 +13,69 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.ATour.AppBarOverlay">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/header_layout"
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
+            android:layout_height="wrap_content"
+            android:minHeight="?actionBarSize"
             app:layout_scrollFlags="enterAlways|scroll"
-            android:orientation="horizontal"
             android:paddingStart="@dimen/padding"
             android:paddingEnd="@dimen/padding">
-            <ImageButton
-                android:id="@+id/btn_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:gravity="center"
-                android:src="@drawable/ic_back"
-                android:scaleType="centerInside"
-                android:onClick="onClickBackBtn"
-                android:background="@drawable/bg_white"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:text="МО Чемпионат"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btn_back"
-                app:layout_constraintEnd_toStartOf="@id/btn_send_request"/>
-            <Button
-                android:id="@+id/btn_send_request"
-                android:layout_width="70dp"
-                android:layout_height="30dp"
-                android:textAllCaps="false"
-                android:text="Подать\nзаявку"
-                android:textSize="@dimen/sub_text_size"
-                android:visibility="invisible"
-                android:onClick="onClickMemRequestBtn"
-                android:background="@drawable/border_black"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:indeterminateOnly="true"
-                android:indeterminateTint="@color/black"
-                android:visibility="invisible"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageButton
+                    android:id="@+id/btn_back"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:src="@drawable/ic_back"
+                    android:scaleType="centerInside"
+                    android:onClick="onClickBackBtn"
+                    android:background="@drawable/bg_white"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:text="МО Чемпионат"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/btn_back"
+                    app:layout_constraintEnd_toStartOf="@id/btn_send_request"/>
+                <Button
+                    android:id="@+id/btn_send_request"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:textAllCaps="false"
+                    android:text="Подать\nзаявку"
+                    android:textSize="@dimen/sub_text_size"
+                    android:visibility="invisible"
+                    android:onClick="onClickMemRequestBtn"
+                    android:background="@drawable/border_black"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:indeterminateOnly="true"
+                    android:indeterminateTint="@color/black"
+                    android:visibility="invisible"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -337,9 +343,7 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/img_role"
                     app:layout_constraintTop_toTopOf="parent" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             <TextView
                 android:id="@+id/tv_message"

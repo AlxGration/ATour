@@ -1,11 +1,13 @@
 package com.alex.atour.DTO;
 
+import com.alex.atour.models.IEstimation;
+
 import java.io.Serializable;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class MemberEstimation extends RealmObject implements Comparable<MemberEstimation>, Serializable {
+public class MemberEstimation extends RealmObject implements Comparable<MemberEstimation>, Serializable, IEstimation {
 
     @PrimaryKey
     private String id;

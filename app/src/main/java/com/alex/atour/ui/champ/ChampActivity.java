@@ -1,20 +1,24 @@
 package com.alex.atour.ui.champ;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MemberEstimation;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
+import com.alex.atour.models.ConfirmationDialog;
 import com.alex.atour.models.EstimsRecyclerAdapter;
 import com.alex.atour.models.MembersListRecyclerAdapter;
 import com.alex.atour.ui.champ.admin.MembersFragment;
@@ -33,6 +37,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private ChampInfo info;
     private User admin;
     private int role;
+    private Toolbar toolbar;
 
     private ChampViewModel viewModel;
 
@@ -49,6 +54,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         tvAdminFio = findViewById(R.id.tv_fio);
         TextView tvError = findViewById(R.id.tv_error);
         pBar = findViewById(R.id.progress_bar);
+        toolbar = findViewById(R.id.toolbar);
 
         //setting ChampInfo on UI
         setChampInfoOnUI((ChampInfo) getIntent().getSerializableExtra("champInfo"));
@@ -64,20 +70,49 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
             );
         });
         viewModel.getErrorMessage().observe(this, tvError::setText);
-
         viewModel.getRoleLiveData().observe(this, role->{
             this.role = role;
             showLayoutDependsOnRoleAndState(role, -1);
         });
-
         viewModel.getStateLiveData().observe(this, state->{
-            showLayoutDependsOnRoleAndState(role, state);
-        });
+            showLayoutDependsOnRoleAndState(role, state); });
+        viewModel.getIsEnrollmentOpenLiveData().observe(this, isOpen->{
+            if (isOpen) Toast.makeText(getApplicationContext(), "Регистрация завершена", Toast.LENGTH_SHORT).show();});
 
         // request admin info
         // and user status and role (admin, referee, member)
         viewModel.loadPage(info.getAdminID(), info.getChampID());
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.admin_menu, menu);
+        menu.getItem(1).setVisible(info.isEnrollmentOpen());
+        return true;
+    }
+    // Для админа,
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id){
+            case R.id.action_requests :// переход на активность для просмотра заявок на чемпионат
+                Intent intent = new Intent(ChampActivity.this, RequestsListActivity.class);
+                intent.putExtra("champID", info.getChampID());
+                startActivity(intent);
+                return true;
+            case R.id.action_close_enrollment://закрытие приема заявок и формирование судейский протоколов
+                ConfirmationDialog confirmationDialog = new ConfirmationDialog(() -> {
+                    viewModel.closeEnrollment(info.getChampID());
+                });
+                confirmationDialog.show(getSupportFragmentManager(), "myDialog");
+                return true;
+            case R.id.action_create_total_protocol:
+                Toast.makeText(this, "creating total protocol", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public void onClickBackBtn(View view) {
         finish();
@@ -140,16 +175,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         if (info.isTypeOther()) findViewById(R.id.cp_other).setVisibility(View.VISIBLE);
     }
 
-    // Для админа, переход на активность для просмотра заявок на чемпионат
-    private final View.OnClickListener onClickRequests = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(ChampActivity.this, RequestsListActivity.class);
-            intent.putExtra("champID", info.getChampID());
-            startActivity(intent);
-        }
-    };
-
     @Override
     public void startProfileActivityWith(int role, Member member) {
         //администратор хочет посмотреть информацию участника или судьи
@@ -183,9 +208,12 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         }
 
         if (role == 0){//admin
-            btnSendRequest.setVisibility(View.VISIBLE);
-            btnSendRequest.setOnClickListener(onClickRequests);
-            btnSendRequest.setText("Заявки");
+            btnSendRequest.setVisibility(View.INVISIBLE);
+            //todo: show menu
+            setSupportActionBar(toolbar);
+
+            //btnSendRequest.setOnClickListener(onClickRequests);
+            //btnSendRequest.setText("Заявки");
             showMembersFragment();
         }
         if (role == 1 && state != -1){//member

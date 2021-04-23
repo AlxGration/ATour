@@ -4,11 +4,13 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MemberEstimation;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.db.RealmDB;
 import com.alex.atour.models.BaseViewModel;
+import com.alex.atour.models.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.TreeSet;
@@ -56,6 +58,44 @@ public class MembersViewModel extends BaseViewModel {
         });
     }
 
+    public void sendEstimations(){
+        setIsLoading(true);
+
+        //get local MemberEstimations
+        TreeSet<MemberEstimation> treeSet = realmDB.getMemberEstimations(champID, refereeID);
+        ArrayList<Estimation> estimsToSend = new ArrayList<>(treeSet.size());
+
+        //extract data to Estimation.class, pack to List
+        for (MemberEstimation m : treeSet){
+            Estimation e = new Estimation(m);
+            String isAnyErr = ValueFormatter.isEstimationOK(e,
+                m.getComplexity()+"", m.getNovelty()+"", m.getStrategy()+"",
+                m.getTactics()+"", m.getTechnique()+"", m.getTension()+"",
+                m.getInformativeness()+"");
+
+            if (isAnyErr != null){
+                Log.e("TAG", e.getMemberFIO()+" "+isAnyErr+" "+e.getComplexity());
+                requestError(e.getMemberFIO()+"\n"+isAnyErr);return; }
+
+            estimsToSend.add(e);
+        }
+
+        //and send
+        db.sendRefereeEstimations(estimsToSend, new DBManager.IRequestListener() {
+            @Override
+            public void onSuccess() {
+                //todo:will think about me
+                setIsLoading(false);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                //todo:will think about me
+                setIsLoading(false);
+            }
+        });
+    }
+
     public boolean getMembersFromLocalDB(){
         TreeSet<MemberEstimation> treeSet = realmDB.getMemberEstimations(champID, refereeID);
         if (treeSet.size() > 0){
@@ -73,7 +113,6 @@ public class MembersViewModel extends BaseViewModel {
     void setMembersList(ArrayList<MemberEstimation> members){
         this.mEstims.setValue(members);
         setIsLoading(false);
-        setErrorMessage("");
     }
 
     void requestError(String msg){

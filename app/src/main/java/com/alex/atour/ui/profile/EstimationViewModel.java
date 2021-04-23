@@ -8,6 +8,7 @@ import com.alex.atour.DTO.MemberEstimation;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.db.RealmDB;
 import com.alex.atour.models.BaseViewModel;
+import com.alex.atour.models.ValueFormatter;
 
 public class EstimationViewModel extends BaseViewModel {
 
@@ -34,28 +35,11 @@ public class EstimationViewModel extends BaseViewModel {
 
         //data validation
         MemberEstimation estim = new MemberEstimation(mEstim);
-        float k = 0;
-        if (complexity.isEmpty() || (k = Float.parseFloat(complexity)) < 1 || k > 120){
-            setErrorMessage("Неверное значение 'Сложность'"); return;
-        }else estim.setComplexity(k);
-        if (novelty.isEmpty() || (k = Float.parseFloat(novelty)) < 0 || k > 24){
-            setErrorMessage("Неверное значение 'Новизна'");return;
-        }else estim.setNovelty(k);
-        if (strategy.isEmpty() || (k = Float.parseFloat(strategy)) < -15 || k > 6){
-            setErrorMessage("Неверное значение 'Стратегия'");return;
-        }else estim.setStrategy(k);
-        if (tactics.isEmpty() || (k = Float.parseFloat(tactics)) < -13 || k > 7){
-            setErrorMessage("Неверное значение 'Тактика'");return;
-        }else estim.setTactics(k);
-        if (technique.isEmpty() || (k = Float.parseFloat(technique)) < -12 || k > 5){
-            setErrorMessage("Неверное значение 'Техника'");return;
-        }else estim.setTechnique(k);
-        if (tension.isEmpty() || (k = Float.parseFloat(tension)) < -6 || k > 18){
-            setErrorMessage("Неверное значение 'Напряженность'");return;
-        }else estim.setTension(k);
-        if (informativeness.isEmpty() || (k = Float.parseFloat(informativeness)) < -1 || k > 7){
-            setErrorMessage("Неверное значение 'Информативность'");return;
-        }else estim.setInformativeness(k);
+        String isAnyErr = ValueFormatter.isEstimationOK(estim, complexity,
+                novelty, strategy, tactics,
+                technique, tension, informativeness
+        );
+        if (isAnyErr != null){ setErrorMessage(isAnyErr); return; }
 
         //
         estim.setComment(comment);

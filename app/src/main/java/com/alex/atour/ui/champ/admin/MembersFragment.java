@@ -45,7 +45,6 @@ public class MembersFragment extends Fragment {
         TabLayout tabLayout = view.findViewById(R.id.tabs_layout);
         tabLayout.setupWithViewPager(viewPager);
 
-        Button btnCloseEnroll = view.findViewById(R.id.btn_close_enrollment);
 
         //get all members
         viewModel.requestMembersList(champID);
@@ -57,10 +56,7 @@ public class MembersFragment extends Fragment {
             tabLayout.getTabAt(0).setText("Участники ("+list.size()+")");
         });
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), ((ChampActivity)getActivity())::showLoadingProcess);
-        viewModel.getIsEnrollmentOpenLiveData().observe(getViewLifecycleOwner(), btnCloseEnroll::setEnabled);
-        viewModel.setEnrollment(((ChampActivity)getActivity()).getIsEnrollOpen());
 
-        btnCloseEnroll.setOnClickListener(view1 -> viewModel.closeEnrollment(champID));
         return view;
     }
 }

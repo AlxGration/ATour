@@ -37,6 +37,15 @@ public class ChampModel {
 
     }
 
+    public void closeEnrollment(String champID){
+        db.closeEnrollmentAndCreateRefereeProtocols(champID, new DBManager.IRequestListener() {
+            @Override
+            public void onSuccess() { viewModel.setInEnrollmentOpen(false); }
+            @Override
+            public void onFailed(String msg) { viewModel.requestError(msg); }
+        });
+    }
+
     //запрос статуса чела в этом ЧМ
     private void requestMyRoleAndStateInChamp(String champID){
         String curUserID = db.getPrefs().getUserID();

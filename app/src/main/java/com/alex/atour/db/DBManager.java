@@ -11,6 +11,7 @@ import com.alex.atour.DTO.User;
 import com.alex.atour.ui.champ.ChampActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class DBManager {
 
@@ -60,7 +61,8 @@ public abstract class DBManager {
     public abstract void sendDocument(String champID, Document document, IRequestListener listener); // добавить документ
 
     public abstract void closeEnrollmentAndCreateRefereeProtocols(String champID, IRequestListener listener);//закрыть прием заявок, сформировать судейские протоколы
-    public abstract void sendEstimation(String champID, Estimation estim, IRequestListener listener); // добавить оценку
+    //public abstract void sendEstimation(String champID, Estimation estim, IRequestListener listener); // добавить оценку
+    public abstract void sendRefereeEstimations(List<Estimation> estimations, IRequestListener listener); // отправить все оценки судьи
     public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
 
     public abstract void acceptRequest(MembershipRequest req, IRequestListener listener);// одобрение заявки админом

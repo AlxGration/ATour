@@ -1,19 +1,28 @@
 package com.alex.atour.DTO;
 
+import com.alex.atour.models.IEstimation;
 import com.google.android.gms.common.images.ImageManager;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Estimation extends RealmObject implements Comparable<Estimation>{
+public class Estimation implements Comparable<Estimation>, IEstimation {
 
-    @PrimaryKey
+
     private String id;
     private String champID, memberID, refereeID, memberFIO;
     private float complexity, novelty, strategy, tactics, technique, tension, informativeness ;
     private String comment;
 
     public Estimation(){}
+    public Estimation(MemberEstimation m){
+        id = m.getId();
+        champID = m.getChampID(); memberID = m.getMemberID(); refereeID = m.getRefereeID();
+        memberFIO = m.getMemberFIO();
+        complexity = m.getComplexity(); novelty = m.getNovelty(); strategy = m.getStrategy();
+        tactics = m.getTactics(); technique = m.getTechnique(); tension = m.getTension();
+        informativeness = m.getInformativeness(); comment = m.getComment();
+    }
 
     public String getMemberID() {
         return memberID;
