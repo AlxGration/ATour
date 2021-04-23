@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.champ.ChampActivity">
 
     <TableLayout
@@ -108,6 +109,19 @@
         layout="@layout/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <EditText
+        android:id="@+id/et_referee_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="13"
+        android:layout_marginEnd="@dimen/padding"
+        android:layout_marginStart="@dimen/padding"
+        android:layout_marginTop="@dimen/padding"
+        android:textSize="@dimen/sub_text_size"
+        android:hint="разряд, судейская категория (МС, сс1к)"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:inputType="text"/>
     <Button
         android:id="@+id/btn_send"
         android:layout_width="match_parent"

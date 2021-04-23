@@ -11,7 +11,9 @@ import androidx.fragment.app.DialogFragment;
 public class ConfirmationDialog extends DialogFragment {
 
     private IDialogResult listener;
-    public ConfirmationDialog(IDialogResult listener){
+    private String message;
+    public ConfirmationDialog(String msg, IDialogResult listener){
+        message = msg;
         this.listener = listener;
     }
 
@@ -23,7 +25,6 @@ public class ConfirmationDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String title = "Подтверждение";
-        String message = "Вы уверены?";
         String confirmBtn = "Да";
         String cancelBtn = "Отмена";
 

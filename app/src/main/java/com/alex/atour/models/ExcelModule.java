@@ -6,6 +6,8 @@ import android.content.res.AssetManager;
 import android.os.Environment;
 import android.util.Log;
 
+import com.alex.atour.DTO.Estimation;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -17,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class ExcelModule {
 
@@ -58,17 +61,14 @@ public class ExcelModule {
 
     //заполняет в протоколе ФИО руководителей
     //todo:: и место проведения
-    public void createReportForReferee(String refereeProtocolFileName, String[] fios){
+    public void createRefereeReport(String refereeProtocolFileName, String refereeInfo, ArrayList<Estimation> estims){
 
-        Log.e("TAG", "createReportForReferee");
+        Log.e("TAG", "createRefereeReport");
 
-        //файл общий
         try {
-
-            if(!path.exists())
-            {
+            if(!path.exists()) {
                 Log.e("TAG", "folder created");
-                // Make it, if it doesn't exit
+                // create it, if doesn't exit
                 path.mkdirs();
             }
 
@@ -78,16 +78,28 @@ public class ExcelModule {
             XSSFWorkbook book = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = book.getSheetAt(0);
 
-            for (int i = 0; i < fios.length; i++){
+            //refereeInfo
+            Row row = sheet.getRow(1);
+            fillCell(row, 0, refereeInfo);
 
-                Log.e("TAG", i+": "+fios[i]);
+            for (int i = 0; i < estims.size() ; i++){
 
-                Row row = sheet.getRow(i+6);
-                Cell fioCell = row.getCell(1);
-                if (fioCell == null){
-                    fioCell = row.createCell(1);
-                }
-                fioCell.setCellValue(fios[i]);
+                Log.e("TAG", i+": "+estims.get(i).getMemberFIO());
+
+                row = sheet.getRow(i+6);
+
+                // member FIO
+                fillCell(row, 1, estims.get(i).getMemberFIO());
+
+                //estimations
+                fillCell(row, 5, estims.get(i).getComplexity());
+                fillCell(row, 6, estims.get(i).getNovelty());
+                fillCell(row, 7, estims.get(i).getStrategy());
+                fillCell(row, 8, estims.get(i).getTactics());
+                fillCell(row, 9, estims.get(i).getTechnique());
+                fillCell(row, 10, estims.get(i).getTension());
+                fillCell(row, 11, estims.get(i).getInformativeness());
+
             }
 
             //save and close streams
@@ -103,6 +115,21 @@ public class ExcelModule {
             e.printStackTrace();
         }
         Log.e("TAG", "end");
+    }
+
+    private void fillCell(Row row, int ind, String data){
+        Cell cell = row.getCell(ind);
+        if (cell == null){
+            cell = row.createCell(ind);
+        }
+        cell.setCellValue(data);
+    }
+    private void fillCell(Row row, int ind, double data){
+        Cell cell = row.getCell(ind);
+        if (cell == null){
+            cell = row.createCell(ind);
+        }
+        cell.setCellValue(data);
     }
 
     private void copyFromAssets(String originalName, String fileName) {

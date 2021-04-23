@@ -63,7 +63,6 @@ public class FirebaseDB extends DBManager{
                         }
                     }
                 );
-
     }
 
     public void signOut(){

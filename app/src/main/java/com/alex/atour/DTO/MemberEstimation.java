@@ -1,9 +1,7 @@
 package com.alex.atour.DTO;
 
 import com.alex.atour.models.IEstimation;
-
 import java.io.Serializable;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 

@@ -10,6 +10,7 @@
     tools:context=".ui.champ.ChampActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.ATour.AppBarOverlay">
@@ -80,7 +81,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="enterAlways|scroll">
+            app:layout_scrollFlags="scroll|enterAlways">
             <TextView
                 android:id="@+id/tv_error"
                 android:layout_width="match_parent"
@@ -294,9 +295,7 @@
                     android:checkable="false"
                     android:visibility="gone"
                     android:text="@string/type_other"/>
-
             </com.google.android.material.chip.ChipGroup>
-
 
             <TextView
                 android:id="@+id/tv_title_main_referee"

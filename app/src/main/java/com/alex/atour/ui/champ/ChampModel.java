@@ -58,6 +58,7 @@ public class ChampModel {
                     return;//new user
                 }
                 Member member = members.get(0);
+                db.getPrefs().setUserFIO(member.getUserFIO());
                 viewModel.setRole(member.getRole());
                 viewModel.setState(member.getState());
             }

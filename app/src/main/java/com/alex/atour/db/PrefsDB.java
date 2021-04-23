@@ -32,6 +32,17 @@ public class PrefsDB {
         spEdit.putString(KEYS.ID.toString(), id);
         spEdit.apply();
     }
+
+    public String getUserFIO(){
+        return sp.getString(KEYS.FIO.toString(), "");
+    }
+    public void setUserFIO(String fio){
+        spEdit = sp.edit();
+        spEdit.putString(KEYS.FIO.toString(), fio);
+        spEdit.apply();
+    }
+
+
 /*
     public void setUserInfo(User u){
 

@@ -2,6 +2,7 @@ package com.alex.atour.ui.champ;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.alex.atour.DTO.ChampInfo;
@@ -27,6 +29,7 @@ import com.alex.atour.ui.champ.referee.MembersForRefereeFragment;
 import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
 import com.alex.atour.ui.requests.RequestsListActivity;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener, EstimsRecyclerAdapter.IonItemClickListener {
@@ -38,7 +41,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private User admin;
     private int role;
     private Toolbar toolbar;
-
     private ChampViewModel viewModel;
 
     @Override
@@ -90,6 +92,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         menu.getItem(1).setVisible(info.isEnrollmentOpen());
         return true;
     }
+
     // Для админа,
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -101,7 +104,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                 startActivity(intent);
                 return true;
             case R.id.action_close_enrollment://закрытие приема заявок и формирование судейский протоколов
-                ConfirmationDialog confirmationDialog = new ConfirmationDialog(() -> {
+                ConfirmationDialog confirmationDialog = new ConfirmationDialog("Вы уверены?", () -> {
                     viewModel.closeEnrollment(info.getChampID());
                 });
                 confirmationDialog.show(getSupportFragmentManager(), "myDialog");
@@ -209,11 +212,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
 
         if (role == 0){//admin
             btnSendRequest.setVisibility(View.INVISIBLE);
-            //todo: show menu
             setSupportActionBar(toolbar);
-
-            //btnSendRequest.setOnClickListener(onClickRequests);
-            //btnSendRequest.setText("Заявки");
             showMembersFragment();
         }
         if (role == 1 && state != -1){//member
@@ -231,7 +230,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     btnSendRequest.setVisibility(View.INVISIBLE);
                     showDocsSendingFragment();
                     break;
-                case 3://MembershipState.DOCS_SUBMITTED//todo:mb changing status after docs sent on this?
+                case 3://MembershipState.DOCS_SUBMITTED
                     tvMessage.setText(R.string.results_waiting);
                     break;
                 case 4://MembershipState.RESULTS
@@ -262,6 +261,8 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     break;
             }
         }
+        //todo:scroll tot top after referee sent estimation
+        //todo:округлить значения перед внесением в протокол судьи
     }
 
     // (for admin)
@@ -286,7 +287,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     // (for members and referees)
     private void showResultsFragment(){
         //todo:create me
-        findViewById(R.id.frame_layout).setVisibility(View.GONE);
+        findViewById(R.id.frame_layout).setVisibility(View.INVISIBLE);
         tvMessage.setText(": showResultsFragment");
     }
 
@@ -302,9 +303,5 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     @Override
     public void showError(String err){
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_SHORT).show();
-    }
-    public boolean getIsEnrollOpen(){
-        if (info != null) return info.isEnrollmentOpen();
-        return false;
     }
 }

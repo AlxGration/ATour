@@ -1,10 +1,6 @@
 package com.alex.atour.DTO;
 
 import com.alex.atour.models.IEstimation;
-import com.google.android.gms.common.images.ImageManager;
-
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 public class Estimation implements Comparable<Estimation>, IEstimation {
 
