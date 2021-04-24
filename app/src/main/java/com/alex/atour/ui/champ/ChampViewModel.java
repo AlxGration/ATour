@@ -1,5 +1,7 @@
 package com.alex.atour.ui.champ;
 
+import android.content.Context;
+
 import androidx.lifecycle.MutableLiveData;
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
@@ -33,6 +35,7 @@ public class ChampViewModel extends BaseViewModel {
         setIsLoading(true);
         model.loadPage(adminID, champID);
     }
+    public void createTotalProtocol(Context ctx, String champID){ model.createTotalProtocol(ctx, champID);}
 
     public void closeEnrollment(String champID){
         model.closeEnrollment(champID);
@@ -42,6 +45,7 @@ public class ChampViewModel extends BaseViewModel {
         setIsLoading(false);
         setErrorMessage("");
     }
+
     void requestError(String msg){
         setIsLoading(false);
         setErrorMessage(msg);

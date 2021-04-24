@@ -27,6 +27,111 @@ public class _Estimation extends RealmObject implements Comparable<_Estimation>{
         e.setInformativeness(informativeness); e.setComment(comment);
         return e;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getChampID() {
+        return champID;
+    }
+
+    public void setChampID(String champID) {
+        this.champID = champID;
+    }
+
+    public String getMemberID() {
+        return memberID;
+    }
+
+    public void setMemberID(String memberID) {
+        this.memberID = memberID;
+    }
+
+    public String getRefereeID() {
+        return refereeID;
+    }
+
+    public void setRefereeID(String refereeID) {
+        this.refereeID = refereeID;
+    }
+
+    public String getMemberFIO() {
+        return memberFIO;
+    }
+
+    public void setMemberFIO(String memberFIO) {
+        this.memberFIO = memberFIO;
+    }
+
+    public double getComplexity() {
+        return complexity;
+    }
+
+    public void setComplexity(double complexity) {
+        this.complexity = complexity;
+    }
+
+    public double getNovelty() {
+        return novelty;
+    }
+
+    public void setNovelty(double novelty) {
+        this.novelty = novelty;
+    }
+
+    public double getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(double strategy) {
+        this.strategy = strategy;
+    }
+
+    public double getTactics() {
+        return tactics;
+    }
+
+    public void setTactics(double tactics) {
+        this.tactics = tactics;
+    }
+
+    public double getTechnique() {
+        return technique;
+    }
+
+    public void setTechnique(double technique) {
+        this.technique = technique;
+    }
+
+    public double getTension() {
+        return tension;
+    }
+
+    public void setTension(double tension) {
+        this.tension = tension;
+    }
+
+    public double getInformativeness() {
+        return informativeness;
+    }
+
+    public void setInformativeness(double informativeness) {
+        this.informativeness = informativeness;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     @Override
     public int compareTo(_Estimation o) {
         int v = memberFIO.compareTo(o.memberFIO);

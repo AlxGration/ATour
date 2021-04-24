@@ -27,6 +27,7 @@ public class RealmDB {
     private enum FLAGS {
         champID,
         refereeID,
+        memberID,
         id
     }
 
@@ -75,5 +76,25 @@ public class RealmDB {
         return realm.where(MemberEstimation.class)
                 .equalTo(FLAGS.id.name(), id)
                 .findFirst();
+    }
+
+    public ArrayList<_Estimation> getEstimationsOfUser(String champID, String userID){
+        RealmResults<_Estimation> results = realm.where(_Estimation.class)
+                .equalTo(FLAGS.champID.name(), champID)
+                .and()
+                .equalTo(FLAGS.memberID.name(), userID)
+                .findAllAsync();
+        return new ArrayList<>(results);
+    }
+
+    public String[] getAllMembersIDs(String champID){
+        RealmResults<_Estimation> results = realm.where(_Estimation.class)
+                .equalTo(FLAGS.champID.name(), champID)
+                .findAllAsync();
+        String[] membersIDs = new String[results.size()];
+        for (int i = 0; i < results.size(); i++){
+            membersIDs[i] = results.get(i).getMemberID();
+        }
+        return membersIDs;
     }
 }

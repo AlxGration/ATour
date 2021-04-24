@@ -1,8 +1,13 @@
 package com.alex.atour.ui.champ;
 
+import android.content.Context;
+
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.User;
+import com.alex.atour.DTO._Estimation;
 import com.alex.atour.db.DBManager;
+import com.alex.atour.models.ExcelModule;
+
 import java.util.ArrayList;
 
 public class ChampModel {
@@ -66,5 +71,17 @@ public class ChampModel {
             @Override
             public void onFailed(String msg) { viewModel.requestError(msg); }
         });
+    }
+    //todo: creating createTotalProtocol
+    public void createTotalProtocol(Context ctx, String champID){
+
+        //todo: download estimations from server
+        //todo: save them to local
+
+
+        //extract membersIDs
+        String[] membersIDs = DBManager.getInstance().getRealmDB().getAllMembersIDs(champID);
+        ExcelModule excelModule = new ExcelModule(ctx);
+        excelModule.createTotalProtocol(champID, membersIDs);
     }
 }

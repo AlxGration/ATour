@@ -7,6 +7,9 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.alex.atour.DTO.Estimation;
+import com.alex.atour.DTO._Estimation;
+import com.alex.atour.db.DBManager;
+import com.alex.atour.db.RealmDB;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,30 +28,8 @@ import java.util.ArrayList;
 
 public class ExcelModule {
 
-    /*
-    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            Log.e("TAG", "start process");
-            String [] fios = {
-                    "Винов Александр Сергеевич",
-                    "Команда 2",
-                    "Команда 3",
-                    "Команда 4",
-                    "Команда 5",
-                    "Команда 6",
-                    "Команда 7",
-                    "Команда 8",
-                    "Команда 9",
-            };
-            ExcelModule excelModule = new ExcelModule(this);
-            excelModule.createReportForReferee("refereeAlex.xlsx", fios);
-
-        }else {
-            //запрашиваем разрешение
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        }
-     */
-
     private final String templateRefereeProtocolPath = "protocol_referee.xlsx";
+    private final String templateTotalProtocolPath = "protocol_total.xlsx";
 
     private final Context ctx;
     public ExcelModule(Context ctx){
@@ -61,11 +42,11 @@ public class ExcelModule {
                             Environment.DIRECTORY_DOCUMENTS + "/ATour/"
                     );
 
-    //заполняет в протоколе ФИО руководителей
+    //заполняет в протоколе ФИО руководителей, (ФИО, город, разряд) судьи
     //todo:: и место проведения
     public void createRefereeReport(String refereeProtocolFileName, String refereeInfo, ArrayList<Estimation> estims){
 
-        Log.e("TAG", "createRefereeReport");
+        Log.e("TAG", "creatingRefereeReport");
 
         try {
             if(!path.exists()) {
@@ -80,43 +61,41 @@ public class ExcelModule {
             XSSFWorkbook book = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = book.getSheetAt(0);
 
-            //refereeInfo
-            Row row = sheet.getRow(1);
-            fillCell(row, 0, refereeInfo);
+            try {
+                //refereeInfo
+                Row row = sheet.getRow(1);
+                fillCell(row, 0, refereeInfo);
 
-            for (int i = 0; i < estims.size() ; i++){
+                for (int i = 0; i < estims.size(); i++) {
+                    //Log.e("TAG", i + ": " + estims.get(i).getMemberFIO());
+                    row = sheet.getRow(i + 6);
 
-                Log.e("TAG", i+": "+estims.get(i).getMemberFIO());
+                    // member FIO
+                    fillCell(row, 1, estims.get(i).getMemberFIO());
 
-                row = sheet.getRow(i+6);
+                    //estimations
+                    fillCell(row, 5, estims.get(i).getComplexity());
+                    fillCell(row, 6, estims.get(i).getNovelty());
+                    fillCell(row, 7, estims.get(i).getStrategy());
+                    fillCell(row, 8, estims.get(i).getTactics());
+                    fillCell(row, 9, estims.get(i).getTechnique());
+                    fillCell(row, 10, estims.get(i).getTension());
+                    fillCell(row, 11, estims.get(i).getInformativeness());
+                }
 
-                // member FIO
-                fillCell(row, 1, estims.get(i).getMemberFIO());
-
-                //estimations
-                fillCell(row, 5, estims.get(i).getComplexity());
-                fillCell(row, 6, estims.get(i).getNovelty());
-                fillCell(row, 7, estims.get(i).getStrategy());
-                fillCell(row, 8, estims.get(i).getTactics());
-                fillCell(row, 9, estims.get(i).getTechnique());
-                fillCell(row, 10, estims.get(i).getTension());
-                fillCell(row, 11, estims.get(i).getInformativeness());
-
+                //save and close streams
+                File newFile = new File(path, refereeProtocolFileName);
+                if (!newFile.exists()) newFile.createNewFile();
+                FileOutputStream os = new FileOutputStream(newFile);
+                book.write(os); os.close();
+            }finally {
+                inputStream.close();
+                book.close();
             }
-
-            //save and close streams
-            File newFile = new File(path, refereeProtocolFileName);
-            if (!newFile.exists()) newFile.createNewFile();
-            FileOutputStream os = new FileOutputStream(newFile);
-            book.write(os);
-            os.close();
-            inputStream.close();
-            book.close();
             Log.e("TAG", "success");
         }catch(Exception e){
             e.printStackTrace();
         }
-        Log.e("TAG", "end");
     }
 
     private void fillCell(Row row, int ind, String data){
@@ -157,5 +136,171 @@ public class ExcelModule {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void createTotalProtocol(String champID, String[] membersIDs){
+        if(!path.exists()) {
+            Log.e("TAG", "folder created");
+            // create it, if doesn't exit
+            path.mkdirs();
+        }
+        try{
+            copyFromAssets(templateTotalProtocolPath, templateTotalProtocolPath);
+
+            FileInputStream inputStream = new FileInputStream(new File(path, templateTotalProtocolPath));
+            XSSFWorkbook book = new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = book.getSheetAt(0);
+
+            RealmDB realmDB = DBManager.getInstance().getRealmDB();
+            //main logic
+            //iterate persons ids
+            int index = 0;
+            for (String pID: membersIDs){
+                //get all marks for person
+                ArrayList<_Estimation> marks = realmDB.getEstimationsOfUser(champID, pID);
+                double compl=0d, nov=0d, st=0d, tac=0d, tec=0d, ten=0d, inf=0d;
+                Log.e("TAG", compl +" "+nov+" "+st+" "+tac+" "+tec+" "+ten+" "+inf);
+                int refereesSize = marks.size();
+
+                if (refereesSize > 4) {
+                    //need to remove min and max value
+                    //todo:: remove min and max value
+                    double min = marks.get(0).getComplexity(),
+                            max = min;
+                    double minTac= Double.MAX_VALUE, maxTac= Double.MAX_VALUE,
+                            minSt= Double.MAX_VALUE, maxSt= Double.MAX_VALUE,
+                            minTec= Double.MAX_VALUE, maxTec = Double.MAX_VALUE;
+
+
+                    int x1 = 0, y1 = 0, x2=0, y2 = 0;//indexes of min and max value
+                    //searching max and min values, indexes
+                        for (int i = 0; i<refereesSize; i++){
+                        _Estimation e = marks.get(i);
+                        compl=e.getComplexity(); nov=e.getNovelty();
+                        st=e.getStrategy()     ; tac=e.getTactics();
+                        tec=e.getTechnique()   ; ten=e.getTension();
+                        inf=e.getInformativeness();
+
+                        //find min and max vals
+                        min = Minimum(min, compl, nov, st, tac, tec, ten, inf);
+                        max = Maximum(max, compl, nov, st, tac, tec, ten, inf);
+
+                        //get index of min val
+                        if (min == compl){x1 = i; y1 = 0;}  if (max == compl){x2 = i; y2 = 0;}
+                        if (min == nov){x1 = i; y1 = 1;}    if (max == nov){x2 = i; y2 = 1;}
+                        if (min == st){x1 = i; y1 = 2;}     if (max == st){x2 = i; y2 = 2;}
+                        if (min == tac){x1 = i; y1 = 3;}    if (max == tac){x2 = i; y2 = 3;}
+                        if (min == tec){x1 = i; y1 = 4;}    if (max == tec){x2 = i; y2 = 4;}
+                        if (min == ten){x1 = i; y1 = 5;}    if (max == ten){x2 = i; y2 = 5;}
+                        if (min == inf){x1 = i; y1 = 6;}    if (max == inf){x2 = i; y2 = 6;}
+                    }
+
+                    //remove min and max vals
+                        double removedVal = 999;
+                        switch (y1){
+                            case 0: marks.get(x1).setComplexity(removedVal);break;
+                            case 1: marks.get(x1).setNovelty(removedVal);break;
+                            case 2: marks.get(x1).setStrategy(removedVal);break;
+                            case 3: marks.get(x1).setTactics(removedVal);break;
+                            case 4: marks.get(x1).setTechnique(removedVal);break;
+                            case 5: marks.get(x1).setTension(removedVal);break;
+                            case 6: marks.get(x1).setInformativeness(removedVal);break;
+                        }
+                        switch (y2){
+                            case 0: marks.get(x2).setComplexity(removedVal);break;
+                            case 1: marks.get(x2).setNovelty(removedVal);break;
+                            case 2: marks.get(x2).setStrategy(removedVal);break;
+                            case 3: marks.get(x2).setTactics(removedVal);break;
+                            case 4: marks.get(x2).setTechnique(removedVal);break;
+                            case 5: marks.get(x2).setTension(removedVal);break;
+                            case 6: marks.get(x2).setInformativeness(removedVal);break;
+                        }
+
+                    //remove min and max val in Стратегии, Тактике, Технике
+                        int iSt=0, iTa=0, iTe=0, aSt=0, aTa=0, aTe=0;
+                        for (int i = 0; i < refereesSize; i++){
+                            _Estimation e = marks.get(i);
+                            //min
+                            if (e.getStrategy()!=removedVal && minSt>e.getStrategy()) {minSt = e.getStrategy(); iSt = i;}
+                            if (e.getTactics()!=removedVal && minTac>e.getTactics()) {minTac = e.getTactics(); iTa = i;}
+                            if (e.getTechnique()!=removedVal && minTec>e.getTechnique()) {minTec = e.getTechnique(); iTe = i;}
+
+                            //max
+                            if (e.getStrategy()!=removedVal && maxSt<e.getStrategy()) {maxSt = e.getStrategy(); aSt = i;}
+                            if (e.getTactics()!=removedVal && maxTac<e.getTactics()) {maxTac = e.getTactics(); aTa = i;}
+                            if (e.getTechnique()!=removedVal && maxTec<e.getTechnique()) {maxTec = e.getTechnique(); aTe = i;}
+                        }
+                        marks.get(iSt).setStrategy(removedVal);
+                        marks.get(iTa).setTactics(removedVal);
+                        marks.get(iTe).setTechnique(removedVal);
+                        marks.get(aSt).setStrategy(removedVal);
+                        marks.get(aTa).setTactics(removedVal);
+                        marks.get(aTe).setTechnique(removedVal);
+
+                    //count every value
+                    for (_Estimation e: marks) {
+                        //dont count if it was deleted as min or max val
+                        if (e.getComplexity() != removedVal) compl+=e.getComplexity();
+                        if (e.getNovelty() != removedVal) nov+=e.getNovelty();
+                        if (e.getStrategy() != removedVal) st+=e.getStrategy();
+                        if (e.getTactics() != removedVal) tac+=e.getTactics();
+                        if (e.getTechnique() != removedVal) tec+=e.getTechnique();
+                        if (e.getTension() != removedVal) ten+=e.getTension();
+                        if (e.getInformativeness() != removedVal) inf+=e.getInformativeness();
+                    }
+                    compl /= (refereesSize-2);  nov /= (refereesSize-2);
+                    st /= (refereesSize-2);     tac /= (refereesSize-2);
+                    tec /= (refereesSize-2);    ten /= (refereesSize-2);
+                    inf /= (refereesSize-2);
+
+
+                    //memberFIO
+                    Row row = sheet.getRow(11+index);
+                    fillCell(row, 1, marks.get(0).getMemberFIO());
+
+                    //estimations
+                    fillCell(row, 6, compl);
+                    fillCell(row, 7, nov);
+                    fillCell(row, 8, st);
+                    fillCell(row, 9, tac);
+                    fillCell(row, 10, tec);
+                    fillCell(row, 11, ten);
+                    fillCell(row, 12, inf);
+                }else{
+                    //if less than 5 referees
+                    for (_Estimation e: marks) {
+                        compl+=e.getComplexity(); nov+=e.getNovelty();
+                        st+=e.getStrategy()     ; tac+=e.getTactics();
+                        tec+=e.getTechnique()   ; ten+=e.getTension();
+                        inf+=e.getInformativeness();
+                    }
+                    compl /= refereesSize;  nov /= refereesSize;
+                    st /= refereesSize;     tac /= refereesSize;
+                    tec /= refereesSize;    ten /= refereesSize;
+                    inf /= refereesSize;
+                }
+                index++;
+            }
+
+            //save and close streams
+            File newFile = new File(path, templateTotalProtocolPath);
+            if (!newFile.exists()) newFile.createNewFile();
+            FileOutputStream os = new FileOutputStream(newFile);
+            book.write(os); os.close();
+            inputStream.close(); book.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private double Minimum(double... args){
+        double m = args[0];
+        for(double d: args) m = Math.min(m, d);
+        return m;
+    }
+    private double Maximum(double... args){
+        double m = args[0];
+        for(double d: args) m = Math.max(m, d);
+        return m;
     }
 }

@@ -122,22 +122,6 @@ public class MembersViewModel extends BaseViewModel {
     void createLocalRefereeProtocol(Context ctx, String refereeInfo){
         ExcelModule excelModule = new ExcelModule(ctx);
         excelModule.createRefereeReport("refereeProtocol.xlsx", refereeInfo, getEstimationsFromLocalDB());
-
-//        db.getUserData(db.getPrefs().getUserID(), new DBManager.IUserInfoListener() {
-//            @Override
-//            public void onSuccess(User user) {
-//                String info = user.getFio() +", "+refereeInfo+", "+user.getCity();
-//
-//                setIsLoading(false);
-//            }
-//
-//            @Override
-//            public void onFailed(String msg) {
-//                excelModule.createRefereeReport("refereeProtocol.xlsx", db.getPrefs().getUserFIO(), getEstimationsFromLocalDB());
-//                requestError(msg);
-//                setIsLoading(false);
-//            }
-//        });
     }
 
     public boolean getMembersFromLocalDB(){

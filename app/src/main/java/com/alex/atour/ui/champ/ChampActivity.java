@@ -1,9 +1,14 @@
 package com.alex.atour.ui.champ;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
+
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -95,6 +100,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        ConfirmationDialog confirmationDialog;
         switch(id){
             case R.id.action_requests :// переход на активность для просмотра заявок на чемпионат
                 Intent intent = new Intent(ChampActivity.this, RequestsListActivity.class);
@@ -102,13 +108,25 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                 startActivity(intent);
                 return true;
             case R.id.action_close_enrollment://закрытие приема заявок и формирование судейский протоколов
-                ConfirmationDialog confirmationDialog = new ConfirmationDialog("Вы уверены?", () -> {
+                confirmationDialog = new ConfirmationDialog("Вы уверены?", () -> {
                     viewModel.closeEnrollment(info.getChampID());
                 });
                 confirmationDialog.show(getSupportFragmentManager(), "myDialog");
                 return true;
             case R.id.action_create_total_protocol:
-                Toast.makeText(this, "creating total protocol", Toast.LENGTH_SHORT).show();
+                confirmationDialog = new ConfirmationDialog("Вы уверены?\nКопия протокола будет сохранена в папке Documents", () -> {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                        Log.e("TAG", "start saving");
+                        Toast.makeText(this, "creating total protocol", Toast.LENGTH_SHORT).show();
+                        viewModel.createTotalProtocol(this, info.getChampID());
+                    }else {
+                        //запрашиваем разрешение
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    }
+
+
+                });
+                confirmationDialog.show(getSupportFragmentManager(), "myDialog");
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -301,5 +319,19 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     @Override
     public void showError(String err){
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1 ){
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                Log.e("TAG", "start saving");
+                viewModel.createTotalProtocol(this, info.getChampID());
+            }  else {
+                viewModel.requestError("Для сохранения протокола\nНеобходимо разрешение");
+            }
+        }
     }
 }
