@@ -10,7 +10,7 @@ public class MemberEstimation extends RealmObject implements Comparable<MemberEs
     @PrimaryKey
     private String id;
     private String champID, memberID, refereeID, memberFIO;
-    private float complexity, novelty, strategy, tactics, technique, tension, informativeness ;
+    private double complexity, novelty, strategy, tactics, technique, tension, informativeness ;
     private String comment;
 
     private String requestID;
@@ -89,59 +89,66 @@ public class MemberEstimation extends RealmObject implements Comparable<MemberEs
         this.memberFIO = memberFIO;
     }
 
-    public float getComplexity() {
+    @Override
+    public double getComplexity() {
         return complexity;
     }
 
-    public void setComplexity(float complexity) {
+    public void setComplexity(double complexity) {
         this.complexity = complexity;
     }
 
-    public float getNovelty() {
+    @Override
+    public double getNovelty() {
         return novelty;
     }
 
-    public void setNovelty(float novelty) {
+    public void setNovelty(double novelty) {
         this.novelty = novelty;
     }
 
-    public float getStrategy() {
+    @Override
+    public double getStrategy() {
         return strategy;
     }
 
-    public void setStrategy(float strategy) {
+    public void setStrategy(double strategy) {
         this.strategy = strategy;
     }
 
-    public float getTactics() {
+    @Override
+    public double getTactics() {
         return tactics;
     }
 
-    public void setTactics(float tactics) {
+    public void setTactics(double tactics) {
         this.tactics = tactics;
     }
 
-    public float getTechnique() {
+    @Override
+    public double getTechnique() {
         return technique;
     }
 
-    public void setTechnique(float technique) {
+    public void setTechnique(double technique) {
         this.technique = technique;
     }
 
-    public float getTension() {
+    @Override
+    public double getTension() {
         return tension;
     }
 
-    public void setTension(float tension) {
+    public void setTension(double tension) {
         this.tension = tension;
     }
 
-    public float getInformativeness() {
+    @Override
+    public double getInformativeness() {
         return informativeness;
     }
 
-    public void setInformativeness(float informativeness) {
+    public void setInformativeness(double informativeness) {
         this.informativeness = informativeness;
     }
 

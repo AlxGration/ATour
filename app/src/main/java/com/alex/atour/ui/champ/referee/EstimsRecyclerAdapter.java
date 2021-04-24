@@ -1,4 +1,4 @@
-package com.alex.atour.models;
+package com.alex.atour.ui.champ.referee;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -6,17 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MemberEstimation;
 import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.db.RealmDB;
+import com.alex.atour.models.ValueFormatter;
 
 import java.util.ArrayList;
 
@@ -34,7 +33,7 @@ public class EstimsRecyclerAdapter extends RecyclerView.Adapter<EstimsRecyclerAd
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_estim, parent, false);
+                .inflate(R.layout.list_item_referee_estim, parent, false);
 
         return new ViewHolder(view);
     }

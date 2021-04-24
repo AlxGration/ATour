@@ -3,9 +3,12 @@ package com.alex.atour.ui.profile;
 import androidx.lifecycle.MutableLiveData;
 
 import com.alex.atour.DTO.Document;
+import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.BaseViewModel;
+
+import java.util.ArrayList;
 
 public class ProfileViewModel extends BaseViewModel {
 
@@ -19,6 +22,7 @@ public class ProfileViewModel extends BaseViewModel {
 
     private final MutableLiveData<Document> document;
     private final MutableLiveData<MembershipRequest> memReq;
+    private final MutableLiveData<ArrayList<Estimation>> estims;
 
     public ProfileViewModel(){
         secName = new MutableLiveData<>();
@@ -28,6 +32,7 @@ public class ProfileViewModel extends BaseViewModel {
         city = new MutableLiveData<>();
         document = new MutableLiveData<>();
         memReq = new MutableLiveData<>();
+        estims = new MutableLiveData<>();
 
         model = new ProfileModel(this);
     }
@@ -39,6 +44,7 @@ public class ProfileViewModel extends BaseViewModel {
     public MutableLiveData<String> getPhone() { return phone; }
     public MutableLiveData<Document> getDocument() { return document; }
     public MutableLiveData<MembershipRequest> getMembershipRequest() { return memReq; }
+    public MutableLiveData<ArrayList<Estimation>> getEstimations() { return estims; }
 
     public void loadProfile(String userID){
         setIsLoading(true);
@@ -53,6 +59,10 @@ public class ProfileViewModel extends BaseViewModel {
     public void loadDocs(String champID, String userID){
         setIsLoading(true);
         model.requestDocuments(champID, userID);
+    }
+
+    public void loadEstimations(String champID, String userID){
+        //todo:create ME
     }
 
     void requestError(String msg){

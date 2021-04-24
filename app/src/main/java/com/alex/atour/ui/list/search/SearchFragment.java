@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.atour.R;
-import com.alex.atour.models.ChampsListRecyclerAdapter;
+import com.alex.atour.ui.list.ChampsListRecyclerAdapter;
 import com.alex.atour.ui.list.ChampsListViewModel;
 import com.alex.atour.ui.list.MainActivity;
 

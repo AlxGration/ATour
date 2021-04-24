@@ -1,22 +1,21 @@
-package com.alex.atour.models;
+package com.alex.atour.ui.champ.admin;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.alex.atour.DTO.MembershipRequest;
+import com.alex.atour.DTO.Member;
 import com.alex.atour.R;
 import java.util.ArrayList;
 
-public class RequestsListRecyclerAdapter extends RecyclerView.Adapter<RequestsListRecyclerAdapter.ViewHolder> {
+public class MembersListRecyclerAdapter extends RecyclerView.Adapter<MembersListRecyclerAdapter.ViewHolder> {
 
-    ArrayList<MembershipRequest> data;
+    private ArrayList<Member> data;
 
-    public RequestsListRecyclerAdapter(ArrayList<MembershipRequest> data){
+    public MembersListRecyclerAdapter(ArrayList<Member> data){
         this.data = data;
     }
 
@@ -24,14 +23,15 @@ public class RequestsListRecyclerAdapter extends RecyclerView.Adapter<RequestsLi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_request, parent, false);
+                .inflate(R.layout.list_item_member, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MembershipRequest request = data.get(position);
+
+        Member request = data.get(position);
 
         // покрас списка в виде "зебры"
         if (position % 2 == 0){
@@ -76,15 +76,9 @@ public class RequestsListRecyclerAdapter extends RecyclerView.Adapter<RequestsLi
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(view -> {
             if (listener != null) {
-                MembershipRequest req = data.get(((int)view.getTag()));
-                listener.startProfileActivityWith(req);
+                Member req = data.get(((int)view.getTag()));
+                listener.startProfileActivityWith(role, req);
             }
-        });
-        holder.btnAccept.setOnClickListener(v -> {
-            if (listener != null) {listener.acceptRequest(request);}
-        });
-        holder.btnDeny.setOnClickListener(v -> {
-            if (listener != null) {listener.denyRequest(request);}
         });
     }
 
@@ -94,21 +88,21 @@ public class RequestsListRecyclerAdapter extends RecyclerView.Adapter<RequestsLi
     }
 
     public static IonItemClickListener listener;
-    public static void setOnItemClickListener(IonItemClickListener lis){
+    private static int role = -1;
+    //role - от чьего имени открывается экран
+    public static void setOnItemClickListener(int _role, IonItemClickListener lis){
+        role = _role;
         listener = lis;
     }
     public interface IonItemClickListener{
-        void startProfileActivityWith(MembershipRequest req);
-
-        void acceptRequest(MembershipRequest req);
-        void denyRequest(MembershipRequest req);
+        void startProfileActivityWith(int role, Member req);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvFIO;
         private final ImageView imgWalk, imgSki, imgHike, imgWater, imgSpeleo, imgBike, imgAuto, imgOther, imgRole;
-        private final Button btnAccept, btnDeny;
+
 
         private final View view;
 
@@ -126,8 +120,6 @@ public class RequestsListRecyclerAdapter extends RecyclerView.Adapter<RequestsLi
             imgBike = view.findViewById(R.id.img_bike);
             imgAuto = view.findViewById(R.id.img_auto);
             imgOther = view.findViewById(R.id.img_other);
-            btnAccept = view.findViewById(R.id.btn_accept);
-            btnDeny = view.findViewById(R.id.btn_deny);
         }
         private void setGreyBG() {
             if (view == null) return;

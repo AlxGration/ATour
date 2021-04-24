@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.alex.atour.R;
-import com.alex.atour.models.MembersListRecyclerAdapter;
 import com.alex.atour.ui.champ.ChampActivity;
 
 public class MembersListFragment extends Fragment {

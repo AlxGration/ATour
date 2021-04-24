@@ -19,6 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class ExcelModule {
@@ -129,7 +131,8 @@ public class ExcelModule {
         if (cell == null){
             cell = row.createCell(ind);
         }
-        cell.setCellValue(data);
+        BigDecimal bd = new BigDecimal(Double.toString(data)).setScale(2, RoundingMode.HALF_DOWN);
+        cell.setCellValue(bd.doubleValue());
     }
 
     private void copyFromAssets(String originalName, String fileName) {

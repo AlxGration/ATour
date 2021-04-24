@@ -2,26 +2,26 @@ package com.alex.atour.models;
 
 public interface IEstimation {
 
-    float getComplexity() ;
-    void setComplexity(float complexity) ;
+    double getComplexity() ;
+    void setComplexity(double complexity) ;
 
-    float getNovelty() ;
-    void setNovelty(float novelty) ;
+    double getNovelty() ;
+    void setNovelty(double novelty) ;
 
-    float getStrategy() ;
-    void setStrategy(float strategy) ;
+    double getStrategy() ;
+    void setStrategy(double strategy) ;
 
-    float getTactics() ;
-    void setTactics(float tactics) ;
+    double getTactics() ;
+    void setTactics(double tactics) ;
 
-    float getTechnique() ;
-    void setTechnique(float technique) ;
+    double getTechnique() ;
+    void setTechnique(double technique) ;
 
-    float getTension() ;
-    void setTension(float tension);
+    double getTension() ;
+    void setTension(double tension);
 
-    float getInformativeness() ;
-    void setInformativeness(float informativeness);
+    double getInformativeness() ;
+    void setInformativeness(double informativeness);
 
     String getComment() ;
     void setComment(String comment) ;

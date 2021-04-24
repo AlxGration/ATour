@@ -2,7 +2,6 @@ package com.alex.atour.ui.champ;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.alex.atour.DTO.ChampInfo;
@@ -21,15 +20,14 @@ import com.alex.atour.DTO.MemberEstimation;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.models.ConfirmationDialog;
-import com.alex.atour.models.EstimsRecyclerAdapter;
-import com.alex.atour.models.MembersListRecyclerAdapter;
+import com.alex.atour.ui.champ.referee.EstimsRecyclerAdapter;
+import com.alex.atour.ui.champ.admin.MembersListRecyclerAdapter;
 import com.alex.atour.ui.champ.admin.MembersFragment;
 import com.alex.atour.ui.champ.member.DocsFragment;
 import com.alex.atour.ui.champ.referee.MembersForRefereeFragment;
 import com.alex.atour.ui.create.memrequest.MembershipRequestActivity;
 import com.alex.atour.ui.profile.ProfileActivity;
 import com.alex.atour.ui.requests.RequestsListActivity;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener, EstimsRecyclerAdapter.IonItemClickListener {
@@ -262,7 +260,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
             }
         }
         //todo:scroll tot top after referee sent estimation
-        //todo:округлить значения перед внесением в протокол судьи
     }
 
     // (for admin)
@@ -287,7 +284,8 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     // (for members and referees)
     private void showResultsFragment(){
         //todo:create me
-        findViewById(R.id.frame_layout).setVisibility(View.INVISIBLE);
+
+        ((FrameLayout)findViewById(R.id.frame_layout)).removeAllViews();
         tvMessage.setText(": showResultsFragment");
     }
 

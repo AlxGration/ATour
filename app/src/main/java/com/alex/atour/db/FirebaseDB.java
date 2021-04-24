@@ -254,6 +254,27 @@ public class FirebaseDB extends DBManager{
         });
     }
 
+    //get RefereeEstimations
+    //todo: dont forget about refereee info
+    public void getRefereeEstimationsList(String champID, String refereeID){
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMATIONS).child(refereeID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Estimation> list = new ArrayList<>((int)snapshot.getChildrenCount()-1);
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
+                    Log.e("TAG", "estim: "+snap.toString());
+                    list.add(snap.getValue(Estimation.class));
+                }
+                if (listener!=null) listener.onSuccess(list);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
+            }
+        });
+    }
+
     @Override
     public void getMembershipRequestsList(String champID, IMembershipRequestsListListener listener) {
         Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(REQUEST_TABLE);
@@ -283,30 +304,6 @@ public class FirebaseDB extends DBManager{
             }
         });
     }
-
-
-    // add to Champ->Estimation and Champ->Docs->memberID->Estimations->(refereeID)
-    //todo:check it. is it need?
-    /*
-    @Override
-    public void sendEstimation(String champID, Estimation estim, IRequestListener listener){
-        DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMATIONS);
-        String estimID = ref.push().getKey();
-        estim.setId(estimID);
-
-        ref.child(estimID).setValue(estim).addOnCompleteListener(task -> {
-            if (task.isSuccessful())
-                if (listener!=null) listener.onSuccess();
-        });
-
-        // чтобы не показывать участника судье после оценивания
-        ref = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMS);
-        ShortEstimation est = new ShortEstimation(estim.getMemberID(), estim.getRefereeID());
-        ref.push().setValue(est);
-    }
-
-     */
-
 
     private void getMembershipRequests(Query query, IMembershipRequestsListListener listener){
         query.addValueEventListener(new ValueEventListener() {
@@ -433,15 +430,18 @@ public class FirebaseDB extends DBManager{
     // set Champ->Estimations list with refereeID
     // and change referee state to RESULT, cause his work is done
     @Override
-    public void sendRefereeEstimations(List<Estimation> estimations, IRequestListener listener){
+    public void sendRefereeEstimations(List<Estimation> estimations, String refereeInfo, IRequestListener listener){
         if (estimations == null || estimations.size() < 1) {
             if (listener != null) listener.onFailed("Отсутствуют оценки");
             return;
         }
         Estimation e = estimations.get(0);
 
-        DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(e.getChampID()).child(ESTIMATIONS);
-        ref.child(estimations.get(0).getRefereeID()).setValue(estimations).addOnCompleteListener(task -> {
+        HashMap<String, Object> info = new HashMap<>(1);
+        info.put("refereeInfo", refereeInfo);
+
+        DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(e.getChampID()).child(ESTIMATIONS).child(estimations.get(0).getRefereeID());
+        ref.setValue(estimations).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 listener.onSuccess();
                 //change referee state, cause his work is done
@@ -449,6 +449,7 @@ public class FirebaseDB extends DBManager{
             }
             else listener.onFailed("Ошибка выполнения операции");
         });
+        ref.updateChildren(info);
     }
 
     // get members who sent docs and waiting results
@@ -468,6 +469,9 @@ public class FirebaseDB extends DBManager{
                         ArrayList<Member> members = new ArrayList<>((int)snapshot.getChildrenCount());
                         for (DataSnapshot snap: snapshot.getChildren()){
                             Member m = snap.getValue(Member.class);
+                            //cause referees have "DOCS_SUBMITTED" state too
+                            if (m.getRole() == 2)continue;
+
                             //type filter (show member to referee only if they have common types)
                             if (me.isTypeWalk())    {members.add(m); continue;}
                             if (me.isTypeSki())     {members.add(m); continue;}
@@ -480,29 +484,6 @@ public class FirebaseDB extends DBManager{
                             if (me.isTypeOther())   members.add(m);
                         }
                         if (listener!=null) listener.onSuccess(members);
-
-                        /*
-                        //check is this referee has estimated this member
-                        //чтобы не показывать судье уже оцененного участника
-                        Query q = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMS).orderByChild("refereeID").equalTo(refereeID);
-                        q.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot snap: snapshot.getChildren()){//перебор оценок, которые дал судья
-                                    ShortEstimation est = snap.getValue(ShortEstimation.class);
-                                    for(Member m: members){//проверка
-                                        if (m.getUserID().equals(est.getMemberID())){ members.remove(m); break; }
-                                    }
-                                }
-
-                                if (listener!=null) listener.onSuccess(members);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                if (listener!=null) listener.onFailed(error.getMessage());
-                            }
-                        });*/
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -510,7 +491,6 @@ public class FirebaseDB extends DBManager{
                     }
                 });
             }
-
             @Override
             public void onFailed(String msg) { if (listener!=null) listener.onFailed(msg);  }
         });

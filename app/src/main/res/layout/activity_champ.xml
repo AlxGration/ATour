@@ -20,9 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?actionBarSize"
-            app:layout_scrollFlags="enterAlways|scroll"
             android:paddingStart="@dimen/padding"
-            android:paddingEnd="@dimen/padding">
+            android:paddingEnd="@dimen/padding"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -77,286 +77,285 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways">
-            <TextView
-                android:id="@+id/tv_error"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorError"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <TextView
-                android:id="@+id/tv_middle"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:text=" — "
-                android:layout_marginTop="40dp"
-                android:gravity="center"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/tv_data_from"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_title_data_from"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/data_from"
-                android:textSize="@dimen/mid_text_size"
-                android:textColor="@color/grey"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintStart_toStartOf="@id/tv_data_from"
-                app:layout_constraintEnd_toEndOf="@id/tv_data_from"
-                app:layout_constraintBottom_toTopOf="@id/tv_data_from"/>
-
-            <TextView
-                android:id="@+id/tv_title_data_to"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/data_to"
-                android:textSize="@dimen/mid_text_size"
-                android:textColor="@color/grey"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintStart_toStartOf="@id/tv_data_to"
-                app:layout_constraintEnd_toEndOf="@id/tv_data_to"
-                app:layout_constraintBottom_toTopOf="@id/tv_data_to"/>
-
-            <TextView
-                android:id="@+id/tv_data_from"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/border_black"
-                android:padding="5dp"
-                android:text="17.09.2020"
-                android:layout_marginEnd="10dp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/main_text_size"
-                app:layout_constraintEnd_toStartOf="@id/tv_middle"
-                app:layout_constraintTop_toTopOf="@id/tv_middle" />
-
-            <TextView
-                android:id="@+id/tv_data_to"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="17.11.2020"
-                android:padding="5dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/border_black"
-                android:textSize="@dimen/main_text_size"
-                android:textColor="@color/black"
-                app:layout_constraintTop_toTopOf="@id/tv_middle"
-                app:layout_constraintStart_toEndOf="@id/tv_middle"/>
-
-            <TextView
-                android:id="@+id/tv_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="г. Уфа"
-                android:textColor="@color/black"
-                android:textSize="@dimen/main_text_size"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_data_from"/>
-
-            <TextView
-                android:id="@+id/tv_title_types"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/types"
-                android:textColor="@color/grey"
-                android:textSize="@dimen/mid_text_size"
-                app:layout_constraintTop_toBottomOf="@id/tv_city"
-                app:layout_constraintStart_toStartOf="@id/tv_city"/>
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_types"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tv_title_types"
-                app:layout_constraintStart_toStartOf="@id/tv_title_types">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/cp_walk"
-                    app:chipIcon="@drawable/ic_walk"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Entry"
-                    app:closeIconEnabled="false"
-                    app:checkedIcon="@null"
-                    app:chipIconTint="@color/black"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="@color/grey_bg"
-                    android:checkable="false"
-                    android:visibility="gone"
-                    android:text="@string/type_walk"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/cp_ski"
-                    app:chipIcon="@drawable/ic_ski"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Entry"
-                    app:closeIconEnabled="false"
-                    app:checkedIcon="@null"
-                    app:chipIconTint="@color/black"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="@color/grey_bg"
-                    android:checkable="false"
-                    android:visibility="gone"
-                    android:text="@string/type_ski"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/cp_hike"
-                    app:chipIcon="@drawable/ic_hike"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Entry"
-                    app:closeIconEnabled="false"
-                    app:checkedIcon="@null"
-                    app:chipIconTint="@color/black"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="@color/grey_bg"
-                    android:checkable="false"
-                    android:visibility="gone"
-                    android:text="@string/type_hike"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/cp_water"
-                    app:chipIcon="@drawable/ic_water"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Entry"
-                    app:closeIconEnabled="false"
-                    app:checkedIcon="@null"
-                    app:chipIconTint="@color/black"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="@color/grey_bg"
-                    android:checkable="false"
-                    android:visibility="gone"
-                    android:text="@string/type_water"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/cp_speleo"
-                    app:chipIcon="@drawable/ic_speleo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Entry"
-                    app:closeIconEnabled="false"
-                    app:checkedIcon="@null"
-                    app:chipIconTint="@color/black"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="@color/grey_bg"
-                    android:checkable="false"
-                    android:visibility="gone"
-                    android:text="@string/type_speleo"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/cp_bike"
-                    app:chipIcon="@drawable/ic_bike"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Entry"
-                    app:closeIconEnabled="false"
-                    app:checkedIcon="@null"
-                    app:chipIconTint="@color/black"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="@color/grey_bg"
-                    android:checkable="false"
-                    android:visibility="gone"
-                    android:text="@string/type_bike"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/cp_auto"
-                    app:chipIcon="@drawable/ic_auto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Entry"
-                    app:closeIconEnabled="false"
-                    app:checkedIcon="@null"
-                    app:chipIconTint="@color/black"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="@color/grey_bg"
-                    android:checkable="false"
-                    android:visibility="gone"
-                    android:text="@string/type_auto"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/cp_other"
-                    app:chipIcon="@drawable/ic_other"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Entry"
-                    app:closeIconEnabled="false"
-                    app:checkedIcon="@null"
-                    app:chipIconTint="@color/black"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="@color/grey_bg"
-                    android:checkable="false"
-                    android:visibility="gone"
-                    android:text="@string/type_other"/>
-            </com.google.android.material.chip.ChipGroup>
-
-            <TextView
-                android:id="@+id/tv_title_main_referee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_referee"
-                android:textSize="@dimen/mid_text_size"
-                android:textColor="@color/grey"
-                app:layout_constraintTop_toBottomOf="@id/cg_types"
-                app:layout_constraintStart_toStartOf="@id/cg_types"/>
-
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_main_referee"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/li_size"
-                android:background="@drawable/bg_grey"
-                android:onClick="onClickShowProfile"
-                android:layout_marginStart="@dimen/padding"
-                android:layout_marginEnd="@dimen/padding"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title_main_referee" >
-
-                <ImageView
-                    android:id="@+id/img_role"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:src="@drawable/ic_admin"
-                    android:scaleType="centerInside"
-                    android:padding="5dp"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/border_black"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+                <TextView
+                    android:id="@+id/tv_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorError"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
-                    android:id="@+id/tv_fio"
+                    android:id="@+id/tv_middle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:text=" — "
+                    android:layout_marginTop="40dp"
+                    android:gravity="center"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_data_from"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_title_data_from"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="14dp"
-                    android:text=""
+                    android:text="@string/data_from"
+                    android:textSize="@dimen/mid_text_size"
+                    android:textColor="@color/grey"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintStart_toStartOf="@id/tv_data_from"
+                    app:layout_constraintEnd_toEndOf="@id/tv_data_from"
+                    app:layout_constraintBottom_toTopOf="@id/tv_data_from"/>
+
+                <TextView
+                    android:id="@+id/tv_title_data_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/data_to"
+                    android:textSize="@dimen/mid_text_size"
+                    android:textColor="@color/grey"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintStart_toStartOf="@id/tv_data_to"
+                    app:layout_constraintEnd_toEndOf="@id/tv_data_to"
+                    app:layout_constraintBottom_toTopOf="@id/tv_data_to"/>
+
+                <TextView
+                    android:id="@+id/tv_data_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_black"
+                    android:padding="5dp"
+                    android:text="17.09.2020"
+                    android:layout_marginEnd="10dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/main_text_size"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@id/img_role"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintEnd_toStartOf="@id/tv_middle"
+                    app:layout_constraintTop_toTopOf="@id/tv_middle" />
 
-            <TextView
-                android:id="@+id/tv_message"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text=""
-                android:textColor="@color/light_black"
-                android:textSize="@dimen/mid_text_size"
-                android:layout_margin="@dimen/padding"
-                app:layout_constraintTop_toBottomOf="@id/layout_main_referee"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tv_data_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="17.11.2020"
+                    android:padding="5dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/border_black"
+                    android:textSize="@dimen/main_text_size"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toTopOf="@id/tv_middle"
+                    app:layout_constraintStart_toEndOf="@id/tv_middle"/>
+
+                <TextView
+                    android:id="@+id/tv_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="г. Уфа"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/main_text_size"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_data_from"/>
+
+                <TextView
+                    android:id="@+id/tv_title_types"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/types"
+                    android:textColor="@color/grey"
+                    android:textSize="@dimen/mid_text_size"
+                    app:layout_constraintTop_toBottomOf="@id/tv_city"
+                    app:layout_constraintStart_toStartOf="@id/tv_city"/>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_types"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_types"
+                    app:layout_constraintStart_toStartOf="@id/tv_title_types">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_walk"
+                        app:chipIcon="@drawable/ic_walk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.Chip.Entry"
+                        app:closeIconEnabled="false"
+                        app:checkedIcon="@null"
+                        app:chipIconTint="@color/black"
+                        android:textColor="@color/black"
+                        app:chipBackgroundColor="@color/grey_bg"
+                        android:checkable="false"
+                        android:visibility="gone"
+                        android:text="@string/type_walk"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_ski"
+                        app:chipIcon="@drawable/ic_ski"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.Chip.Entry"
+                        app:closeIconEnabled="false"
+                        app:checkedIcon="@null"
+                        app:chipIconTint="@color/black"
+                        android:textColor="@color/black"
+                        app:chipBackgroundColor="@color/grey_bg"
+                        android:checkable="false"
+                        android:visibility="gone"
+                        android:text="@string/type_ski"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_hike"
+                        app:chipIcon="@drawable/ic_hike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.Chip.Entry"
+                        app:closeIconEnabled="false"
+                        app:checkedIcon="@null"
+                        app:chipIconTint="@color/black"
+                        android:textColor="@color/black"
+                        app:chipBackgroundColor="@color/grey_bg"
+                        android:checkable="false"
+                        android:visibility="gone"
+                        android:text="@string/type_hike"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_water"
+                        app:chipIcon="@drawable/ic_water"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.Chip.Entry"
+                        app:closeIconEnabled="false"
+                        app:checkedIcon="@null"
+                        app:chipIconTint="@color/black"
+                        android:textColor="@color/black"
+                        app:chipBackgroundColor="@color/grey_bg"
+                        android:checkable="false"
+                        android:visibility="gone"
+                        android:text="@string/type_water"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_speleo"
+                        app:chipIcon="@drawable/ic_speleo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.Chip.Entry"
+                        app:closeIconEnabled="false"
+                        app:checkedIcon="@null"
+                        app:chipIconTint="@color/black"
+                        android:textColor="@color/black"
+                        app:chipBackgroundColor="@color/grey_bg"
+                        android:checkable="false"
+                        android:visibility="gone"
+                        android:text="@string/type_speleo"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_bike"
+                        app:chipIcon="@drawable/ic_bike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.Chip.Entry"
+                        app:closeIconEnabled="false"
+                        app:checkedIcon="@null"
+                        app:chipIconTint="@color/black"
+                        android:textColor="@color/black"
+                        app:chipBackgroundColor="@color/grey_bg"
+                        android:checkable="false"
+                        android:visibility="gone"
+                        android:text="@string/type_bike"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_auto"
+                        app:chipIcon="@drawable/ic_auto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.Chip.Entry"
+                        app:closeIconEnabled="false"
+                        app:checkedIcon="@null"
+                        app:chipIconTint="@color/black"
+                        android:textColor="@color/black"
+                        app:chipBackgroundColor="@color/grey_bg"
+                        android:checkable="false"
+                        android:visibility="gone"
+                        android:text="@string/type_auto"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_other"
+                        app:chipIcon="@drawable/ic_other"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.Chip.Entry"
+                        app:closeIconEnabled="false"
+                        app:checkedIcon="@null"
+                        app:chipIconTint="@color/black"
+                        android:textColor="@color/black"
+                        app:chipBackgroundColor="@color/grey_bg"
+                        android:checkable="false"
+                        android:visibility="gone"
+                        android:text="@string/type_other"/>
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/tv_title_main_referee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_referee"
+                    android:textSize="@dimen/mid_text_size"
+                    android:textColor="@color/grey"
+                    app:layout_constraintTop_toBottomOf="@id/cg_types"
+                    app:layout_constraintStart_toStartOf="@id/cg_types"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_main_referee"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/li_size"
+                    android:background="@drawable/bg_grey"
+                    android:onClick="onClickShowProfile"
+                    android:layout_marginStart="@dimen/padding"
+                    android:layout_marginEnd="@dimen/padding"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_main_referee" >
+
+                    <ImageView
+                        android:id="@+id/img_role"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:src="@drawable/ic_admin"
+                        android:scaleType="centerInside"
+                        android:padding="5dp"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/border_black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/tv_fio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="14dp"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/main_text_size"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/img_role"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/tv_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/light_black"
+                    android:textSize="@dimen/mid_text_size"
+                    android:layout_margin="@dimen/padding"
+                    app:layout_constraintTop_toBottomOf="@id/layout_main_referee"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout

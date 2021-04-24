@@ -23,7 +23,6 @@ public class MembersViewModel extends BaseViewModel {
     private final DBManager db;
     private final RealmDB realmDB;
     private final MutableLiveData<ArrayList<MemberEstimation>> mEstims;
-    private final MutableLiveData<Boolean> flagToSaveLocalProtocol;
     private String champID, refereeID;
 
 
@@ -31,11 +30,9 @@ public class MembersViewModel extends BaseViewModel {
         db = DBManager.getInstance();
         realmDB = db.getRealmDB();
         mEstims = new MutableLiveData<>(new ArrayList<>());
-        flagToSaveLocalProtocol = new MutableLiveData<>();
     }
 
     public MutableLiveData<ArrayList<MemberEstimation>> getMembersLiveData() { return mEstims; }
-    public MutableLiveData<Boolean> getFlagToSaveLocalProtocolLiveData() { return flagToSaveLocalProtocol; }
 
     public void requestMembersList(String champID){
         setIsLoading(true);
@@ -65,10 +62,10 @@ public class MembersViewModel extends BaseViewModel {
         });
     }
 
-    public void sendEstimations(Context ctx, String refereeInfo){
+    public void sendEstimations(Context ctx, String refereeRank){
         setIsLoading(true);
 
-        if (refereeInfo.isEmpty()){
+        if (refereeRank.isEmpty()){
             requestError("Не заполнен разряд судьи");
             return;
         }
@@ -92,13 +89,55 @@ public class MembersViewModel extends BaseViewModel {
             estimsToSend.add(e);
         }
 
-        //and send
-        db.sendRefereeEstimations(estimsToSend, new DBManager.IRequestListener() {
+        //get referee info
+        db.getUserData(db.getPrefs().getUserID(), new DBManager.IUserInfoListener() {
             @Override
-            public void onSuccess() { createRefereeProtocol(ctx, refereeInfo); }
+            public void onSuccess(User user) {
+                String info = user.getFio() +", "+refereeRank+", "+user.getCity();
+                //send estims to server
+                sendEstimationsToServer(estimsToSend, info);
+                //and save local copy
+                createLocalRefereeProtocol(ctx, info);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                //send estims to server
+                sendEstimationsToServer(estimsToSend, db.getPrefs().getUserFIO());
+                //and save local copy
+                createLocalRefereeProtocol(ctx, db.getPrefs().getUserFIO());
+            }
+        });
+    }
+
+    void sendEstimationsToServer(ArrayList<Estimation> estimsToSend, String refereeInfo){
+        //and send
+        db.sendRefereeEstimations(estimsToSend, refereeInfo, new DBManager.IRequestListener() {
+            @Override
+            public void onSuccess() { setIsLoading(false); }
             @Override
             public void onFailed(String msg) { requestError(msg); setIsLoading(false); }
         });
+    }
+    void createLocalRefereeProtocol(Context ctx, String refereeInfo){
+        ExcelModule excelModule = new ExcelModule(ctx);
+        excelModule.createRefereeReport("refereeProtocol.xlsx", refereeInfo, getEstimationsFromLocalDB());
+
+//        db.getUserData(db.getPrefs().getUserID(), new DBManager.IUserInfoListener() {
+//            @Override
+//            public void onSuccess(User user) {
+//                String info = user.getFio() +", "+refereeInfo+", "+user.getCity();
+//
+//                setIsLoading(false);
+//            }
+//
+//            @Override
+//            public void onFailed(String msg) {
+//                excelModule.createRefereeReport("refereeProtocol.xlsx", db.getPrefs().getUserFIO(), getEstimationsFromLocalDB());
+//                requestError(msg);
+//                setIsLoading(false);
+//            }
+//        });
     }
 
     public boolean getMembersFromLocalDB(){
@@ -132,25 +171,5 @@ public class MembersViewModel extends BaseViewModel {
     void requestError(String msg){
         setIsLoading(false);
         setErrorMessage(msg);
-    }
-
-    void createRefereeProtocol(Context ctx, String refereeInfo){
-        ExcelModule excelModule = new ExcelModule(ctx);
-
-        db.getUserData(db.getPrefs().getUserID(), new DBManager.IUserInfoListener() {
-            @Override
-            public void onSuccess(User user) {
-                String info = user.getFio() +", "+refereeInfo+", "+user.getCity();
-                excelModule.createRefereeReport("refereeProtocol.xlsx", info, getEstimationsFromLocalDB());
-                setIsLoading(false);
-            }
-
-            @Override
-            public void onFailed(String msg) {
-                excelModule.createRefereeReport("refereeProtocol.xlsx", db.getPrefs().getUserFIO(), getEstimationsFromLocalDB());
-                requestError(msg);
-                setIsLoading(false);
-            }
-        });
     }
 }

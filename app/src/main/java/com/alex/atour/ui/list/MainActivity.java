@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
-import com.alex.atour.models.ChampsListRecyclerAdapter;
 import com.alex.atour.ui.champ.ChampActivity;
 import com.alex.atour.ui.create.champ.ChampCreationActivity;
 import com.alex.atour.ui.list.search.SearchFragment;

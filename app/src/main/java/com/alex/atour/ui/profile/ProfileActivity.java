@@ -2,6 +2,9 @@ package com.alex.atour.ui.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +18,8 @@ import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
+import com.alex.atour.ui.list.ChampsListRecyclerAdapter;
+import com.alex.atour.ui.list.MainActivity;
 import com.alex.atour.ui.login.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -44,7 +49,13 @@ public class ProfileActivity extends AppCompatActivity {
         ProgressBar pBar = findViewById(R.id.progress_bar);
         TextView tvDLink = findViewById(R.id.tv_d_link);
         TextView tvDComment = findViewById(R.id.tv_d_comment);
+        RecyclerView recyclerView = findViewById(R.id.rv_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        viewModel.getEstimations().observe(this, estims->{
+            EstimsRecyclerAdapter adapter = new EstimsRecyclerAdapter(estims);
+            recyclerView.setAdapter(adapter);
+        });
         viewModel.getIsLoading().observe(this, isLoading->{
             pBar.setVisibility(isLoading?
                     View.VISIBLE:
@@ -90,6 +101,8 @@ public class ProfileActivity extends AppCompatActivity {
                 userID = req.getUserID();
                 viewModel.loadProfile(userID);  // показ регистрационных данных пользователя
                 showRequest(req);               // показ заявки на участие
+                if (req.getRole() == 2)         // если это судья, то загрузить его оценки
+                    showRefereeEstimations(req.getChampID(), req.getUserID());
                 break;
             case 3://show admin info
                 User u = (User) getIntent().getSerializableExtra("userInfo");
@@ -211,5 +224,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
     private void showError(String err){
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_LONG).show();
+    }
+    private void showRefereeEstimations(String champID, String userID){
+        showLayout(R.id.rv_list, View.VISIBLE);
+        viewModel.loadEstimations(champID, userID);
     }
 }

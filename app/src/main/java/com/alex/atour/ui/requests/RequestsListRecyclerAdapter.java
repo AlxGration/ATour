@@ -1,37 +1,37 @@
-package com.alex.atour.models;
+package com.alex.atour.ui.requests;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.alex.atour.DTO.ChampInfo;
+import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.R;
 import java.util.ArrayList;
 
-public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRecyclerAdapter.ViewHolder> {
+public class RequestsListRecyclerAdapter extends RecyclerView.Adapter<RequestsListRecyclerAdapter.ViewHolder> {
 
-    ArrayList<ChampInfo> data;
+    ArrayList<MembershipRequest> data;
 
-    public ChampsListRecyclerAdapter(ArrayList<ChampInfo> data){
+    public RequestsListRecyclerAdapter(ArrayList<MembershipRequest> data){
         this.data = data;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_champ, parent, false);
+                .inflate(R.layout.list_item_request, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ChampInfo info = data.get(position);
+        MembershipRequest request = data.get(position);
 
         // покрас списка в виде "зебры"
         if (position % 2 == 0){
@@ -40,41 +40,51 @@ public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRe
             holder.setWhiteBG();
         }
 
-        holder.tvTitle.setText(info.getTitle());
-        holder.tvCity.setText(info.getCity());
-        holder.tvYear.setText(info.getDataTo().split("\\.")[0]);
+        holder.tvFIO.setText(request.getUserFIO());
+
+        if (request.getRole() == 1){
+            holder.imgRole.setImageResource(R.drawable.ic_member);
+        }else{
+            holder.imgRole.setImageResource(R.drawable.ic_referee);
+        }
 
         holder.imgWalk.setVisibility(
-                info.isTypeWalk()? View.VISIBLE: View.GONE
+                request.isTypeWalk()? View.VISIBLE: View.GONE
         );
         holder.imgSki.setVisibility(
-                info.isTypeSki()? View.VISIBLE: View.GONE
+                request.isTypeSki()? View.VISIBLE: View.GONE
         );
         holder.imgHike.setVisibility(
-                info.isTypeHike()? View.VISIBLE: View.GONE
+                request.isTypeHike()? View.VISIBLE: View.GONE
         );
         holder.imgWater.setVisibility(
-                info.isTypeWater()? View.VISIBLE: View.GONE
+                request.isTypeWater()? View.VISIBLE: View.GONE
         );
         holder.imgSpeleo.setVisibility(
-                info.isTypeSpeleo()? View.VISIBLE: View.GONE
+                request.isTypeSpeleo()? View.VISIBLE: View.GONE
         );
         holder.imgBike.setVisibility(
-                info.isTypeBike()? View.VISIBLE: View.GONE
+                request.isTypeBike()? View.VISIBLE: View.GONE
         );
         holder.imgAuto.setVisibility(
-                info.isTypeAuto()? View.VISIBLE: View.GONE
+                request.isTypeAuto()? View.VISIBLE: View.GONE
         );
         holder.imgOther.setVisibility(
-                info.isTypeOther()? View.VISIBLE: View.GONE
+                request.isTypeOther()? View.VISIBLE: View.GONE
         );
         
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(view -> {
             if (listener != null) {
-                ChampInfo info1 = data.get(((int)view.getTag()));
-                listener.startChampActivityWith(info1);
+                MembershipRequest req = data.get(((int)view.getTag()));
+                listener.startProfileActivityWith(req);
             }
+        });
+        holder.btnAccept.setOnClickListener(v -> {
+            if (listener != null) {listener.acceptRequest(request);}
+        });
+        holder.btnDeny.setOnClickListener(v -> {
+            if (listener != null) {listener.denyRequest(request);}
         });
     }
 
@@ -88,15 +98,17 @@ public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRe
         listener = lis;
     }
     public interface IonItemClickListener{
-        void startChampActivityWith(ChampInfo info);
+        void startProfileActivityWith(MembershipRequest req);
+
+        void acceptRequest(MembershipRequest req);
+        void denyRequest(MembershipRequest req);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView tvTitle;
-        private final TextView tvCity;
-        private final TextView tvYear;
-        private final ImageView imgWalk, imgSki, imgHike, imgWater, imgSpeleo, imgBike, imgAuto, imgOther;
+        private final TextView tvFIO;
+        private final ImageView imgWalk, imgSki, imgHike, imgWater, imgSpeleo, imgBike, imgAuto, imgOther, imgRole;
+        private final Button btnAccept, btnDeny;
 
         private final View view;
 
@@ -104,9 +116,8 @@ public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRe
             super(view);
             this.view = view;
 
-            tvTitle = view.findViewById(R.id.tv_title);
-            tvCity = view.findViewById(R.id.tv_city);
-            tvYear = view.findViewById(R.id.tv_year);
+            tvFIO = view.findViewById(R.id.tv_fio);
+            imgRole = view.findViewById(R.id.img_role);
             imgWalk = view.findViewById(R.id.img_walk);
             imgSki = view.findViewById(R.id.img_ski);
             imgHike = view.findViewById(R.id.img_hike);
@@ -115,6 +126,8 @@ public class ChampsListRecyclerAdapter extends RecyclerView.Adapter<ChampsListRe
             imgBike = view.findViewById(R.id.img_bike);
             imgAuto = view.findViewById(R.id.img_auto);
             imgOther = view.findViewById(R.id.img_other);
+            btnAccept = view.findViewById(R.id.btn_accept);
+            btnDeny = view.findViewById(R.id.btn_deny);
         }
         private void setGreyBG() {
             if (view == null) return;

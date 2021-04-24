@@ -22,111 +22,91 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    
-    <ImageButton
-        android:id="@+id/btn_save"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:padding="2dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_save"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:scaleType="centerInside"
-        app:tint="@color/light_black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
     <LinearLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingTop="8dp"
         app:layout_constraintStart_toStartOf="@id/tv_fio"
         app:layout_constraintTop_toBottomOf="@id/tv_fio">
-        <EditText
-            android:id="@+id/et_complexity"
+        <TextView
+            android:id="@+id/tv_complexity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
-            android:textSize="14sp"
-            android:hint="С"
-            android:nextFocusDown="@id/et_novelty"
-            android:inputType="numberDecimal|numberSigned"
             android:gravity="center"
-            android:ems="3"/>
-        <EditText
-            android:id="@+id/et_novelty"
+            android:text="105.5"
+            android:textColor="@color/light_black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_novelty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
-            android:textSize="14sp"
-            android:hint="Нв"
-            android:nextFocusDown="@id/et_strategy"
-            android:inputType="numberDecimal|numberSigned"
             android:gravity="center"
-            android:ems="3"/>
-        <EditText
-            android:id="@+id/et_strategy"
+            android:text="105.5"
+            android:textColor="@color/light_black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_strategy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
-            android:textSize="14sp"
-            android:hint="Ст"
-            android:nextFocusDown="@id/et_tactics"
-            android:inputType="numberDecimal|numberSigned"
             android:gravity="center"
-            android:ems="3"/>
-        <EditText
-            android:id="@+id/et_tactics"
+            android:text="105.5"
+            android:textColor="@color/light_black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_tactics"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
-            android:textSize="14sp"
-            android:hint="Тк"
-            android:nextFocusDown="@id/et_technique"
-            android:inputType="numberDecimal|numberSigned"
             android:gravity="center"
-            android:ems="3"/>
-        <EditText
-            android:id="@+id/et_technique"
+            android:text="105.5"
+            android:textColor="@color/light_black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_technique"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
-            android:textSize="14sp"
-            android:hint="Т"
-            android:nextFocusDown="@id/et_tension"
-            android:inputType="numberDecimal|numberSigned"
             android:gravity="center"
-            android:ems="3"/>
-        <EditText
-            android:id="@+id/et_tension"
+            android:text="105.5"
+            android:textColor="@color/light_black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_tension"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
-            android:textSize="14sp"
-            android:hint="Н"
-            android:nextFocusDown="@id/et_informativeness"
-            android:inputType="numberDecimal|numberSigned"
             android:gravity="center"
-            android:ems="3"/>
-        <EditText
-            android:id="@+id/et_informativeness"
+            android:text="105.5"
+            android:textColor="@color/light_black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_informativeness"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
-            android:textSize="14sp"
-            android:hint="П"
-            android:nextFocusDown="@id/et_complexity"
-            android:inputType="numberDecimal|numberSigned"
             android:gravity="center"
-            android:ems="3"/>
+            android:text="105.5"
+            android:textColor="@color/light_black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

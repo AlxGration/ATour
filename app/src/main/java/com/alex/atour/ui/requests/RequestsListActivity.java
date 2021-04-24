@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.R;
-import com.alex.atour.models.RequestsListRecyclerAdapter;
 import com.alex.atour.ui.profile.ProfileActivity;
 
 public class RequestsListActivity extends AppCompatActivity implements RequestsListRecyclerAdapter.IonItemClickListener {
