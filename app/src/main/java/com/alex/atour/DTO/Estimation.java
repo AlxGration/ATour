@@ -4,7 +4,6 @@ import com.alex.atour.models.IEstimation;
 
 public class Estimation implements Comparable<Estimation>, IEstimation {
 
-
     private String id;
     private String champID, memberID, refereeID, memberFIO;
     private double complexity, novelty, strategy, tactics, technique, tension, informativeness ;

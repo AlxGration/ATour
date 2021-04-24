@@ -62,7 +62,12 @@ public class ProfileViewModel extends BaseViewModel {
     }
 
     public void loadEstimations(String champID, String userID){
-        //todo:create ME
+        setIsLoading(true);
+        model.loadEstimations(champID, userID);
+    }
+    void setEstimationsList(ArrayList<Estimation> list){
+        estims.setValue(list);
+        setIsLoading(false);
     }
 
     void requestError(String msg){

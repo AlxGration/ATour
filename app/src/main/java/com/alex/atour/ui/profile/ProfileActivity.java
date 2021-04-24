@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,8 +17,6 @@ import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
-import com.alex.atour.ui.list.ChampsListRecyclerAdapter;
-import com.alex.atour.ui.list.MainActivity;
 import com.alex.atour.ui.login.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -30,8 +27,6 @@ public class ProfileActivity extends AppCompatActivity {
     private String champID, userID;
     private MemberEstimation mEstim;
 
-    private TextView tvSecName, tvName;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +36,8 @@ public class ProfileActivity extends AppCompatActivity {
         estimVM = new ViewModelProvider(this).get(EstimationViewModel.class);
 
         Button btnSignOut = findViewById(R.id.btn_sign_out);
-        tvName = findViewById(R.id.tv_name);
-        tvSecName = findViewById(R.id.tv_sec_name);
+        TextView tvName = findViewById(R.id.tv_name);
+        TextView tvSecName = findViewById(R.id.tv_sec_name);
         TextView tvCity = findViewById(R.id.tv_city);
         TextView tvEmail = findViewById(R.id.tv_email);
         TextView tvPhone = findViewById(R.id.tv_phone);
@@ -101,8 +96,6 @@ public class ProfileActivity extends AppCompatActivity {
                 userID = req.getUserID();
                 viewModel.loadProfile(userID);  // показ регистрационных данных пользователя
                 showRequest(req);               // показ заявки на участие
-                if (req.getRole() == 2)         // если это судья, то загрузить его оценки
-                    showRefereeEstimations(req.getChampID(), req.getUserID());
                 break;
             case 3://show admin info
                 User u = (User) getIntent().getSerializableExtra("userInfo");
@@ -123,8 +116,8 @@ public class ProfileActivity extends AppCompatActivity {
                 viewModel.loadProfile(userID);          // показ регистрационных данных пользователя
                 viewModel.loadMembershipRequest(champID, userID);
                 if (mem.getRole() == 1)
-                    viewModel.loadDocs(champID, userID);    // показ документов
-                else showEstimations(champID, userID);      // показ оценок рефери
+                    viewModel.loadDocs(champID, userID);        // показ документов
+                else showRefereeEstimations(champID, userID);   // показ всех оценок рефери
                 break;
         }
     }
@@ -203,9 +196,10 @@ public class ProfileActivity extends AppCompatActivity {
         findViewById(id).setVisibility(visibility);
     }
 
-    //показ всех оценок, которые выставил судья
+    //показ оценок от всех рефери userID участника
     private void showEstimations(String champID, String userID){
         //todo:: create me
+
     }
 
     //save estimation locally(referee)
@@ -226,7 +220,7 @@ public class ProfileActivity extends AppCompatActivity {
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_LONG).show();
     }
     private void showRefereeEstimations(String champID, String userID){
-        showLayout(R.id.rv_list, View.VISIBLE);
+        showLayout(R.id.layout_ref_estims, View.VISIBLE);
         viewModel.loadEstimations(champID, userID);
     }
 }

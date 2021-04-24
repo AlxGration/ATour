@@ -4,12 +4,17 @@ import android.util.Log;
 
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.MemberEstimation;
+import com.alex.atour.DTO._Estimation;
+import com.alex.atour.models.IEstimation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.annotations.PrimaryKey;
 
 public class RealmDB {
 
@@ -25,19 +30,24 @@ public class RealmDB {
         id
     }
 
-//    public void writeEstimation(Estimation estim) {
-//        realm.executeTransactionAsync(t->{
-//            t.insertOrUpdate(estim);
-//        });
-//    }
-//    public TreeSet<Estimation> getEstimations(String champID, String refereeID){
-//        RealmResults<Estimation> results = realm.where(Estimation.class)
-//                .equalTo(FLAGS.champID.name(), champID)
-//                .and()
-//                .equalTo(FLAGS.refereeID.name(), refereeID)
-//                .findAllAsync();
-//        return new TreeSet<>(results);
-//    }
+    public void writeEstimations(List<Estimation> mEstims){
+        List<_Estimation> list = new ArrayList<>(mEstims.size());
+        for(Estimation m: mEstims){list.add(new _Estimation(m));}
+
+        realm.executeTransactionAsync(t->{
+            t.insertOrUpdate(list);
+        });
+    }
+    public TreeSet<Estimation> getEstimations(String refereeID){
+        RealmResults<_Estimation> results = realm.where(_Estimation.class)
+                .equalTo(FLAGS.refereeID.name(), refereeID)
+                .findAllAsync();
+
+        TreeSet<_Estimation> tree =  new TreeSet<>(results);
+        TreeSet<Estimation> list = new TreeSet<>();
+        for(_Estimation m: tree){list.add(m.getEstimationObject());}
+        return list;
+    }
 
     public void writeMemberEstimations(List<MemberEstimation> mEstims){
         realm.executeTransactionAsync(t->{

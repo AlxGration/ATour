@@ -10,12 +10,9 @@ import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
-import com.alex.atour.DTO.ShortEstimation;
 import com.alex.atour.DTO.ShortRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.MembershipState;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +37,7 @@ public class FirebaseDB extends DBManager{
     private final String ACCEPTED_REQUEST_TABLE = "Accepted";// одобренные заявки пользователей
     private final String DOCUMENTS = "Docs";// таблица документов
     private final String ESTIMATIONS = "Estimations";// таблица оценок
-    //private final String ESTIMS = "Estims";// укороченная таблица оценок
+    private final String REFEREE_RANKS = "Ranks";// таблица "звания" судей
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -255,8 +252,8 @@ public class FirebaseDB extends DBManager{
     }
 
     //get RefereeEstimations
-    //todo: dont forget about refereee info
-    public void getRefereeEstimationsList(String champID, String refereeID){
+    @Override
+    public void getRefereeEstimationsList(String champID, String refereeID, IEstimationsListListener listener){
         Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMATIONS).child(refereeID);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -273,6 +270,11 @@ public class FirebaseDB extends DBManager{
                 if (listener!=null) listener.onFailed(error.getMessage());
             }
         });
+    }
+    //get RefereeRank
+    @Override
+    public void getRefereeRankFromEstimation(String champID, String refereeID, IRefereeRankListListener listener){
+        //todo:create me
     }
 
     @Override
@@ -437,8 +439,10 @@ public class FirebaseDB extends DBManager{
         }
         Estimation e = estimations.get(0);
 
+        //add referee rank to Champ->Ranks
         HashMap<String, Object> info = new HashMap<>(1);
-        info.put("refereeInfo", refereeInfo);
+        info.put(e.getRefereeID(), refereeInfo);
+        getDbRef().child(CHAMP_TABLE).child(e.getChampID()).child(REFEREE_RANKS).push().setValue(info);
 
         DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(e.getChampID()).child(ESTIMATIONS).child(estimations.get(0).getRefereeID());
         ref.setValue(estimations).addOnCompleteListener(task -> {
@@ -449,7 +453,6 @@ public class FirebaseDB extends DBManager{
             }
             else listener.onFailed("Ошибка выполнения операции");
         });
-        ref.updateChildren(info);
     }
 
     // get members who sent docs and waiting results

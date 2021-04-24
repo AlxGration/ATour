@@ -60,8 +60,10 @@ public abstract class DBManager {
     public abstract void getMembershipRequestByID(String champID, String userID, IMembershipRequestsListListener listener);//заявка одобренная на чемпионат(для админа)
     public abstract void sendDocument(String champID, Document document, IRequestListener listener); // добавить документ
 
+    public abstract void getRefereeEstimationsList(String champID, String refereeID, IEstimationsListListener listener); // получить оценки определенного судьи
+    public abstract void getRefereeRankFromEstimation(String champID, String refereeID, IRefereeRankListListener listener); // получить оценки определенного судьи
+
     public abstract void closeEnrollmentAndCreateRefereeProtocols(String champID, IRequestListener listener);//закрыть прием заявок, сформировать судейские протоколы
-    //public abstract void sendEstimation(String champID, Estimation estim, IRequestListener listener); // добавить оценку
     public abstract void sendRefereeEstimations(List<Estimation> estimations, String refereeInfo, IRequestListener listener); // отправить все оценки судьи
     public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
 
@@ -88,8 +90,16 @@ public abstract class DBManager {
         void onSuccess(ArrayList<Member> members);
         void onFailed(String msg);
     }
+    public interface IEstimationsListListener{
+        void onSuccess(ArrayList<Estimation> estims);
+        void onFailed(String msg);
+    }
     public interface IDocumentListener{
         void onSuccess(Document document);
+        void onFailed(String msg);
+    }
+    public interface IRefereeRankListListener{
+        void onSuccess(String refereeRank);
         void onFailed(String msg);
     }
 }

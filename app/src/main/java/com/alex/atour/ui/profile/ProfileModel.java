@@ -1,11 +1,13 @@
 package com.alex.atour.ui.profile;
 
 import com.alex.atour.DTO.Document;
+import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class ProfileModel {
 
@@ -44,8 +46,6 @@ public class ProfileModel {
     }
 
     public void requestMembershipRequest(String champID, String userID){
-        //todo:realize me
-        //todo:load from Champ->Accepted
         db.getMembershipRequestByID(champID, userID, new DBManager.IMembershipRequestsListListener() {
             @Override
             public void onSuccess(ArrayList<MembershipRequest> requests) {
@@ -54,8 +54,23 @@ public class ProfileModel {
             @Override
             public void onFailed(String msg) { viewModel.requestError(msg); }
         });
-
     }
+
+    public void loadEstimations(String champID, String userID){
+        TreeSet<Estimation> treeSet = db.getRealmDB().getEstimations(userID);
+        if (treeSet.size() > 0) viewModel.setEstimationsList(new ArrayList<>(treeSet));
+
+        db.getRefereeEstimationsList(champID, userID, new DBManager.IEstimationsListListener() {
+            @Override
+            public void onSuccess(ArrayList<Estimation> estims) {
+                db.getRealmDB().writeEstimations(estims);
+                viewModel.setEstimationsList(estims);
+            }
+            @Override
+            public void onFailed(String msg) { viewModel.requestError(msg); }
+        });
+    }
+
 
     public void signOut(){ db.signOut(); }
 }

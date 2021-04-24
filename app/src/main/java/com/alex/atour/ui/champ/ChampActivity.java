@@ -127,7 +127,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     }
 
 
-    public void onClickShowProfile(View view){
+    public void onClickShowAdminProfile(View view){
         if (admin == null) {
             viewModel.requestError("Не удалось загрузить информацию об админестраторе");
             return;

@@ -439,11 +439,35 @@
                 <include layout="@layout/layout_estimation"/>
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_list"
-                android:visibility="gone"
+            <RelativeLayout
+                android:id="@+id/layout_ref_estims"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabs_layout"
+                    app:tabIndicatorColor="@color/yellow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Проставленые оценки"/>
+                </com.google.android.material.tabs.TabLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_list"
+                    android:layout_below="@id/tabs_layout"
+                    android:layout_marginStart="@dimen/padding"
+                    android:layout_marginEnd="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <View
+                    android:layout_below="@id/rv_list"
+                    android:layout_width="1dp"
+                    android:layout_height="80dp"/>
+            </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 
