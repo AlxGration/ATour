@@ -18,6 +18,7 @@ import com.alex.atour.db.RealmDB;
 import com.alex.atour.models.ValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class EstimsRecyclerAdapter extends RecyclerView.Adapter<EstimsRecyclerAdapter.ViewHolder> {
 
@@ -50,13 +51,13 @@ public class EstimsRecyclerAdapter extends RecyclerView.Adapter<EstimsRecyclerAd
             holder.setWhiteBG();
         }
 
-        holder.etComplexity.setText(String.format("%.2f", estim.getComplexity()));
-        holder.etNovelty.setText(String.format("%.2f", estim.getNovelty()));
-        holder.etStrategy.setText(String.format("%.2f", estim.getStrategy()));
-        holder.etTactics.setText(String.format("%.2f", estim.getTactics()));
-        holder.etTechnique.setText(String.format("%.2f", estim.getTechnique()));
-        holder.etTension.setText(String.format("%.2f", estim.getTension()));
-        holder.etInformativeness.setText(String.format("%.2f", estim.getInformativeness()));
+        holder.etComplexity.setText(String.format(Locale.ENGLISH, "%.2f", estim.getComplexity()));
+        holder.etNovelty.setText(String.format(Locale.ENGLISH, "%.2f", estim.getNovelty()));
+        holder.etStrategy.setText(String.format(Locale.ENGLISH, "%.2f", estim.getStrategy()));
+        holder.etTactics.setText(String.format(Locale.ENGLISH, "%.2f", estim.getTactics()));
+        holder.etTechnique.setText(String.format(Locale.ENGLISH, "%.2f", estim.getTechnique()));
+        holder.etTension.setText(String.format(Locale.ENGLISH, "%.2f", estim.getTension()));
+        holder.etInformativeness.setText(String.format(Locale.ENGLISH, "%.2f", estim.getInformativeness()));
 
         holder.tvFIO.setText(estim.getMemberFIO());
         holder.btnSave.setOnClickListener(view->{

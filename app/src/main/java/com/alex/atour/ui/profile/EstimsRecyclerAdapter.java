@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.R;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class EstimsRecyclerAdapter extends RecyclerView.Adapter<EstimsRecyclerAdapter.ViewHolder> {
 
@@ -39,13 +40,13 @@ public class EstimsRecyclerAdapter extends RecyclerView.Adapter<EstimsRecyclerAd
             holder.setWhiteBG();
         }
 
-        holder.tvComplexity.setText(String.format("%.2f", estim.getComplexity()));
-        holder.tvNovelty.setText(String.format("%.2f", estim.getNovelty()));
-        holder.tvStrategy.setText(String.format("%.2f", estim.getStrategy()));
-        holder.tvTactics.setText(String.format("%.2f", estim.getTactics()));
-        holder.tvTechnique.setText(String.format("%.2f", estim.getTechnique()));
-        holder.tvTension.setText(String.format("%.2f", estim.getTension()));
-        holder.tvInformativeness.setText(String.format("%.2f", estim.getInformativeness()));
+        holder.tvComplexity.setText(String.format(Locale.ENGLISH, "%.2f", estim.getComplexity()));
+        holder.tvNovelty.setText(String.format(Locale.ENGLISH, "%.2f", estim.getNovelty()));
+        holder.tvStrategy.setText(String.format(Locale.ENGLISH, "%.2f", estim.getStrategy()));
+        holder.tvTactics.setText(String.format(Locale.ENGLISH, "%.2f", estim.getTactics()));
+        holder.tvTechnique.setText(String.format(Locale.ENGLISH, "%.2f", estim.getTechnique()));
+        holder.tvTension.setText(String.format(Locale.ENGLISH, "%.2f", estim.getTension()));
+        holder.tvInformativeness.setText(String.format(Locale.ENGLISH, "%.2f", estim.getInformativeness()));
 
         holder.tvFIO.setText(estim.getMemberFIO());
     }
