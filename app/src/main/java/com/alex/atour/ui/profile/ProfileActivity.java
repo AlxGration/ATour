@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,12 +45,15 @@ public class ProfileActivity extends AppCompatActivity {
         ProgressBar pBar = findViewById(R.id.progress_bar);
         TextView tvDLink = findViewById(R.id.tv_d_link);
         TextView tvDComment = findViewById(R.id.tv_d_comment);
-        RecyclerView recyclerView = findViewById(R.id.rv_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         viewModel.getEstimations().observe(this, estims->{
-            EstimsRecyclerAdapter adapter = new EstimsRecyclerAdapter(estims);
-            recyclerView.setAdapter(adapter);
+            if (estims!= null) {
+                RecyclerView recyclerView = findViewById(R.id.rv_list);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                EstimsRecyclerAdapter adapter = new EstimsRecyclerAdapter(estims);
+                recyclerView.setAdapter(adapter);
+            }
         });
         viewModel.getIsLoading().observe(this, isLoading->{
             pBar.setVisibility(isLoading?
@@ -117,7 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
                 viewModel.loadMembershipRequest(champID, userID);
                 if (mem.getRole() == 1)
                     viewModel.loadDocs(champID, userID);        // показ документов
-                else showRefereeEstimations(champID, userID);   // показ всех оценок рефери
+                //else showRefereeEstimations(champID, userID);   // показ всех оценок рефери
                 break;
         }
     }

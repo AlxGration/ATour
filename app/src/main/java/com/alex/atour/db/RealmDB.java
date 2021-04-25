@@ -104,7 +104,7 @@ public class RealmDB {
         List<_RefereeRank> list = new ArrayList<>(ranks.size());
         for(RefereeRank m: ranks){list.add(new _RefereeRank(m));}
 
-        realm.executeTransactionAsync(t->{
+        realm.executeTransactionAsync(t -> {
             t.insertOrUpdate(list);
         });
     }
@@ -112,7 +112,30 @@ public class RealmDB {
         RealmResults<_RefereeRank> results = realm.where(_RefereeRank.class)
                 .equalTo(FLAGS.champID.name(), champID)
                 .findAllAsync();
-
         return new TreeSet<>(results);
+    }
+    public void writeRefereesRanks(List<RefereeRank> ranks, ISuccessOperation listener){
+        List<_RefereeRank> list = new ArrayList<>(ranks.size());
+        for(RefereeRank m: ranks){list.add(new _RefereeRank(m));}
+
+        realm.executeTransactionAsync(t -> {
+            t.insertOrUpdate(list);
+        }, () -> {
+            listener.onSuccess();
+        });
+    }
+    public void writeEstimations(List<Estimation> mEstims, ISuccessOperation listener){
+        List<_Estimation> list = new ArrayList<>(mEstims.size());
+        for(Estimation m: mEstims){list.add(new _Estimation(m));}
+
+        realm.executeTransactionAsync(t->{
+            t.insertOrUpdate(list);
+        }, () -> {
+            listener.onSuccess();
+        });
+    }
+
+    public interface ISuccessOperation{
+        void onSuccess();
     }
 }

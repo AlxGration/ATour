@@ -13,6 +13,11 @@ import com.alex.atour.db.RealmDB;
 import com.alex.atour.models.ExcelModule;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import io.realm.RealmChangeListener;
 
 public class ChampModel {
 
@@ -81,63 +86,50 @@ public class ChampModel {
 
     // creating createTotalProtocol
     public void createTotalProtocol(Context ctx, String champID){
-        // download estimations from server
+        // download RefereeRanks from server
         db.getAllRefereesRanksList(champID, new DBManager.IRefereesRanksListListener() {
             @Override
             public void onSuccess(ArrayList<RefereeRank> ranks) {
-                realmDB.writeRefereesRanks(ranks);
-            }
-            @Override
-            public void onFailed(String msg) { viewModel.requestError(msg); }
-        });
-        db.getAllEstimationsList(champID, new DBManager.IEstimationsListListener() {
-            @Override
-            public void onSuccess(ArrayList<Estimation> estims) {
-                Log.e("TAG", "got all estims from server "+estims.size());
+                realmDB.writeRefereesRanks(ranks, () -> {
+                    //extract refereesRanks
+                    String[] refereesRanks = new String[ranks.size()];
+                    int i = 0;
+                    for(RefereeRank e: ranks){ refereesRanks[i++]=e.getRefereeInfo(); }
 
-                // save them locally
-                realmDB.writeEstimations(estims);
+                    // download estimations from server
+                    db.getAllEstimationsList(champID, new DBManager.IEstimationsListListener() {
+                        @Override
+                        public void onSuccess(ArrayList<Estimation> estims) {
+                            Log.e("TAG", "got all estims from server "+estims.size());
 
-                //extract membersIDs
-                String[] membersIDs = new String[estims.size()];
-                int i = 0;
-                for(Estimation e: estims){
-                    membersIDs[i++]=e.getMemberID();
-                }
-                ExcelModule excelModule = new ExcelModule(ctx);
-                Log.e("TAG", "size of membersIDs "+membersIDs.length);
+                            //extract membersIDs
 
-                db.getAllRefereesRanksList(champID, new DBManager.IRefereesRanksListListener() {
-                    @Override
-                    public void onSuccess(ArrayList<RefereeRank> ranks) {
-                        realmDB.writeRefereesRanks(ranks);
+                            Set<String> membersIDs = new HashSet<>();
+                            for(Estimation e: estims){ membersIDs.add(e.getMemberID()); }
+                            Log.e("TAG", "size of membersIDs "+membersIDs.size());
 
-                        //extract membersIDs
-                        String[] refereesRanks = new String[ranks.size()];
-                        int i = 0;
-                        for(RefereeRank e: ranks){
-                            refereesRanks[i++]=e.getRefereeInfo();
+                            // save estims locally
+                            realmDB.writeEstimations(estims, () -> {
+
+                                ExcelModule excelModule = new ExcelModule(ctx);
+                                //start creating protocol
+                                excelModule.createTotalProtocol(champID, membersIDs, refereesRanks,  new DBManager.IRequestListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Log.e("TAG", "created total protocol ");
+                                        viewModel.totalProtocolCreated();
+                                    }
+
+                                    @Override
+                                    public void onFailed(String msg) {
+                                        viewModel.requestError(msg);
+                                    }
+                                });
+                            });
                         }
-
-                        //start creating protocol
-                        excelModule.createTotalProtocol(champID, membersIDs, refereesRanks,  new DBManager.IRequestListener() {
-                            @Override
-                            public void onSuccess() {
-                                Log.e("TAG", "created total protocol ");
-                                viewModel.totalProtocolCreated();
-                            }
-
-                            @Override
-                            public void onFailed(String msg) {
-                                viewModel.requestError(msg);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailed(String msg) {
-                        viewModel.requestError(msg);
-                    }
+                        @Override
+                        public void onFailed(String msg) { viewModel.requestError(msg); }
+                    });
                 });
             }
             @Override

@@ -97,7 +97,7 @@ public class MembersViewModel extends BaseViewModel {
                 //send estims to server
                 sendEstimationsToServer(estimsToSend, info);
                 //and save local copy
-                createLocalRefereeProtocol(ctx, info);
+                createLocalRefereeProtocol(ctx, info, estimsToSend);
             }
 
             @Override
@@ -105,7 +105,7 @@ public class MembersViewModel extends BaseViewModel {
                 //send estims to server
                 sendEstimationsToServer(estimsToSend, db.getPrefs().getUserFIO());
                 //and save local copy
-                createLocalRefereeProtocol(ctx, db.getPrefs().getUserFIO());
+                createLocalRefereeProtocol(ctx, db.getPrefs().getUserFIO(), estimsToSend);
             }
         });
     }
@@ -119,9 +119,9 @@ public class MembersViewModel extends BaseViewModel {
             public void onFailed(String msg) { requestError(msg); setIsLoading(false); }
         });
     }
-    void createLocalRefereeProtocol(Context ctx, String refereeInfo){
+    void createLocalRefereeProtocol(Context ctx, String refereeInfo, ArrayList<Estimation> estims){
         ExcelModule excelModule = new ExcelModule(ctx);
-        excelModule.createRefereeReport("refereeProtocol.xlsx", refereeInfo, getEstimationsFromLocalDB());
+        excelModule.createRefereeReport("refereeProtocol.xlsx", refereeInfo, estims);
     }
 
     public boolean getMembersFromLocalDB(){
@@ -132,15 +132,15 @@ public class MembersViewModel extends BaseViewModel {
         }
         return false;
     }
-
-    public ArrayList<Estimation> getEstimationsFromLocalDB(){
-        TreeSet<MemberEstimation> treeSet = realmDB.getMemberEstimations(champID, refereeID);
-        ArrayList<Estimation> estims = new ArrayList<>(treeSet.size());
-        for (MemberEstimation m : treeSet) {
-            estims.add(new Estimation(m));
-        }
-        return estims;
-    }
+//
+//    public ArrayList<Estimation> getEstimationsFromLocalDB(){
+//        TreeSet<MemberEstimation> treeSet = realmDB.getMemberEstimations(champID, refereeID);
+//        ArrayList<Estimation> estims = new ArrayList<>(treeSet.size());
+//        for (MemberEstimation m : treeSet) {
+//            estims.add(new Estimation(m));
+//        }
+//        return estims;
+//    }
 
     public void saveToLocalDB(ArrayList<MemberEstimation> members){
         //save members with 0 estimation

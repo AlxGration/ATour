@@ -4,12 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +23,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.alex.atour.BuildConfig;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MemberEstimation;
@@ -35,6 +41,9 @@ import com.alex.atour.ui.profile.ProfileActivity;
 import com.alex.atour.ui.requests.RequestsListActivity;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.net.URI;
+
 public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener, EstimsRecyclerAdapter.IonItemClickListener {
 
     private TextView tvMessage, tvAdminFio;
@@ -45,6 +54,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private int role;
     private Toolbar toolbar;
     private ChampViewModel viewModel;
+    private MembersForRefereeFragment membersForRefereeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +88,32 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
             pBar.setVisibility(
                     isCreated? View.INVISIBLE: View.VISIBLE
             );
+            if (isCreated){
+                ConfirmationDialog confirmationDialog = new ConfirmationDialog("Протокол сохранен в папке Documents.\nОткрыть?", () -> {
+                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/ATour/"),
+                            "protocol_total.xlsx");
+                    if (file.exists()) {
+                        Intent xlsxOpenintent = new Intent();
+                        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
+                        xlsxOpenintent.setAction(Intent.ACTION_VIEW);
+                        xlsxOpenintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        xlsxOpenintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        xlsxOpenintent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        xlsxOpenintent.setDataAndType(uri, "*/*");
+                        xlsxOpenintent.setDataAndType(uri, "application/vnd.ms-excel");
+                        try {
+                            //Toast.makeText(this, "i got file", Toast.LENGTH_LONG).show();
+                            startActivity(xlsxOpenintent);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(this, "К сожалению, открыть файл не получилось.", Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        }
+                    }else{
+                        Toast.makeText(this, "Файл не найден", Toast.LENGTH_LONG).show();
+                    }
+                });
+                confirmationDialog.show(getSupportFragmentManager(), "myDialog");
+            }
         });
         viewModel.getErrorMessage().observe(this, tvError::setText);
         viewModel.getRoleLiveData().observe(this, role->{
@@ -122,7 +158,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                 confirmationDialog = new ConfirmationDialog("Вы уверены?\nКопия протокола будет сохранена в папке Documents", () -> {
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                         Log.e("TAG", "start saving");
-                        Toast.makeText(this, "creating total protocol", Toast.LENGTH_SHORT).show();
                         viewModel.createTotalProtocol(this, info.getChampID());
                     }else {
                         //запрашиваем разрешение
@@ -315,8 +350,9 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         //show FrameLayout
         findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
         // and fragment
+        membersForRefereeFragment = MembersForRefereeFragment.newInstance(info.getChampID());
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_layout,  MembersForRefereeFragment.newInstance(info.getChampID()))
+                .replace(R.id.frame_layout,  membersForRefereeFragment)
                 .commitNow();
     }
     @Override
@@ -326,7 +362,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1 ){
+        if (requestCode == 1 ){//to save total protocol (admin)
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
@@ -334,6 +370,19 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                 viewModel.createTotalProtocol(this, info.getChampID());
             }  else {
                 viewModel.requestError("Для сохранения протокола\nНеобходимо разрешение");
+            }
+        }
+        if (requestCode == 2 ){//to save referee protocol (referee)
+            Log.e("TAG", "estim permission");
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (membersForRefereeFragment != null){
+                    membersForRefereeFragment.permissionGranted();
+                }
+            }  else {
+                if (membersForRefereeFragment != null){
+                    membersForRefereeFragment.permissionDenied();
+                }
             }
         }
     }

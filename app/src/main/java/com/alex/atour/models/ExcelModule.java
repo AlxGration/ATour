@@ -67,7 +67,6 @@ public class ExcelModule {
                 fillCell(row, 0, refereeInfo);
 
                 for (int i = 0; i < estims.size(); i++) {
-                    //Log.e("TAG", i + ": " + estims.get(i).getMemberFIO());
                     row = sheet.getRow(i + 6);
 
                     // member FIO
@@ -139,8 +138,9 @@ public class ExcelModule {
         }
     }
 
-    //todo:writing to local db could be slower than call this func(witch use data from local db)
-    public void createTotalProtocol(String champID, String[] membersIDs, String[] refereesRanks, DBManager.IRequestListener listener){
+
+    //todo: протестить с 5ю судьями
+    public void createTotalProtocol(String champID,  Set<String> membersIDs, String[] refereesRanks, DBManager.IRequestListener listener){
         if(!path.exists()) {
             Log.e("TAG", "folder created");
             // create it, if doesn't exit
@@ -275,7 +275,6 @@ public class ExcelModule {
                 index++;
             }
 
-            //todo: get refereesData (fio, rank, city)
             index = 0;
             for (String refInfo: refereesRanks){
                 row = sheet.getRow(38+index);

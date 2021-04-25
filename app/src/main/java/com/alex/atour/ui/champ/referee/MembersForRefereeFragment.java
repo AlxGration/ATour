@@ -23,7 +23,7 @@ import com.alex.atour.ui.champ.ChampActivity;
 
 public class MembersForRefereeFragment extends Fragment {
 
-    private MembersViewModel viewModel;
+    public MembersViewModel viewModel;
     private final String champID;
     private EditText etRefereeInfo;
     private EstimsRecyclerAdapter adapter;
@@ -63,7 +63,7 @@ public class MembersForRefereeFragment extends Fragment {
                     viewModel.sendEstimations(getActivity(), etRefereeInfo.getText().toString());
                 }else {
                     //запрашиваем разрешение
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
                 }
 
             });
@@ -81,18 +81,26 @@ public class MembersForRefereeFragment extends Fragment {
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1 ){
-            if (grantResults.length > 0 &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == 1 ){
+//            if (grantResults.length > 0 &&
+//                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                Log.e("TAG", "start saving");
+//                viewModel.sendEstimations(getActivity(), etRefereeInfo.getText().toString());
+//            }  else {
+//                viewModel.requestError("Для сохранения протокола\nНеобходимо разрешение");
+//            }
+//        }
+//    }
 
-                Log.e("TAG", "start saving");
-                viewModel.sendEstimations(getActivity(), etRefereeInfo.getText().toString());
-            }  else {
-                viewModel.requestError("Для сохранения протокола\nНеобходимо разрешение");
-            }
-        }
+    public void permissionGranted(){
+        Log.e("TAG", "start saving");
+        viewModel.sendEstimations(getActivity(), etRefereeInfo.getText().toString());
+    }
+    public void permissionDenied(){
+        viewModel.requestError("Для сохранения протокола\nНеобходимо разрешение");
     }
 }

@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/phone"
         android:inputType="phone"
-        android:maxLength="14"
+        android:maxLength="13"
         android:layout_marginLeft="5dp"
         app:layout_constraintEnd_toEndOf="@id/et_fio"
         app:layout_constraintStart_toEndOf="@+id/tv_7"
