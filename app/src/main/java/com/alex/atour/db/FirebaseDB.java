@@ -10,6 +10,7 @@ import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
+import com.alex.atour.DTO.RefereeRank;
 import com.alex.atour.DTO.ShortRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.MembershipState;
@@ -255,13 +256,21 @@ public class FirebaseDB extends DBManager{
     @Override
     public void getRefereeEstimationsList(String champID, String refereeID, IEstimationsListListener listener){
         Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMATIONS).child(refereeID);
+        getEstimationsList(query, listener);
+    }
+
+    //get all estimations
+    @Override
+    public void getAllEstimationsList(String champID, IEstimationsListListener listener){
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(ESTIMATIONS);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Estimation> list = new ArrayList<>((int)snapshot.getChildrenCount()-1);
-                for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
-                    Log.e("TAG", "estim: "+snap.toString());
-                    list.add(snap.getValue(Estimation.class));
+                ArrayList<Estimation> list = new ArrayList<>((int)snapshot.getChildrenCount());
+                for (DataSnapshot snap: snapshot.getChildren()) { // iterate by refereesID
+                    for (DataSnapshot s : snap.getChildren()) {
+                        list.add(s.getValue(Estimation.class));
+                    }
                 }
                 if (listener!=null) listener.onSuccess(list);
             }
@@ -271,10 +280,41 @@ public class FirebaseDB extends DBManager{
             }
         });
     }
+
+    @Override
+    public void getAllRefereesRanksList(String champID, IRefereesRanksListListener listener) {
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(REFEREE_RANKS);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<RefereeRank> list = new ArrayList<>((int)snapshot.getChildrenCount());
+                for (DataSnapshot snap: snapshot.getChildren()) { // iterate by refereesID
+                    list.add(snap.getValue(RefereeRank.class));
+                }
+                if (listener!=null) listener.onSuccess(list);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
+            }
+        });
+    }
+
     //get RefereeRank
     @Override
-    public void getRefereeRankFromEstimation(String champID, String refereeID, IRefereeRankListListener listener){
-        //todo:create me
+    public void getRefereeRank(String champID, String refereeID, IRefereeRankListListener listener){
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(REFEREE_RANKS).child(refereeID);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (listener!=null) listener.onSuccess((String)snapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
+            }
+        });
     }
 
     @Override
@@ -307,6 +347,23 @@ public class FirebaseDB extends DBManager{
         });
     }
 
+    private void getEstimationsList(Query query, IEstimationsListListener listener){
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Estimation> list = new ArrayList<>((int)snapshot.getChildrenCount()-1);
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate estimations
+                    Log.e("TAG", "estim: "+snap.toString());
+                    list.add(snap.getValue(Estimation.class));
+                }
+                if (listener!=null) listener.onSuccess(list);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
+            }
+        });
+    }
     private void getMembershipRequests(Query query, IMembershipRequestsListListener listener){
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -441,8 +498,8 @@ public class FirebaseDB extends DBManager{
 
         //add referee rank to Champ->Ranks
         HashMap<String, Object> info = new HashMap<>(1);
-        info.put(e.getRefereeID(), refereeInfo);
-        getDbRef().child(CHAMP_TABLE).child(e.getChampID()).child(REFEREE_RANKS).push().setValue(info);
+        info.put("refereeInfo", refereeInfo);
+        getDbRef().child(CHAMP_TABLE).child(e.getChampID()).child(REFEREE_RANKS).child(e.getRefereeID()).setValue(info);
 
         DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(e.getChampID()).child(ESTIMATIONS).child(estimations.get(0).getRefereeID());
         ref.setValue(estimations).addOnCompleteListener(task -> {

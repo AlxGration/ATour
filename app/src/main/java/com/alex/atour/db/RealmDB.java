@@ -4,7 +4,9 @@ import android.util.Log;
 
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.MemberEstimation;
+import com.alex.atour.DTO.RefereeRank;
 import com.alex.atour.DTO._Estimation;
+import com.alex.atour.DTO._RefereeRank;
 import com.alex.atour.models.IEstimation;
 
 import java.util.ArrayList;
@@ -96,5 +98,21 @@ public class RealmDB {
             membersIDs[i] = results.get(i).getMemberID();
         }
         return membersIDs;
+    }
+
+    public void writeRefereesRanks(List<RefereeRank> ranks){
+        List<_RefereeRank> list = new ArrayList<>(ranks.size());
+        for(RefereeRank m: ranks){list.add(new _RefereeRank(m));}
+
+        realm.executeTransactionAsync(t->{
+            t.insertOrUpdate(list);
+        });
+    }
+    public TreeSet<_RefereeRank> getRefereesRanks(String champID){
+        RealmResults<_RefereeRank> results = realm.where(_RefereeRank.class)
+                .equalTo(FLAGS.champID.name(), champID)
+                .findAllAsync();
+
+        return new TreeSet<>(results);
     }
 }

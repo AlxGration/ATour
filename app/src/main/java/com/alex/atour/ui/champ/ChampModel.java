@@ -1,11 +1,15 @@
 package com.alex.atour.ui.champ;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
+import com.alex.atour.DTO.RefereeRank;
 import com.alex.atour.DTO.User;
 import com.alex.atour.DTO._Estimation;
 import com.alex.atour.db.DBManager;
+import com.alex.atour.db.RealmDB;
 import com.alex.atour.models.ExcelModule;
 
 import java.util.ArrayList;
@@ -13,11 +17,13 @@ import java.util.ArrayList;
 public class ChampModel {
 
     private final DBManager db;
+    private final RealmDB realmDB;
     private final ChampViewModel viewModel;
 
     ChampModel(ChampViewModel viewModel){
         this.viewModel = viewModel;
         db = DBManager.getInstance();
+        realmDB = db.getRealmDB();
     }
 
     public void loadPage(String adminID, String champID){
@@ -72,16 +78,70 @@ public class ChampModel {
             public void onFailed(String msg) { viewModel.requestError(msg); }
         });
     }
-    //todo: creating createTotalProtocol
+
+    // creating createTotalProtocol
     public void createTotalProtocol(Context ctx, String champID){
+        // download estimations from server
+        db.getAllRefereesRanksList(champID, new DBManager.IRefereesRanksListListener() {
+            @Override
+            public void onSuccess(ArrayList<RefereeRank> ranks) {
+                realmDB.writeRefereesRanks(ranks);
+            }
+            @Override
+            public void onFailed(String msg) { viewModel.requestError(msg); }
+        });
+        db.getAllEstimationsList(champID, new DBManager.IEstimationsListListener() {
+            @Override
+            public void onSuccess(ArrayList<Estimation> estims) {
+                Log.e("TAG", "got all estims from server "+estims.size());
 
-        //todo: download estimations from server
-        //todo: save them to local
+                // save them locally
+                realmDB.writeEstimations(estims);
 
+                //extract membersIDs
+                String[] membersIDs = new String[estims.size()];
+                int i = 0;
+                for(Estimation e: estims){
+                    membersIDs[i++]=e.getMemberID();
+                }
+                ExcelModule excelModule = new ExcelModule(ctx);
+                Log.e("TAG", "size of membersIDs "+membersIDs.length);
 
-        //extract membersIDs
-        String[] membersIDs = DBManager.getInstance().getRealmDB().getAllMembersIDs(champID);
-        ExcelModule excelModule = new ExcelModule(ctx);
-        excelModule.createTotalProtocol(champID, membersIDs);
+                db.getAllRefereesRanksList(champID, new DBManager.IRefereesRanksListListener() {
+                    @Override
+                    public void onSuccess(ArrayList<RefereeRank> ranks) {
+                        realmDB.writeRefereesRanks(ranks);
+
+                        //extract membersIDs
+                        String[] refereesRanks = new String[ranks.size()];
+                        int i = 0;
+                        for(RefereeRank e: ranks){
+                            refereesRanks[i++]=e.getRefereeInfo();
+                        }
+
+                        //start creating protocol
+                        excelModule.createTotalProtocol(champID, membersIDs, refereesRanks,  new DBManager.IRequestListener() {
+                            @Override
+                            public void onSuccess() {
+                                Log.e("TAG", "created total protocol ");
+                                viewModel.totalProtocolCreated();
+                            }
+
+                            @Override
+                            public void onFailed(String msg) {
+                                viewModel.requestError(msg);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailed(String msg) {
+                        viewModel.requestError(msg);
+                    }
+                });
+            }
+            @Override
+            public void onFailed(String msg) { viewModel.requestError(msg); }
+        });
     }
 }

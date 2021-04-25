@@ -25,22 +25,22 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ExcelModule {
 
     private final String templateRefereeProtocolPath = "protocol_referee.xlsx";
     private final String templateTotalProtocolPath = "protocol_total.xlsx";
 
+    private final double removedVal = 999;
     private final Context ctx;
     public ExcelModule(Context ctx){
         this.ctx = ctx;
     }
 
     final File path =
-            Environment.getExternalStoragePublicDirectory
-                    (
-                            Environment.DIRECTORY_DOCUMENTS + "/ATour/"
-                    );
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/ATour/");
 
     //заполняет в протоколе ФИО руководителей, (ФИО, город, разряд) судьи
     //todo:: и место проведения
@@ -126,6 +126,7 @@ public class ExcelModule {
                 while((read = inputStream.read(buffer)) != -1){
                     outputStream.write(buffer, 0, read);
                 }
+                Log.e("TAG", "copied file from assets");
             } catch(Exception e){
                 e.printStackTrace();
             }finally {
@@ -138,7 +139,8 @@ public class ExcelModule {
         }
     }
 
-    public void createTotalProtocol(String champID, String[] membersIDs){
+    //todo:writing to local db could be slower than call this func(witch use data from local db)
+    public void createTotalProtocol(String champID, String[] membersIDs, String[] refereesRanks, DBManager.IRequestListener listener){
         if(!path.exists()) {
             Log.e("TAG", "folder created");
             // create it, if doesn't exit
@@ -151,7 +153,9 @@ public class ExcelModule {
             XSSFWorkbook book = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = book.getSheetAt(0);
 
-            RealmDB realmDB = DBManager.getInstance().getRealmDB();
+            DBManager db = DBManager.getInstance();
+            RealmDB realmDB = db.getRealmDB();
+            Row row;
             //main logic
             //iterate persons ids
             int index = 0;
@@ -159,12 +163,12 @@ public class ExcelModule {
                 //get all marks for person
                 ArrayList<_Estimation> marks = realmDB.getEstimationsOfUser(champID, pID);
                 double compl=0d, nov=0d, st=0d, tac=0d, tec=0d, ten=0d, inf=0d;
-                Log.e("TAG", compl +" "+nov+" "+st+" "+tac+" "+tec+" "+ten+" "+inf);
-                int refereesSize = marks.size();
 
+                int refereesSize = marks.size();
+                Log.e("TAG", "refereesSize "+refereesSize+" for "+pID);
+                //если судей от 5 и больше
+                //
                 if (refereesSize > 4) {
-                    //need to remove min and max value
-                    //todo:: remove min and max value
                     double min = marks.get(0).getComplexity(),
                             max = min;
                     double minTac= Double.MAX_VALUE, maxTac= Double.MAX_VALUE,
@@ -196,25 +200,9 @@ public class ExcelModule {
                     }
 
                     //remove min and max vals
-                        double removedVal = 999;
-                        switch (y1){
-                            case 0: marks.get(x1).setComplexity(removedVal);break;
-                            case 1: marks.get(x1).setNovelty(removedVal);break;
-                            case 2: marks.get(x1).setStrategy(removedVal);break;
-                            case 3: marks.get(x1).setTactics(removedVal);break;
-                            case 4: marks.get(x1).setTechnique(removedVal);break;
-                            case 5: marks.get(x1).setTension(removedVal);break;
-                            case 6: marks.get(x1).setInformativeness(removedVal);break;
-                        }
-                        switch (y2){
-                            case 0: marks.get(x2).setComplexity(removedVal);break;
-                            case 1: marks.get(x2).setNovelty(removedVal);break;
-                            case 2: marks.get(x2).setStrategy(removedVal);break;
-                            case 3: marks.get(x2).setTactics(removedVal);break;
-                            case 4: marks.get(x2).setTechnique(removedVal);break;
-                            case 5: marks.get(x2).setTension(removedVal);break;
-                            case 6: marks.get(x2).setInformativeness(removedVal);break;
-                        }
+                        removeValues(y1, x1, marks);
+                        removeValues(y2, x2, marks);
+
 
                     //remove min and max val in Стратегии, Тактике, Технике
                         int iSt=0, iTa=0, iTe=0, aSt=0, aTa=0, aTe=0;
@@ -253,21 +241,11 @@ public class ExcelModule {
                     tec /= (refereesSize-2);    ten /= (refereesSize-2);
                     inf /= (refereesSize-2);
 
-
-                    //memberFIO
-                    Row row = sheet.getRow(11+index);
-                    fillCell(row, 1, marks.get(0).getMemberFIO());
-
-                    //estimations
-                    fillCell(row, 6, compl);
-                    fillCell(row, 7, nov);
-                    fillCell(row, 8, st);
-                    fillCell(row, 9, tac);
-                    fillCell(row, 10, tec);
-                    fillCell(row, 11, ten);
-                    fillCell(row, 12, inf);
+                    Log.e("TAG", "gather 4: "+compl +" "+nov+" "+st+" "+tac+" "+tec+" "+ten+" "+inf);
                 }else{
                     //if less than 5 referees
+
+                    //count values
                     for (_Estimation e: marks) {
                         compl+=e.getComplexity(); nov+=e.getNovelty();
                         st+=e.getStrategy()     ; tac+=e.getTactics();
@@ -278,9 +256,33 @@ public class ExcelModule {
                     st /= refereesSize;     tac /= refereesSize;
                     tec /= refereesSize;    ten /= refereesSize;
                     inf /= refereesSize;
+
+                    Log.e("TAG", "less 5: "+compl +" "+nov+" "+st+" "+tac+" "+tec+" "+ten+" "+inf);
                 }
+
+                //memberFIO
+                row = sheet.getRow(11+index);
+                fillCell(row, 1, marks.get(0).getMemberFIO());
+
+                //estimations
+                fillCell(row, 6, compl);
+                fillCell(row, 7, nov);
+                fillCell(row, 8, st);
+                fillCell(row, 9, tac);
+                fillCell(row, 10, tec);
+                fillCell(row, 11, ten);
+                fillCell(row, 12, inf);
                 index++;
             }
+
+            //todo: get refereesData (fio, rank, city)
+            index = 0;
+            for (String refInfo: refereesRanks){
+                row = sheet.getRow(38+index);
+                fillCell(row, 2, refInfo);
+                index++;
+            }
+
 
             //save and close streams
             File newFile = new File(path, templateTotalProtocolPath);
@@ -288,8 +290,11 @@ public class ExcelModule {
             FileOutputStream os = new FileOutputStream(newFile);
             book.write(os); os.close();
             inputStream.close(); book.close();
+
+            listener.onSuccess();
         }catch (Exception e){
             e.printStackTrace();
+            listener.onFailed("Ошибка создания файла "+e.getMessage());
         }
     }
 
@@ -302,5 +307,16 @@ public class ExcelModule {
         double m = args[0];
         for(double d: args) m = Math.max(m, d);
         return m;
+    }
+    private void removeValues(int x, int y, ArrayList<_Estimation> marks){
+        switch (y){
+            case 0: marks.get(x).setComplexity(removedVal);break;
+            case 1: marks.get(x).setNovelty(removedVal);break;
+            case 2: marks.get(x).setStrategy(removedVal);break;
+            case 3: marks.get(x).setTactics(removedVal);break;
+            case 4: marks.get(x).setTechnique(removedVal);break;
+            case 5: marks.get(x).setTension(removedVal);break;
+            case 6: marks.get(x).setInformativeness(removedVal);break;
+        }
     }
 }

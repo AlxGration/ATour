@@ -7,6 +7,7 @@ import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
+import com.alex.atour.DTO.RefereeRank;
 import com.alex.atour.DTO.User;
 import com.alex.atour.ui.champ.ChampActivity;
 
@@ -59,13 +60,14 @@ public abstract class DBManager {
     public abstract void getMembershipRequestsList(String champID, IMembershipRequestsListListener listener);//заявки на чемпионат(для админа)
     public abstract void getMembershipRequestByID(String champID, String userID, IMembershipRequestsListListener listener);//заявка одобренная на чемпионат(для админа)
     public abstract void sendDocument(String champID, Document document, IRequestListener listener); // добавить документ
+    public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
 
     public abstract void getRefereeEstimationsList(String champID, String refereeID, IEstimationsListListener listener); // получить оценки определенного судьи
-    public abstract void getRefereeRankFromEstimation(String champID, String refereeID, IRefereeRankListListener listener); // получить оценки определенного судьи
-
+    public abstract void getAllEstimationsList(String champID, IEstimationsListListener listener); // получить все оценки судей
+    public abstract void getAllRefereesRanksList(String champID, IRefereesRanksListListener listener); // получить разряды всех судей
+    public abstract void getRefereeRank(String champID, String refereeID, IRefereeRankListListener listener); // получить разряд определенного судьи
     public abstract void closeEnrollmentAndCreateRefereeProtocols(String champID, IRequestListener listener);//закрыть прием заявок, сформировать судейские протоколы
     public abstract void sendRefereeEstimations(List<Estimation> estimations, String refereeInfo, IRequestListener listener); // отправить все оценки судьи
-    public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
 
     public abstract void acceptRequest(MembershipRequest req, IRequestListener listener);// одобрение заявки админом
     public abstract void denyRequest(MembershipRequest req, IRequestListener listener);// отмена заявки админом
@@ -92,6 +94,10 @@ public abstract class DBManager {
     }
     public interface IEstimationsListListener{
         void onSuccess(ArrayList<Estimation> estims);
+        void onFailed(String msg);
+    }
+    public interface IRefereesRanksListListener{
+        void onSuccess(ArrayList<RefereeRank> ranks);
         void onFailed(String msg);
     }
     public interface IDocumentListener{

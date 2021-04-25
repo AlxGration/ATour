@@ -74,6 +74,11 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     isLoading? View.VISIBLE: View.INVISIBLE
             );
         });
+        viewModel.getIsTotalProtocolCreatedLiveData().observe(this, isCreated->{
+            pBar.setVisibility(
+                    isCreated? View.INVISIBLE: View.VISIBLE
+            );
+        });
         viewModel.getErrorMessage().observe(this, tvError::setText);
         viewModel.getRoleLiveData().observe(this, role->{
             this.role = role;
@@ -123,8 +128,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                         //запрашиваем разрешение
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                     }
-
-
                 });
                 confirmationDialog.show(getSupportFragmentManager(), "myDialog");
                 return true;

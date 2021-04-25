@@ -16,6 +16,7 @@ public class ChampViewModel extends BaseViewModel {
     private final MutableLiveData<Integer> role;
     private final MutableLiveData<Integer> state;
     private final MutableLiveData<Boolean> isEnrollmentOpen;
+    private final MutableLiveData<Boolean> isTotalProtocolCreated;
 
     public ChampViewModel(){
         admin = new MutableLiveData<>();
@@ -23,19 +24,21 @@ public class ChampViewModel extends BaseViewModel {
         role = new MutableLiveData<>();
         model = new ChampModel(this);
         isEnrollmentOpen = new MutableLiveData<>();
+        isTotalProtocolCreated = new MutableLiveData<>();
     }
 
     public MutableLiveData<User> getAdminLiveData() { return admin; }
     public MutableLiveData<Integer> getRoleLiveData() { return role; }
     public MutableLiveData<Integer> getStateLiveData() { return state; }
     public MutableLiveData<Boolean> getIsEnrollmentOpenLiveData() { return isEnrollmentOpen; }
+    public MutableLiveData<Boolean> getIsTotalProtocolCreatedLiveData() { return isTotalProtocolCreated; }
 
 
     public void loadPage(String adminID, String champID){
         setIsLoading(true);
         model.loadPage(adminID, champID);
     }
-    public void createTotalProtocol(Context ctx, String champID){ model.createTotalProtocol(ctx, champID);}
+    public void createTotalProtocol(Context ctx, String champID){ setIsLoading(true); model.createTotalProtocol(ctx, champID);}
 
     public void closeEnrollment(String champID){
         model.closeEnrollment(champID);
@@ -58,4 +61,5 @@ public class ChampViewModel extends BaseViewModel {
         this.state.setValue(state);
     }
     void setInEnrollmentOpen(boolean isOpen){isEnrollmentOpen.setValue(isOpen);}
+    void totalProtocolCreated(){setIsLoading(false); isTotalProtocolCreated.setValue(true);}
 }
