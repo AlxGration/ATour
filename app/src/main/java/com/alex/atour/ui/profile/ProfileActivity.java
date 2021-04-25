@@ -121,7 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
                 viewModel.loadMembershipRequest(champID, userID);
                 if (mem.getRole() == 1)
                     viewModel.loadDocs(champID, userID);        // показ документов
-                //else showRefereeEstimations(champID, userID);   // показ всех оценок рефери
+                else showRefereeEstimations(champID, userID);   // показ всех оценок рефери
                 break;
         }
     }

@@ -351,7 +351,7 @@ public class FirebaseDB extends DBManager{
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Estimation> list = new ArrayList<>((int)snapshot.getChildrenCount()-1);
+                ArrayList<Estimation> list = new ArrayList<>((int)snapshot.getChildrenCount());
                 for (DataSnapshot snap: snapshot.getChildren()){ // iterate estimations
                     Log.e("TAG", "estim: "+snap.toString());
                     list.add(snap.getValue(Estimation.class));
