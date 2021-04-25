@@ -3,6 +3,7 @@ package com.alex.atour.ui.champ;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
@@ -54,6 +55,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private int role;
     private Toolbar toolbar;
     private ChampViewModel viewModel;
+    private ConstraintLayout profileAdminLayout;
     private MembersForRefereeFragment membersForRefereeFragment;
 
     @Override
@@ -64,6 +66,8 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         viewModel = new ViewModelProvider(this).get(ChampViewModel.class);
 
         //init ui
+        profileAdminLayout = findViewById(R.id.layout_main_referee);
+        profileAdminLayout.setOnClickListener(onClickShowAdminProfile);
         tvMessage = findViewById(R.id.tv_message);
         btnSendRequest = findViewById(R.id.btn_send_request);
         tvAdminFio = findViewById(R.id.tv_fio);
@@ -183,17 +187,21 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     }
 
 
-    public void onClickShowAdminProfile(View view){
-        if (admin == null) {
-            viewModel.requestError("Не удалось загрузить информацию об админестраторе");
-            return;
-        }
+    public View.OnClickListener onClickShowAdminProfile = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (admin == null) {
+                viewModel.requestError("Не удалось загрузить информацию об админестраторе");
+                return;
+            }
 
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra("userInfo", admin);
-        intent.putExtra("comeFrom", 3);//show admin info
-        startActivity(intent);
-    }
+            Intent intent = new Intent(ChampActivity.this, ProfileActivity.class);
+            intent.putExtra("userInfo", admin);
+            intent.putExtra("comeFrom", 3);//show admin info
+            startActivity(intent);
+        }
+    };
+
 
     private void setChampInfoOnUI(ChampInfo info){
         if (info == null) {
