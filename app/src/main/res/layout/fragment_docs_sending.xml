@@ -63,13 +63,24 @@
                 android:inputType="text" />
 
             <Button
+                android:id="@+id/btn_tsm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="@dimen/padding"
+                android:layout_marginEnd="@dimen/padding"
+                style="@style/GreyButton"
+                android:text="Прикрепить справку ТСМ (.xlsx)"/>
+            <Button
                 android:id="@+id/btn_send"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="@dimen/padding"
                 android:layout_marginEnd="@dimen/padding"
-                style="@style/BlackButton"
+                android:enabled="false"
+                android:textColor="@color/grey"
+                style="@style/YellowButton"
                 android:text="@string/send"/>
         </LinearLayout>
     </ScrollView>

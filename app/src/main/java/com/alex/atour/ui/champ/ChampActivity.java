@@ -1,6 +1,7 @@
 package com.alex.atour.ui.champ;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -31,6 +32,7 @@ import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MemberEstimation;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
+import com.alex.atour.db.DBManager;
 import com.alex.atour.models.ConfirmationDialog;
 import com.alex.atour.ui.champ.referee.EstimsRecyclerAdapter;
 import com.alex.atour.ui.champ.admin.MembersListRecyclerAdapter;
@@ -43,7 +45,6 @@ import com.alex.atour.ui.requests.RequestsListActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
-import java.net.URI;
 
 public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener, EstimsRecyclerAdapter.IonItemClickListener {
 
@@ -57,6 +58,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private ChampViewModel viewModel;
     private ConstraintLayout profileAdminLayout;
     private MembersForRefereeFragment membersForRefereeFragment;
+    private DocsFragment docsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -341,8 +343,9 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         //show FrameLayout
         findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
         // and fragment
+        docsFragment = DocsFragment.newInstance(info.getChampID());
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_layout,  DocsFragment.newInstance(info.getChampID()))
+                .replace(R.id.frame_layout,  docsFragment)
                 .commitNow();
     }
     // (for members and referees)
@@ -367,6 +370,24 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     public void showError(String err){
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_SHORT).show();
     }
+
+    //todo:be careful with it, no check for requestCode
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //todo:parse data
+        //save path to Prefs
+        if (data != null) {
+            Log.e("TAG", data.getData().getPath());
+            DBManager.getInstance().getPrefs().setTSMFilePath(data.getData().getPath());
+
+            if (docsFragment != null) {
+                docsFragment.tsmSaved();
+            }
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

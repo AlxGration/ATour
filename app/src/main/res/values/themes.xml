@@ -32,4 +32,16 @@
         <item name="textAllCaps">false</item>
         <item name="android:textSize">@dimen/btn_text_size</item>
     </style>
+    <style name="GreyButton" parent="TextAppearance.AppCompat.Widget.Button.Colored">
+        <item name="android:background">@drawable/bg_grey</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">@dimen/btn_text_size</item>
+    </style>
+    <style name="YellowButton" parent="TextAppearance.AppCompat.Widget.Button.Colored">
+        <item name="android:background">@drawable/bg_yellow</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">@dimen/btn_text_size</item>
+    </style>
 </resources>

@@ -12,7 +12,8 @@ public class PrefsDB {
         FIO,
         CITY,
         EMAIL,
-        PHONE
+        PHONE,
+        TSM,
     }
 
     private String SETTINGS = "settings";
@@ -42,6 +43,15 @@ public class PrefsDB {
         spEdit.apply();
     }
 
+
+    public String getTSMFilePath(){
+        return sp.getString(KEYS.TSM.toString(), "");
+    }
+    public void setTSMFilePath(String path){
+        spEdit = sp.edit();
+        spEdit.putString(KEYS.TSM.toString(), path);
+        spEdit.apply();
+    }
 
 /*
     public void setUserInfo(User u){
