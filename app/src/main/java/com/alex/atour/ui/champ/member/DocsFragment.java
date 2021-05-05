@@ -18,8 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.alex.atour.BuildConfig;
+import com.alex.atour.DTO.TSMReport;
 import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
+import com.alex.atour.models.ExcelModule;
 import com.alex.atour.ui.champ.ChampActivity;
 
 import java.io.File;
@@ -83,7 +85,14 @@ public class DocsFragment extends Fragment {
         return view;
     }
 
-    public void tsmSaved(){
+    public void tsmSave(Uri tsmPath){
+
+        ExcelModule excel = new ExcelModule(getActivity());
+        TSMReport tsm = excel.parseTSM(tsmPath);
+        viewModel.saveTSMPathLocally(tsmPath.getPath());
+        viewModel.sendTSMToServer(champID, tsm);
+
+
         if (btnSend!= null){
             btnSendTSM.setText("ТСМ принята");
             btnSend.setEnabled(true);

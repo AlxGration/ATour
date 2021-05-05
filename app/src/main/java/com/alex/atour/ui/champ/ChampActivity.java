@@ -34,6 +34,7 @@ import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.models.ConfirmationDialog;
+import com.alex.atour.models.ExcelModule;
 import com.alex.atour.ui.champ.referee.EstimsRecyclerAdapter;
 import com.alex.atour.ui.champ.admin.MembersListRecyclerAdapter;
 import com.alex.atour.ui.champ.admin.MembersFragment;
@@ -375,15 +376,12 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        //todo:parse data
         //save path to Prefs
         if (data != null) {
-            Log.e("TAG", data.getData().getPath());
-            DBManager.getInstance().getPrefs().setTSMFilePath(data.getData().getPath());
+            Uri tsmPath = data.getData();
 
             if (docsFragment != null) {
-                docsFragment.tsmSaved();
+                docsFragment.tsmSave(tsmPath);
             }
         }
     }
