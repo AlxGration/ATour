@@ -30,6 +30,11 @@ public class ProfileActivity extends AppCompatActivity {
     private String champID, userID;
     private MemberEstimation mEstim;
 
+    //todo::load TSM
+    //todo::load TSM
+    //todo::load TSM
+    //todo::load TSM
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

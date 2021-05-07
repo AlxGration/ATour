@@ -51,6 +51,7 @@ public class DocsViewModel extends BaseViewModel {
 
     public void sendTSMToServer(String champID, TSMReport tsm) {
         String memberID = db.getPrefs().getUserID();
-        db.sendTSM(champID, memberID, tsm);
+        tsm.setId(memberID);
+        db.sendTSM(champID, tsm);
     }
 }

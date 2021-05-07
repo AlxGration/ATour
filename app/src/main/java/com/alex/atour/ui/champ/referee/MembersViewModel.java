@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MemberEstimation;
+import com.alex.atour.DTO.TSMReport;
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.db.RealmDB;
@@ -120,8 +121,15 @@ public class MembersViewModel extends BaseViewModel {
         });
     }
     void createLocalRefereeProtocol(Context ctx, String refereeInfo, ArrayList<Estimation> estims){
-        ExcelModule excelModule = new ExcelModule(ctx);
-        excelModule.createRefereeReport("refereeProtocol.xlsx", refereeInfo, estims);
+        loadAllTSM(new DBManager.ITSMListListener() {
+            @Override
+            public void onSuccess(ArrayList<TSMReport> tsmReports) {
+                ExcelModule excelModule = new ExcelModule(ctx);
+                excelModule.createRefereeReport("refereeProtocol.xlsx", refereeInfo, estims, tsmReports);
+            }
+            @Override
+            public void onFailed(String msg) { requestError(msg); setIsLoading(false); }
+        });
     }
 
     public boolean getMembersFromLocalDB(){
@@ -132,15 +140,10 @@ public class MembersViewModel extends BaseViewModel {
         }
         return false;
     }
-//
-//    public ArrayList<Estimation> getEstimationsFromLocalDB(){
-//        TreeSet<MemberEstimation> treeSet = realmDB.getMemberEstimations(champID, refereeID);
-//        ArrayList<Estimation> estims = new ArrayList<>(treeSet.size());
-//        for (MemberEstimation m : treeSet) {
-//            estims.add(new Estimation(m));
-//        }
-//        return estims;
-//    }
+
+    void loadAllTSM(DBManager.ITSMListListener listener){
+        db.getAllTSM(champID, listener);
+    }
 
     public void saveToLocalDB(ArrayList<MemberEstimation> members){
         //save members with 0 estimation

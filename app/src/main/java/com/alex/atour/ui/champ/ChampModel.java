@@ -6,6 +6,7 @@ import android.util.Log;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.RefereeRank;
+import com.alex.atour.DTO.TSMReport;
 import com.alex.atour.DTO.User;
 import com.alex.atour.DTO._Estimation;
 import com.alex.atour.db.DBManager;
@@ -110,20 +111,24 @@ public class ChampModel {
 
                             // save estims locally
                             realmDB.writeEstimations(estims, () -> {
-
-                                ExcelModule excelModule = new ExcelModule(ctx);
-                                //start creating protocol
-                                excelModule.createTotalProtocol(champID, membersIDs, refereesRanks,  new DBManager.IRequestListener() {
+                                // load tsm
+                                db.getAllTSM(champID, new DBManager.ITSMListListener() {
                                     @Override
-                                    public void onSuccess() {
-                                        Log.e("TAG", "created total protocol ");
-                                        viewModel.totalProtocolCreated();
+                                    public void onSuccess(ArrayList<TSMReport> tsmReports) {
+                                        ExcelModule excelModule = new ExcelModule(ctx);
+                                        //start creating protocol
+                                        excelModule.createTotalProtocol(champID, membersIDs, refereesRanks, tsmReports, new DBManager.IRequestListener() {
+                                            @Override
+                                            public void onSuccess() {
+                                                Log.e("TAG", "total protocol created");
+                                                viewModel.totalProtocolCreated();
+                                            }
+                                            @Override
+                                            public void onFailed(String msg) { viewModel.requestError(msg); }
+                                        });
                                     }
-
                                     @Override
-                                    public void onFailed(String msg) {
-                                        viewModel.requestError(msg);
-                                    }
+                                    public void onFailed(String msg) { viewModel.requestError(msg); }
                                 });
                             });
                         }

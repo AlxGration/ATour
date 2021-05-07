@@ -326,7 +326,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     break;
             }
         }
-        //todo:scroll tot top after referee sent estimation
+        //todo:scroll to top after referee sent estimation
     }
 
     // (for admin)
@@ -372,7 +372,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_SHORT).show();
     }
 
-    //todo:be careful with it, no check for requestCode
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

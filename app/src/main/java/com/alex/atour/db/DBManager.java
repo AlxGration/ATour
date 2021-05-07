@@ -61,8 +61,9 @@ public abstract class DBManager {
     public abstract void getMembershipRequestsList(String champID, IMembershipRequestsListListener listener);//заявки на чемпионат(для админа)
     public abstract void getMembershipRequestByID(String champID, String userID, IMembershipRequestsListListener listener);//заявка одобренная на чемпионат(для админа)
     public abstract void sendDocument(String champID, Document document, IRequestListener listener); // добавить документ
-    public abstract void sendTSM(String champID, String memberID, TSMReport tsm); // добавить справку ТСМ
+    public abstract void sendTSM(String champID, TSMReport tsm); // добавить справку ТСМ
     public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
+    public abstract void getAllTSM(String champID, ITSMListListener listener);
 
     public abstract void getRefereeEstimationsList(String champID, String refereeID, IEstimationsListListener listener); // получить оценки определенного судьи
     public abstract void getAllEstimationsList(String champID, IEstimationsListListener listener); // получить все оценки судей
@@ -108,6 +109,10 @@ public abstract class DBManager {
     }
     public interface IRefereeRankListListener{
         void onSuccess(String refereeRank);
+        void onFailed(String msg);
+    }
+    public interface ITSMListListener{
+        void onSuccess(ArrayList<TSMReport> tsmReports);
         void onFailed(String msg);
     }
 }

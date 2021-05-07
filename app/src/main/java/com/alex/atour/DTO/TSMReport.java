@@ -3,7 +3,7 @@ package com.alex.atour.DTO;
 import androidx.annotation.NonNull;
 
 public class TSMReport {
-    private String category, managerFIO, company, members, date;
+    private String id, category, managerFIO, company, members, date, shortPath;
 
     @NonNull
     @Override
@@ -12,6 +12,22 @@ public class TSMReport {
     }
 
     public TSMReport(){}
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getShortPath() {
+        return shortPath;
+    }
+
+    public void setShortPath(String shortPath) {
+        this.shortPath = shortPath;
+    }
 
     public String getCategory() {
         return category;

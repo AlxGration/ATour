@@ -448,8 +448,8 @@ public class FirebaseDB extends DBManager{
     }
 
     @Override
-    public void sendTSM(String champID, String memberID, TSMReport tsm) {
-        DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(TSM_TABLE).child(memberID);
+    public void sendTSM(String champID, TSMReport tsm) {
+        DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(TSM_TABLE).child(tsm.getId());
 
         //send tsm
         ref.setValue(tsm);
@@ -474,6 +474,25 @@ public class FirebaseDB extends DBManager{
                     list.add(snap.getValue(Document.class));
                 }
                 if (listener!=null) listener.onSuccess(list.get(0));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener!=null) listener.onFailed(error.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getAllTSM(String champID, ITSMListListener listener) {
+        Query query = getDbRef().child(CHAMP_TABLE).child(champID).child(TSM_TABLE);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<TSMReport> list = new ArrayList<>((int)snapshot.getChildrenCount());
+                for (DataSnapshot snap: snapshot.getChildren()){ // iterate requests
+                    list.add(snap.getValue(TSMReport.class));
+                }
+                if (listener!=null) listener.onSuccess(list);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

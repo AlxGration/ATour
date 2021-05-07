@@ -49,7 +49,7 @@ public class ExcelModule {
 
     //заполняет в протоколе ФИО руководителей, (ФИО, город, разряд) судьи
     //todo:: и место проведения
-    public void createRefereeReport(String refereeProtocolFileName, String refereeInfo, ArrayList<Estimation> estims){
+    public void createRefereeReport(String refereeProtocolFileName, String refereeInfo, ArrayList<Estimation> estims, ArrayList<TSMReport> tsmReports){
 
         Log.e("TAG", "creatingRefereeReport");
 
@@ -77,6 +77,13 @@ public class ExcelModule {
 
                 // member FIO
                 fillCell(row, 1, estims.get(i).getMemberFIO());
+
+                TSMReport tsm = getTsmById(estims.get(i).getMemberID(), tsmReports);
+                //category
+                fillCell(row, 2, tsm.getCategory());
+
+                //path
+                fillCell(row, 4, tsm.getShortPath());
 
                 //estimations
                 fillCell(row, 5, estims.get(i).getComplexity());
@@ -146,7 +153,7 @@ public class ExcelModule {
 
 
     //todo: протестить с 5ю судьями
-    public void createTotalProtocol(String champID,  Set<String> membersIDs, String[] refereesRanks, DBManager.IRequestListener listener){
+    public void createTotalProtocol(String champID,  Set<String> membersIDs, String[] refereesRanks, ArrayList<TSMReport> tsmReports, DBManager.IRequestListener listener){
         if(!path.exists()) {
             Log.e("TAG", "folder created");
             // create it, if doesn't exit
@@ -186,7 +193,7 @@ public class ExcelModule {
 
                     int x1 = 0, y1 = 0, x2=0, y2 = 0;//indexes of min and max value
                     //searching max and min values, indexes
-                        for (int i = 0; i<refereesSize; i++){
+                    for (int i = 0; i<refereesSize; i++){
                         _Estimation e = marks.get(i);
                         compl=e.getComplexity(); nov=e.getNovelty();
                         st=e.getStrategy()     ; tac=e.getTactics();
@@ -208,30 +215,30 @@ public class ExcelModule {
                     }
 
                     //remove min and max vals
-                        removeValues(y1, x1, marks);
-                        removeValues(y2, x2, marks);
+                    removeValues(y1, x1, marks);
+                    removeValues(y2, x2, marks);
 
 
                     //remove min and max val in Стратегии, Тактике, Технике
-                        int iSt=0, iTa=0, iTe=0, aSt=0, aTa=0, aTe=0;
-                        for (int i = 0; i < refereesSize; i++){
-                            _Estimation e = marks.get(i);
-                            //min
-                            if (e.getStrategy()!=removedVal && minSt>e.getStrategy()) {minSt = e.getStrategy(); iSt = i;}
-                            if (e.getTactics()!=removedVal && minTac>e.getTactics()) {minTac = e.getTactics(); iTa = i;}
-                            if (e.getTechnique()!=removedVal && minTec>e.getTechnique()) {minTec = e.getTechnique(); iTe = i;}
+                    int iSt=0, iTa=0, iTe=0, aSt=0, aTa=0, aTe=0;
+                    for (int i = 0; i < refereesSize; i++){
+                        _Estimation e = marks.get(i);
+                        //min
+                        if (e.getStrategy()!=removedVal && minSt>e.getStrategy()) {minSt = e.getStrategy(); iSt = i;}
+                        if (e.getTactics()!=removedVal && minTac>e.getTactics()) {minTac = e.getTactics(); iTa = i;}
+                        if (e.getTechnique()!=removedVal && minTec>e.getTechnique()) {minTec = e.getTechnique(); iTe = i;}
 
-                            //max
-                            if (e.getStrategy()!=removedVal && maxSt<e.getStrategy()) {maxSt = e.getStrategy(); aSt = i;}
-                            if (e.getTactics()!=removedVal && maxTac<e.getTactics()) {maxTac = e.getTactics(); aTa = i;}
-                            if (e.getTechnique()!=removedVal && maxTec<e.getTechnique()) {maxTec = e.getTechnique(); aTe = i;}
-                        }
-                        marks.get(iSt).setStrategy(removedVal);
-                        marks.get(iTa).setTactics(removedVal);
-                        marks.get(iTe).setTechnique(removedVal);
-                        marks.get(aSt).setStrategy(removedVal);
-                        marks.get(aTa).setTactics(removedVal);
-                        marks.get(aTe).setTechnique(removedVal);
+                        //max
+                        if (e.getStrategy()!=removedVal && maxSt<e.getStrategy()) {maxSt = e.getStrategy(); aSt = i;}
+                        if (e.getTactics()!=removedVal && maxTac<e.getTactics()) {maxTac = e.getTactics(); aTa = i;}
+                        if (e.getTechnique()!=removedVal && maxTec<e.getTechnique()) {maxTec = e.getTechnique(); aTe = i;}
+                    }
+                    marks.get(iSt).setStrategy(removedVal);
+                    marks.get(iTa).setTactics(removedVal);
+                    marks.get(iTe).setTechnique(removedVal);
+                    marks.get(aSt).setStrategy(removedVal);
+                    marks.get(aTa).setTactics(removedVal);
+                    marks.get(aTe).setTechnique(removedVal);
 
                     //count every value
                     for (_Estimation e: marks) {
@@ -268,9 +275,20 @@ public class ExcelModule {
                     Log.e("TAG", "less 5: "+compl +" "+nov+" "+st+" "+tac+" "+tec+" "+ten+" "+inf);
                 }
 
+                TSMReport tsm = getTsmById(marks.get(0).getMemberID(), tsmReports);
+
                 //memberFIO
                 row = sheet.getRow(11+index);
-                fillCell(row, 1, marks.get(0).getMemberFIO());
+                fillCell(row, 1, tsm.getManagerFIO() + ", "+ tsm.getCompany());
+
+                //region
+                fillCell(row, 2, tsm.getShortPath());
+
+                //members
+                fillCell(row, 3, tsm.getMembers());
+
+                //date
+                fillCell(row, 4, tsm.getDate());
 
                 //estimations
                 fillCell(row, 6, compl);
@@ -280,6 +298,13 @@ public class ExcelModule {
                 fillCell(row, 10, tec);
                 fillCell(row, 11, ten);
                 fillCell(row, 12, inf);
+
+                //result
+                double res = compl+st+tec+inf+nov+tac+ten;
+                fillCell(row, 13, res);
+
+                //place
+
                 index++;
             }
 
@@ -364,6 +389,11 @@ public class ExcelModule {
             cell = row.getCell(1);
             if (cell != null){ tsm.setManagerFIO(cell.getStringCellValue()); }
 
+            //shortPath
+            row = sheet.getRow(26);
+            cell = row.getCell(1);
+            if (cell != null){ tsm.setShortPath(cell.getStringCellValue()); }
+
             //members
             StringBuilder members = new StringBuilder();
             for (int i = 10; i < 25; i++){
@@ -409,5 +439,11 @@ public class ExcelModule {
             }
         }
         return tsm;
+    }
+    private TSMReport getTsmById(String id, ArrayList<TSMReport> tsmReports){
+        for (TSMReport tsm: tsmReports){
+            if (tsm.getId().equals(id)) return tsm;
+        }
+        return null;
     }
 }
