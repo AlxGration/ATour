@@ -21,6 +21,8 @@ import com.alex.atour.db.DBManager;
 import com.alex.atour.ui.login.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Locale;
+
 public class ProfileActivity extends AppCompatActivity {
 
     private ProfileViewModel viewModel;
@@ -182,13 +184,13 @@ public class ProfileActivity extends AppCompatActivity {
         showLayout(R.id.layout_docs, View.VISIBLE);
         showLayout(R.id.layout_estim, View.VISIBLE);
 
-        ((EditText)findViewById(R.id.et_complexity)).setText(String.format("%.2f", req.getComplexity()));
-        ((EditText)findViewById(R.id.et_novelty)).setText( String.format("%.2f", req.getNovelty()));
-        ((EditText)findViewById(R.id.et_strategy)).setText( String.format("%.2f", req.getStrategy()));
-        ((EditText)findViewById(R.id.et_tactics)).setText(String.format("%.2f", req.getTactics()));
-        ((EditText)findViewById(R.id.et_technique)).setText(String.format("%.2f", req.getTechnique()));
-        ((EditText)findViewById(R.id.et_tension)).setText(String.format("%.2f", req.getTension()));
-        ((EditText)findViewById(R.id.et_informativeness)).setText( String.format("%.2f", req.getInformativeness()));
+        ((EditText)findViewById(R.id.et_complexity)).setText(String.format(Locale.ENGLISH, "%.2f", req.getComplexity()));
+        ((EditText)findViewById(R.id.et_novelty)).setText( String.format(Locale.ENGLISH, "%.2f", req.getNovelty()));
+        ((EditText)findViewById(R.id.et_strategy)).setText( String.format(Locale.ENGLISH, "%.2f", req.getStrategy()));
+        ((EditText)findViewById(R.id.et_tactics)).setText(String.format(Locale.ENGLISH, "%.2f", req.getTactics()));
+        ((EditText)findViewById(R.id.et_technique)).setText(String.format(Locale.ENGLISH, "%.2f", req.getTechnique()));
+        ((EditText)findViewById(R.id.et_tension)).setText(String.format(Locale.ENGLISH, "%.2f", req.getTension()));
+        ((EditText)findViewById(R.id.et_informativeness)).setText( String.format(Locale.ENGLISH, "%.2f", req.getInformativeness()));
         ((EditText)findViewById(R.id.et_comment)).setText(req.getComment());
 
         (findViewById(R.id.img_title_city)).setVisibility(View.GONE);

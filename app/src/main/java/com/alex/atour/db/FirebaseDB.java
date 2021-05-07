@@ -12,6 +12,7 @@ import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.RefereeRank;
 import com.alex.atour.DTO.ShortRequest;
+import com.alex.atour.DTO.TSMReport;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.MembershipState;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +40,7 @@ public class FirebaseDB extends DBManager{
     private final String DOCUMENTS = "Docs";// таблица документов
     private final String ESTIMATIONS = "Estimations";// таблица оценок
     private final String REFEREE_RANKS = "Ranks";// таблица "звания" судей
+    private final String TSM_TABLE = "TSM";// таблица справки о ТСМ
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -443,6 +445,14 @@ public class FirebaseDB extends DBManager{
                 if (listener!=null) listener.onFailed("Ошибка. Попробуйте еще раз");
             }
         });
+    }
+
+    @Override
+    public void sendTSM(String champID, String memberID, TSMReport tsm) {
+        DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(TSM_TABLE).child(memberID);
+
+        //send tsm
+        ref.setValue(tsm);
     }
 
     @Override

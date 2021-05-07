@@ -3,21 +3,25 @@ package com.alex.atour.models;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
 import com.alex.atour.DTO.Estimation;
+import com.alex.atour.DTO.TSMReport;
 import com.alex.atour.DTO._Estimation;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.db.RealmDB;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +36,7 @@ public class ExcelModule {
 
     private final String templateRefereeProtocolPath = "protocol_referee.xlsx";
     private final String templateTotalProtocolPath = "protocol_total.xlsx";
+    private final int TSM_ROWS = 38;
 
     private final double removedVal = 999;
     private final Context ctx;
@@ -48,6 +53,8 @@ public class ExcelModule {
 
         Log.e("TAG", "creatingRefereeReport");
 
+        FileInputStream inputStream = null;
+        XSSFWorkbook book = null;
         try {
             if(!path.exists()) {
                 Log.e("TAG", "folder created");
@@ -57,43 +64,44 @@ public class ExcelModule {
 
             copyFromAssets(templateRefereeProtocolPath, refereeProtocolFileName);
 
-            FileInputStream inputStream = new FileInputStream(new File(path, refereeProtocolFileName));
-            XSSFWorkbook book = new XSSFWorkbook(inputStream);
+            inputStream = new FileInputStream(new File(path, refereeProtocolFileName));
+            book = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = book.getSheetAt(0);
 
-            try {
-                //refereeInfo
-                Row row = sheet.getRow(1);
-                fillCell(row, 0, refereeInfo);
+            //refereeInfo
+            Row row = sheet.getRow(1);
+            fillCell(row, 0, refereeInfo);
 
-                for (int i = 0; i < estims.size(); i++) {
-                    row = sheet.getRow(i + 6);
+            for (int i = 0; i < estims.size(); i++) {
+                row = sheet.getRow(i + 6);
 
-                    // member FIO
-                    fillCell(row, 1, estims.get(i).getMemberFIO());
+                // member FIO
+                fillCell(row, 1, estims.get(i).getMemberFIO());
 
-                    //estimations
-                    fillCell(row, 5, estims.get(i).getComplexity());
-                    fillCell(row, 6, estims.get(i).getNovelty());
-                    fillCell(row, 7, estims.get(i).getStrategy());
-                    fillCell(row, 8, estims.get(i).getTactics());
-                    fillCell(row, 9, estims.get(i).getTechnique());
-                    fillCell(row, 10, estims.get(i).getTension());
-                    fillCell(row, 11, estims.get(i).getInformativeness());
-                }
-
-                //save and close streams
-                File newFile = new File(path, refereeProtocolFileName);
-                if (!newFile.exists()) newFile.createNewFile();
-                FileOutputStream os = new FileOutputStream(newFile);
-                book.write(os); os.close();
-            }finally {
-                inputStream.close();
-                book.close();
+                //estimations
+                fillCell(row, 5, estims.get(i).getComplexity());
+                fillCell(row, 6, estims.get(i).getNovelty());
+                fillCell(row, 7, estims.get(i).getStrategy());
+                fillCell(row, 8, estims.get(i).getTactics());
+                fillCell(row, 9, estims.get(i).getTechnique());
+                fillCell(row, 10, estims.get(i).getTension());
+                fillCell(row, 11, estims.get(i).getInformativeness());
             }
+
+            //save and close streams
+            File newFile = new File(path, refereeProtocolFileName);
+            if (!newFile.exists()) newFile.createNewFile();
+            FileOutputStream os = new FileOutputStream(newFile);
+            book.write(os); os.close();
+
             Log.e("TAG", "success");
         }catch(Exception e){
             e.printStackTrace();
+        }finally{
+            try {
+                if (inputStream != null) inputStream.close();
+                if (book != null) book.close();
+            }catch(Exception e){ e.printStackTrace(); }
         }
     }
 
@@ -133,9 +141,7 @@ public class ExcelModule {
                 outputStream.flush();
                 outputStream.close();
             }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        }catch (Exception e){ e.printStackTrace(); }
     }
 
 
@@ -146,11 +152,13 @@ public class ExcelModule {
             // create it, if doesn't exit
             path.mkdirs();
         }
+        FileInputStream inputStream = null;
+        XSSFWorkbook book = null;
         try{
             copyFromAssets(templateTotalProtocolPath, templateTotalProtocolPath);
 
-            FileInputStream inputStream = new FileInputStream(new File(path, templateTotalProtocolPath));
-            XSSFWorkbook book = new XSSFWorkbook(inputStream);
+            inputStream = new FileInputStream(new File(path, templateTotalProtocolPath));
+            book = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = book.getSheetAt(0);
 
             DBManager db = DBManager.getInstance();
@@ -288,12 +296,16 @@ public class ExcelModule {
             if (!newFile.exists()) newFile.createNewFile();
             FileOutputStream os = new FileOutputStream(newFile);
             book.write(os); os.close();
-            inputStream.close(); book.close();
 
             listener.onSuccess();
         }catch (Exception e){
             e.printStackTrace();
             listener.onFailed("Ошибка создания файла "+e.getMessage());
+        }finally{
+            try {
+                if (inputStream != null) inputStream.close();
+                if (book != null) book.close();
+            }catch(Exception e){ e.printStackTrace(); }
         }
     }
 
@@ -317,5 +329,85 @@ public class ExcelModule {
             case 5: marks.get(x).setTension(removedVal);break;
             case 6: marks.get(x).setInformativeness(removedVal);break;
         }
+    }
+
+    public TSMReport parseTSM(Uri tsmPath){
+        Log.e("TAG", "START PARSING TSM");
+
+        InputStream inputStream = null;
+        XSSFWorkbook book = null;
+        TSMReport tsm = null;
+
+        try {
+
+            inputStream = ctx.getContentResolver().openInputStream(tsmPath);
+            book = new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = book.getSheetAt(0);
+
+            Row row;
+            Cell cell;
+            tsm = new TSMReport();
+
+            //category
+            row = sheet.getRow(3);
+            cell = row.getCell(1);
+            if (cell.getCellType() == 0){ tsm.setCategory(cell.getNumericCellValue()+""); }
+            if (cell.getCellType() == 1){ tsm.setCategory(cell.getStringCellValue()); }
+
+            //company
+            row = sheet.getRow(5);
+            cell = row.getCell(1);
+            if (cell != null){ tsm.setCompany(cell.getStringCellValue()); }
+
+            //managerFIO
+            row = sheet.getRow(6);
+            cell = row.getCell(1);
+            if (cell != null){ tsm.setManagerFIO(cell.getStringCellValue()); }
+
+            //members
+            StringBuilder members = new StringBuilder();
+            for (int i = 10; i < 25; i++){
+                row = sheet.getRow(i);
+                cell = row.getCell(1);
+                if (cell == null) continue;
+                members.append(cell.getStringCellValue()).append(", ");
+            }
+            tsm.setMembers(members.toString());
+
+            //date
+            row = sheet.getRow(28);
+            cell = row.getCell(1);
+            if (cell.getCellType() == 0){ tsm.setDate(cell.getNumericCellValue()+""); }
+            if (cell.getCellType() == 1){ tsm.setDate(cell.getStringCellValue()); }
+
+            Log.e("TAG", tsm.toString());
+
+/*
+            Log.e("TAG", "ITERATING TSM");
+            for (int i = 0; i < TSM_ROWS; i++) {
+                row = sheet.getRow(i);
+                cell = row.getCell(1);
+                if (cell== null) continue;
+                switch (cell.getCellType()){
+                    case Cell.CELL_TYPE_NUMERIC://NUMERIC
+                        Log.e("TAG", cell.getNumericCellValue()+"");
+                        break;
+                    case Cell.CELL_TYPE_STRING://STRING
+                        Log.e("TAG", cell.getStringCellValue());
+                        break;
+                }
+            }
+*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (inputStream!=null) inputStream.close();
+                if (book!=null) book.close();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return tsm;
     }
 }

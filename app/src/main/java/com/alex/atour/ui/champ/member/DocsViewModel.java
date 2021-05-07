@@ -1,6 +1,7 @@
 package com.alex.atour.ui.champ.member;
 
 import com.alex.atour.DTO.Document;
+import com.alex.atour.DTO.TSMReport;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.models.BaseViewModel;
 
@@ -42,5 +43,14 @@ public class DocsViewModel extends BaseViewModel {
     void requestError(String msg){
         setIsLoading(false);
         setErrorMessage(msg);
+    }
+
+    public void saveTSMPathLocally(String path) {
+        db.getPrefs().setTSMFilePath(path);
+    }
+
+    public void sendTSMToServer(String champID, TSMReport tsm) {
+        String memberID = db.getPrefs().getUserID();
+        db.sendTSM(champID, memberID, tsm);
     }
 }

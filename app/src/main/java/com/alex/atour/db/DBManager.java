@@ -8,6 +8,7 @@ import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.RefereeRank;
+import com.alex.atour.DTO.TSMReport;
 import com.alex.atour.DTO.User;
 import com.alex.atour.ui.champ.ChampActivity;
 
@@ -60,6 +61,7 @@ public abstract class DBManager {
     public abstract void getMembershipRequestsList(String champID, IMembershipRequestsListListener listener);//заявки на чемпионат(для админа)
     public abstract void getMembershipRequestByID(String champID, String userID, IMembershipRequestsListListener listener);//заявка одобренная на чемпионат(для админа)
     public abstract void sendDocument(String champID, Document document, IRequestListener listener); // добавить документ
+    public abstract void sendTSM(String champID, String memberID, TSMReport tsm); // добавить справку ТСМ
     public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
 
     public abstract void getRefereeEstimationsList(String champID, String refereeID, IEstimationsListListener listener); // получить оценки определенного судьи
