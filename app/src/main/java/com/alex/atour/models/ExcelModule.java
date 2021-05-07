@@ -285,10 +285,10 @@ public class ExcelModule {
                 fillCell(row, 2, tsm.getShortPath());
 
                 //members
-                fillCell(row, 3, tsm.getMembers());
+                fillCell(row, 4, tsm.getMembers());
 
                 //date
-                fillCell(row, 4, tsm.getDate());
+                fillCell(row, 5, tsm.getDate());
 
                 //estimations
                 fillCell(row, 6, compl);

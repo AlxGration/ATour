@@ -438,7 +438,7 @@ public class FirebaseDB extends DBManager{
             if (task1.isSuccessful()){
 
                 //and change user state (to show results)
-                changeUserState(champID, document.getUserID(), MembershipState.RESULTS.ordinal());
+                changeUserState(champID, document.getUserID(), MembershipState.DOCS_SUBMITTED.ordinal());
 
                 if (listener!=null) listener.onSuccess();
             }else{
