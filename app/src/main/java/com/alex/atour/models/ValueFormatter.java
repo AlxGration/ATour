@@ -87,7 +87,7 @@ public class ValueFormatter {
                 estim.setTension(bd.doubleValue());
                 Log.e("TAG", "Напряженность " + bd.doubleValue());
             }
-            if (informativeness.isEmpty() || (k = nf.parse(informativeness).doubleValue()) < -1 || k > 7) {
+            if (informativeness.isEmpty() || (k = nf.parse(informativeness).doubleValue()) < -4 || k > 7) {
                 return "Неверное значение 'Информативность'";
             } else {
                 bd = new BigDecimal(informativeness).setScale(2, RoundingMode.HALF_DOWN);
