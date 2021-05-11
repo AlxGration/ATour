@@ -1,5 +1,6 @@
 package com.alex.atour.db;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +49,10 @@ public class FirebaseDB extends DBManager{
     private FirebaseAuth auth;
     private FirebaseUser user;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://alex-atour-usatu-default-rtdb.europe-west1.firebasedatabase.app/");
+    private final FirebaseStorage storage = FirebaseStorage.getInstance("gs://alex-atour-usatu.appspot.com");
+
     private DatabaseReference dbRef;
+    private StorageReference storageRef;
 
     public boolean checkUserAuth(){
         return getUser() != null;//true - auth
@@ -450,9 +457,20 @@ public class FirebaseDB extends DBManager{
     @Override
     public void sendTSM(String champID, TSMReport tsm) {
         DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(TSM_TABLE).child(tsm.getId());
-
         //send tsm
         ref.setValue(tsm);
+    }
+
+    @Override
+    public void uploadTSMFile(String champID, String memberID, Uri filePath) {
+        StorageReference ref = getStorageRef().child(champID).child(memberID).child("TSM.xlsx");
+        ref.putFile(filePath);
+    }
+
+    @Override
+    public void uploadTotalProtocolFile(String champID, Uri filePath) {
+        StorageReference ref = getStorageRef().child(champID).child("total_protocol.xlsx");
+        ref.putFile(filePath);
     }
 
     @Override
@@ -649,6 +667,10 @@ public class FirebaseDB extends DBManager{
     private DatabaseReference getDbRef(){
         if (dbRef == null){ dbRef = database.getReference(); }
         return dbRef;
+    }
+    private StorageReference getStorageRef(){
+        if (storageRef == null){ storageRef = storage.getReference(); }
+        return storageRef;
     }
     private FirebaseAuth getAuth(){
         if (auth == null){ auth = FirebaseAuth.getInstance(); }

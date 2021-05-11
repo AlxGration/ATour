@@ -90,7 +90,7 @@ public class DocsFragment extends Fragment {
         ExcelModule excel = new ExcelModule(getActivity());
         TSMReport tsm = excel.parseTSM(tsmPath);
         viewModel.saveTSMPathLocally(tsmPath.getPath());
-        viewModel.sendTSMToServer(champID, tsm);
+        viewModel.sendTSMToServer(champID, tsm, tsmPath);
 
 
         if (btnSend!= null){

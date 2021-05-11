@@ -57,7 +57,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private int role;
     private Toolbar toolbar;
     private ChampViewModel viewModel;
-    private ConstraintLayout profileAdminLayout;
     private MembersForRefereeFragment membersForRefereeFragment;
     private DocsFragment docsFragment;
 
@@ -69,7 +68,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         viewModel = new ViewModelProvider(this).get(ChampViewModel.class);
 
         //init ui
-        profileAdminLayout = findViewById(R.id.layout_main_referee);
+        ConstraintLayout profileAdminLayout = findViewById(R.id.layout_main_referee);
         profileAdminLayout.setOnClickListener(onClickShowAdminProfile);
         tvMessage = findViewById(R.id.tv_message);
         btnSendRequest = findViewById(R.id.btn_send_request);
@@ -296,6 +295,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     showDocsSendingFragment();
                     break;
                 case 3://MembershipState.DOCS_SUBMITTED
+                    findViewById(R.id.frame_layout).setVisibility(View.INVISIBLE);
                     tvMessage.setText(R.string.results_waiting);
                     break;
                 case 4://MembershipState.RESULTS

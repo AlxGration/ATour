@@ -87,6 +87,7 @@ public class PrefsDB {
         spEdit = sp.edit();
 
         spEdit.putString(KEYS.ID.toString(), "");
+        spEdit.putString(KEYS.TSM.toString(), "");
 //        spEdit.putString(KEYS.FIO.toString(), "");
 //        spEdit.putString(KEYS.EMAIL.toString(), "");
 //        spEdit.putString(KEYS.CITY.toString(), "");

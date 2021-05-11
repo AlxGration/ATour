@@ -1,6 +1,7 @@
 package com.alex.atour.db;
 
 import android.app.Activity;
+import android.net.Uri;
 
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Document;
@@ -62,6 +63,8 @@ public abstract class DBManager {
     public abstract void getMembershipRequestByID(String champID, String userID, IMembershipRequestsListListener listener);//заявка одобренная на чемпионат(для админа)
     public abstract void sendDocument(String champID, Document document, IRequestListener listener); // добавить документ
     public abstract void sendTSM(String champID, TSMReport tsm); // добавить справку ТСМ
+    public abstract void uploadTSMFile(String champID, String memberID, Uri filePath); // загружает справку ТСМ на сервер
+    public abstract void uploadTotalProtocolFile(String champID, Uri filePath); // загружает итоговый протокол на сервер
     public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
     public abstract void getAllTSM(String champID, ITSMListListener listener);
 

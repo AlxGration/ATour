@@ -1,5 +1,7 @@
 package com.alex.atour.ui.champ.member;
 
+import android.net.Uri;
+
 import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.TSMReport;
 import com.alex.atour.db.DBManager;
@@ -49,9 +51,10 @@ public class DocsViewModel extends BaseViewModel {
         db.getPrefs().setTSMFilePath(path);
     }
 
-    public void sendTSMToServer(String champID, TSMReport tsm) {
+    public void sendTSMToServer(String champID, TSMReport tsm, Uri filePath) {
         String memberID = db.getPrefs().getUserID();
         tsm.setId(memberID);
         db.sendTSM(champID, tsm);
+        db.uploadTSMFile(champID, memberID, filePath);
     }
 }
