@@ -478,33 +478,23 @@ public class FirebaseDB extends DBManager{
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/ATour/"+memberID+"/");
 
         StorageReference ref = getStorageRef().child(champID).child(memberID).child("TSM.xlsx");
-        File newFile = new File(path, "TSM.xlsx");
-        try {
-            if(!path.exists()) {
-                Log.e("TAG", "folder created");
-                // create it, if doesn't exit
-                path.mkdirs();
-            }
-            if (!newFile.exists()) newFile.createNewFile();
-        }catch (Exception e){
-            if (listener!=null) listener.onFailed("Не удалось создать файл");
-            e.printStackTrace();
-        }
-        ref.getFile(newFile).addOnSuccessListener(taskSnapshot -> {
-            if (listener!=null) listener.onSuccess();
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                if (listener!=null) listener.onFailed("Не удалось скачать файл");
-                exception.printStackTrace();
-            }
-        });
+        downloadFile(ref, path, "TSM.xlsx", listener);
+    }
+
+    @Override
+    public void downloadTotalProtocol(String champID, IRequestListener listener) {
+        File path =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/ATour/");
+
+        StorageReference ref = getStorageRef().child(champID).child("protocol_total.xlsx");
+        downloadFile(ref, path, "protocol_total.xlsx", listener);
     }
 
     @Override
     public void uploadTotalProtocolFile(String champID, Uri filePath) {
-        StorageReference ref = getStorageRef().child(champID).child("total_protocol.xlsx");
+        StorageReference ref = getStorageRef().child(champID).child("protocol_total.xlsx");
         ref.putFile(filePath);
+        changeAllMembersState(champID, MembershipState.RESULTS.ordinal(), null);
     }
 
     @Override
@@ -670,6 +660,7 @@ public class FirebaseDB extends DBManager{
             }
         });
     }
+ 
 
     private void changeAllMembersState(String champID, int state, IRequestListener listener){
         final DatabaseReference ref = getDbRef().child(CHAMP_TABLE).child(champID).child(MEMBER_TABLE);
@@ -693,7 +684,6 @@ public class FirebaseDB extends DBManager{
             }
         });
     }
-
     private FirebaseUser getUser(){
         if (user == null){ user = getAuth().getCurrentUser(); }
         return user;
@@ -730,5 +720,25 @@ public class FirebaseDB extends DBManager{
     private void changeUserState(String champID, String userID, int state){
         getDbRef().child(CHAMP_TABLE).child(champID)
                 .child(MEMBER_TABLE).child(userID).child("state").setValue(state);
+    }
+    private void downloadFile(StorageReference ref, File path, String fileName, IRequestListener listener){
+        File newFile = new File(path, fileName);
+        try {
+            if(!path.exists()) {
+                Log.e("TAG", "folder created");
+                // create it, if doesn't exit
+                path.mkdirs();
+            }
+            if (!newFile.exists()) newFile.createNewFile();
+        }catch (Exception e){
+            if (listener!=null) listener.onFailed("Не удалось создать файл");
+            e.printStackTrace();
+        }
+        ref.getFile(newFile).addOnSuccessListener(taskSnapshot -> {
+            if (listener!=null) listener.onSuccess();
+        }).addOnFailureListener((OnFailureListener) exception -> {
+            if (listener!=null) listener.onFailed("Не удалось скачать файл");
+            exception.printStackTrace();
+        });
     }
 }

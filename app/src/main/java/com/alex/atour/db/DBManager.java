@@ -65,6 +65,7 @@ public abstract class DBManager {
     public abstract void sendTSM(String champID, TSMReport tsm); // добавить справку ТСМ
     public abstract void uploadTSMFile(String champID, String memberID, Uri filePath); // загружает справку ТСМ на сервер
     public abstract void downloadTSMFile(String champID, String memberID, IRequestListener listener); // скачивает справку ТСМ с сервера
+    public abstract void downloadTotalProtocol(String champID, IRequestListener listener); // скачивает итоговый протокол с сервера
     public abstract void uploadTotalProtocolFile(String champID, Uri filePath); // загружает итоговый протокол на сервер
     public abstract void getDocumentByUserID(String champID, String userID, IDocumentListener listener);// получить документ по ID чемпионата и пользователя
     public abstract void getAllTSM(String champID, ITSMListListener listener);

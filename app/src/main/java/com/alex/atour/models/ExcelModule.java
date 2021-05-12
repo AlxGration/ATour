@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.os.FileUtils;
 import android.util.Log;
 
+import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.TSMReport;
 import com.alex.atour.DTO._Estimation;
@@ -148,7 +149,8 @@ public class ExcelModule {
 
 
     //todo: протестить с 5ю судьями
-    public void createTotalProtocol(String champID,  Set<String> membersIDs, String[] refereesRanks, ArrayList<TSMReport> tsmReports, DBManager.IRequestListener listener){
+    // todo аполнить дату,город и статус
+    public void createTotalProtocol(ChampInfo champInfo, Set<String> membersIDs, String[] refereesRanks, ArrayList<TSMReport> tsmReports, DBManager.IRequestListener listener){
         if(!path.exists()) {
             Log.e("TAG", "folder created");
             // create it, if doesn't exit
@@ -171,7 +173,7 @@ public class ExcelModule {
             int index = 0;
             for (String pID: membersIDs){
                 //get all marks for person
-                ArrayList<_Estimation> marks = realmDB.getEstimationsOfUser(champID, pID);
+                ArrayList<_Estimation> marks = realmDB.getEstimationsOfUser(champInfo.getChampID(), pID);
                 double compl=0d, nov=0d, st=0d, tac=0d, tec=0d, ten=0d, inf=0d;
 
                 int refereesSize = marks.size();
@@ -298,12 +300,11 @@ public class ExcelModule {
                 double res = compl+st+tec+inf+nov+tac+ten;
                 fillCell(row, 13, res);
 
-                //place
-
                 index++;
             }
 
             index = 0;
+            // referee ranks
             for (String refInfo: refereesRanks){
                 row = sheet.getRow(38+index);
                 fillCell(row, 2, refInfo);
@@ -311,13 +312,25 @@ public class ExcelModule {
             }
 
 
+            //status and name
+            String status = StatusConverter.statusToString(champInfo.getStatus()) + " "+champInfo.getTitle();
+            row = sheet.getRow(3);
+            fillCell(row, 2, status);
+
+            //city
+            fillCell(row, 16, champInfo.getCity());
+
+            //date
+            String date = champInfo.getDataFrom() +" - "+champInfo.getDataTo();
+            fillCell(row, 7, date);
+
             //save and close streams
             File newFile = new File(path, templateTotalProtocolPath);
             if (!newFile.exists()) newFile.createNewFile();
             FileOutputStream os = new FileOutputStream(newFile);
             book.write(os); os.close();
 
-            db.uploadTotalProtocolFile(champID, Uri.fromFile(newFile));
+            db.uploadTotalProtocolFile(champInfo.getChampID(), Uri.fromFile(newFile));
             listener.onSuccess();
         }catch (Exception e){
             e.printStackTrace();

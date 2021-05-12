@@ -59,6 +59,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private ChampViewModel viewModel;
     private MembersForRefereeFragment membersForRefereeFragment;
     private DocsFragment docsFragment;
+    private ResultFragment resultFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +165,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                 confirmationDialog = new ConfirmationDialog("Вы уверены?\nКопия протокола будет сохранена в папке Documents", () -> {
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                         Log.e("TAG", "start saving");
-                        viewModel.createTotalProtocol(this, info.getChampID());
+                        viewModel.createTotalProtocol(this, info);
                     }else {
                         //запрашиваем разрешение
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -353,10 +354,16 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     // (for members and referees)
     private void showResultsFragment(){
         tvMessage.setVisibility(View.VISIBLE);
-        //todo:create me
 
-        ((FrameLayout)findViewById(R.id.frame_layout)).removeAllViews();
+        //((FrameLayout)findViewById(R.id.frame_layout)).removeAllViews();
         tvMessage.setText("Здесь будет итоговый протокол, как только ГСК его сформирует");
+        //show FrameLayout
+        findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
+        // and fragment
+        resultFragment = ResultFragment.newInstance(info.getChampID());
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout,  resultFragment)
+                .commitNow();
     }
 
     // (for referee)
@@ -395,7 +402,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                 Log.e("TAG", "start saving");
-                viewModel.createTotalProtocol(this, info.getChampID());
+                viewModel.createTotalProtocol(this, info);
             }  else {
                 showError("Для сохранения протокола\nНеобходимо разрешение");
             }
@@ -420,6 +427,17 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                 }
             }  else {
                 showError("Для отправки справки ТСМ\nНеобходимо разрешение");
+            }
+        }
+        if (requestCode == 4 ){//download total protocol (member)
+            Log.e("TAG", "resultFragment permission granted");
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (resultFragment != null){
+                    resultFragment.downloadTotalProtocolFile();
+                }
+            }  else {
+                showError("Для загрузки протокола\nНеобходимо разрешение");
             }
         }
     }

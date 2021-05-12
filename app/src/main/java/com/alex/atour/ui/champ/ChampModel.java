@@ -3,6 +3,7 @@ package com.alex.atour.ui.champ;
 import android.content.Context;
 import android.util.Log;
 
+import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.RefereeRank;
@@ -86,9 +87,9 @@ public class ChampModel {
     }
 
     // creating createTotalProtocol
-    public void createTotalProtocol(Context ctx, String champID){
+    public void createTotalProtocol(Context ctx, ChampInfo champInfo){
         // download RefereeRanks from server
-        db.getAllRefereesRanksList(champID, new DBManager.IRefereesRanksListListener() {
+        db.getAllRefereesRanksList(champInfo.getChampID(), new DBManager.IRefereesRanksListListener() {
             @Override
             public void onSuccess(ArrayList<RefereeRank> ranks) {
                 realmDB.writeRefereesRanks(ranks, () -> {
@@ -98,7 +99,7 @@ public class ChampModel {
                     for(RefereeRank e: ranks){ refereesRanks[i++]=e.getRefereeInfo(); }
 
                     // download estimations from server
-                    db.getAllEstimationsList(champID, new DBManager.IEstimationsListListener() {
+                    db.getAllEstimationsList(champInfo.getChampID(), new DBManager.IEstimationsListListener() {
                         @Override
                         public void onSuccess(ArrayList<Estimation> estims) {
                             Log.e("TAG", "got all estims from server "+estims.size());
@@ -112,12 +113,12 @@ public class ChampModel {
                             // save estims locally
                             realmDB.writeEstimations(estims, () -> {
                                 // load tsm
-                                db.getAllTSM(champID, new DBManager.ITSMListListener() {
+                                db.getAllTSM(champInfo.getChampID(), new DBManager.ITSMListListener() {
                                     @Override
                                     public void onSuccess(ArrayList<TSMReport> tsmReports) {
                                         ExcelModule excelModule = new ExcelModule(ctx);
                                         //start creating protocol
-                                        excelModule.createTotalProtocol(champID, membersIDs, refereesRanks, tsmReports, new DBManager.IRequestListener() {
+                                        excelModule.createTotalProtocol(champInfo, membersIDs, refereesRanks, tsmReports, new DBManager.IRequestListener() {
                                             @Override
                                             public void onSuccess() {
                                                 Log.e("TAG", "total protocol created");

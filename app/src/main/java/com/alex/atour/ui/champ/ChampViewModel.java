@@ -3,6 +3,8 @@ package com.alex.atour.ui.champ;
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
+
+import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.User;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.models.BaseViewModel;
@@ -38,7 +40,7 @@ public class ChampViewModel extends BaseViewModel {
         setIsLoading(true);
         model.loadPage(adminID, champID);
     }
-    public void createTotalProtocol(Context ctx, String champID){ setIsLoading(true); model.createTotalProtocol(ctx, champID);}
+    public void createTotalProtocol(Context ctx, ChampInfo champInfo){ setIsLoading(true); model.createTotalProtocol(ctx, champInfo);}
 
     public void closeEnrollment(String champID){
         model.closeEnrollment(champID);

@@ -4,6 +4,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class _Estimation extends RealmObject implements Comparable<_Estimation>{
+
     @PrimaryKey
     private String id;
     private String champID, memberID, refereeID, memberFIO;
