@@ -43,8 +43,7 @@ public class ExcelModule {
     final File path =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/ATour/");
 
-    //заполняет в протоколе ФИО руководителей, (ФИО, город, разряд) судьи
-    //todo:: и место проведения
+    //заполняет в протоколе ФИО руководителей и место проведения, (ФИО, город, разряд) судьи
     public void createRefereeReport(String refereeProtocolFileName, String refereeInfo, ArrayList<Estimation> estims, ArrayList<TSMReport> tsmReports){
 
         Log.e("TAG", "creatingRefereeReport");
@@ -271,7 +270,7 @@ public class ExcelModule {
                     Log.e("TAG", "less 5: "+compl +" "+nov+" "+st+" "+tac+" "+tec+" "+ten+" "+inf);
                 }
 
-                TSMReport tsm = getTsmById(marks.get(0).getMemberID(), tsmReports);
+                TSMReport tsm = getTsmById(pID, tsmReports);
 
                 //memberFIO
                 row = sheet.getRow(11+index);

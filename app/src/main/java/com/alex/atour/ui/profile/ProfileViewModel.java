@@ -6,6 +6,7 @@ import com.alex.atour.DTO.Document;
 import com.alex.atour.DTO.Estimation;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
+import com.alex.atour.db.DBManager;
 import com.alex.atour.models.BaseViewModel;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class ProfileViewModel extends BaseViewModel {
     private final MutableLiveData<String> email;
     private final MutableLiveData<String> phone;
 
+    private final MutableLiveData<Boolean> isTSMDownloaded;
+
     private final MutableLiveData<Document> document;
     private final MutableLiveData<MembershipRequest> memReq;
     private final MutableLiveData<ArrayList<Estimation>> estims;
@@ -33,6 +36,7 @@ public class ProfileViewModel extends BaseViewModel {
         document = new MutableLiveData<>();
         memReq = new MutableLiveData<>();
         estims = new MutableLiveData<>();
+        isTSMDownloaded = new MutableLiveData<>();
 
         model = new ProfileModel(this);
     }
@@ -45,6 +49,7 @@ public class ProfileViewModel extends BaseViewModel {
     public MutableLiveData<Document> getDocument() { return document; }
     public MutableLiveData<MembershipRequest> getMembershipRequest() { return memReq; }
     public MutableLiveData<ArrayList<Estimation>> getEstimations() { return estims; }
+    public MutableLiveData<Boolean> isTSMDownloaded() { return isTSMDownloaded; }
 
     public void loadProfile(String userID){
         setIsLoading(true);
@@ -101,5 +106,22 @@ public class ProfileViewModel extends BaseViewModel {
         String[] fio = userName.split(" ");
         secName.setValue(fio[0]);
         name.setValue(fio[1]+" "+fio[2]);
+    }
+
+    public void downloadTSMFile(String champID, String memberID){
+        setIsLoading(true);
+        model.downloadTSMFile(champID, memberID, new DBManager.IRequestListener() {
+            @Override
+            public void onSuccess() {
+                setIsLoading(false);
+                isTSMDownloaded.setValue(true);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                setIsLoading(false);
+                requestError(msg);
+            }
+        });
     }
 }

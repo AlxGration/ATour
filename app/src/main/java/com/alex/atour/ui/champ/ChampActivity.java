@@ -278,6 +278,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
             btnSendRequest.setVisibility(View.INVISIBLE);
             setSupportActionBar(toolbar);
             showMembersFragment();
+            tvMessage.setVisibility(View.GONE);
         }
         if (role == 1 && state != -1){//member
             switch (state){
@@ -290,11 +291,12 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     btnSendRequest.setVisibility(View.VISIBLE);
                     break;
                 case 2://MembershipState.ACCEPTED
-                    tvMessage.setText("");
+                    tvMessage.setVisibility(View.GONE);
                     btnSendRequest.setVisibility(View.INVISIBLE);
                     showDocsSendingFragment();
                     break;
                 case 3://MembershipState.DOCS_SUBMITTED
+                    tvMessage.setVisibility(View.VISIBLE);
                     findViewById(R.id.frame_layout).setVisibility(View.INVISIBLE);
                     tvMessage.setText(R.string.results_waiting);
                     break;
@@ -318,7 +320,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     btnSendRequest.setVisibility(View.INVISIBLE);
                     break;
                 case 3://MembershipState.DOCS_SUBMITTED
-                    tvMessage.setText("");
+                    tvMessage.setVisibility(View.GONE);
                     showDocsFragment();
                     break;
                 case 4://MembershipState.RESULTS
@@ -326,7 +328,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     break;
             }
         }
-        //todo:scroll to top after referee sent estimation
     }
 
     // (for admin)
@@ -351,10 +352,11 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     }
     // (for members and referees)
     private void showResultsFragment(){
+        tvMessage.setVisibility(View.VISIBLE);
         //todo:create me
 
         ((FrameLayout)findViewById(R.id.frame_layout)).removeAllViews();
-        tvMessage.setText(": showResultsFragment");
+        tvMessage.setText("Здесь будет итоговый протокол, как только ГСК его сформирует");
     }
 
     // (for referee)
@@ -395,7 +397,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                 Log.e("TAG", "start saving");
                 viewModel.createTotalProtocol(this, info.getChampID());
             }  else {
-                viewModel.requestError("Для сохранения протокола\nНеобходимо разрешение");
+                showError("Для сохранения протокола\nНеобходимо разрешение");
             }
         }
         if (requestCode == 2 ){//to save referee protocol (referee)
@@ -406,10 +408,29 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                     membersForRefereeFragment.permissionGranted();
                 }
             }  else {
-                if (membersForRefereeFragment != null){
-                    membersForRefereeFragment.permissionDenied();
-                }
+                showError("Для сохранения протокола\nНеобходимо разрешение");
             }
         }
+        if (requestCode == 3 ){//to open tsm (member)
+            Log.e("TAG", "tsm permission granted");
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (docsFragment != null){
+                    docsFragment.showTSMPickerDialog();
+                }
+            }  else {
+                showError("Для отправки справки ТСМ\nНеобходимо разрешение");
+            }
+        }
+    }
+
+    private boolean isInfoLayoutOpen = true;
+    public void onHideOrShowInfo(View view) {
+        if (isInfoLayoutOpen){
+            findViewById(R.id.info_layout).setVisibility(View.GONE);
+        }else{
+            findViewById(R.id.info_layout).setVisibility(View.VISIBLE);
+        }
+        isInfoLayoutOpen = !isInfoLayoutOpen;
     }
 }

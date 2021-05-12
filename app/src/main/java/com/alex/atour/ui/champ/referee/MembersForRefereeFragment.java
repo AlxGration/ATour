@@ -80,27 +80,9 @@ public class MembersForRefereeFragment extends Fragment {
         return view;
     }
 
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == 1 ){
-//            if (grantResults.length > 0 &&
-//                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//                Log.e("TAG", "start saving");
-//                viewModel.sendEstimations(getActivity(), etRefereeInfo.getText().toString());
-//            }  else {
-//                viewModel.requestError("Для сохранения протокола\nНеобходимо разрешение");
-//            }
-//        }
-//    }
-
     public void permissionGranted(){
         Log.e("TAG", "start saving");
         viewModel.sendEstimations(getActivity(), etRefereeInfo.getText().toString());
     }
-    public void permissionDenied(){
-        viewModel.requestError("Для сохранения протокола\nНеобходимо разрешение");
-    }
+
 }

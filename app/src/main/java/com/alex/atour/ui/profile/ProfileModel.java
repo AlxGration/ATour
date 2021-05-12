@@ -71,6 +71,9 @@ public class ProfileModel {
         });
     }
 
+    public void downloadTSMFile(String champID, String memberID, DBManager.IRequestListener listener){
+        db.downloadTSMFile(champID, memberID, listener);
+    }
 
     public void signOut(){ db.signOut(); }
 }

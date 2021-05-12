@@ -18,7 +18,7 @@ public class DocsViewModel extends BaseViewModel {
 
 
     public void sendDocs(String champID, String comment, String link){
-        if (comment.isEmpty() || link.isEmpty()){
+        if (link.isEmpty()){
             requestError("Необходимо заполнить оба поля");
             return;
         }

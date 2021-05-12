@@ -62,13 +62,13 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
     @Override
     public void acceptRequest(MembershipRequest req) {
         viewModel.acceptRequest(req);
-        Toast.makeText(this, "acceptRequest", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Заявка одобрена", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void denyRequest(MembershipRequest req) {
         viewModel.denyRequest(req);
-        Toast.makeText(this, "denyRequest", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "В заявке отказано", Toast.LENGTH_SHORT).show();
     }
 
     public void onClickBackBtn(View view) {

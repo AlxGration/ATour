@@ -1,6 +1,7 @@
 package com.alex.atour.db;
 
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,8 @@ import com.alex.atour.DTO.ShortRequest;
 import com.alex.atour.DTO.TSMReport;
 import com.alex.atour.DTO.User;
 import com.alex.atour.models.MembershipState;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,9 +27,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -465,6 +470,35 @@ public class FirebaseDB extends DBManager{
     public void uploadTSMFile(String champID, String memberID, Uri filePath) {
         StorageReference ref = getStorageRef().child(champID).child(memberID).child("TSM.xlsx");
         ref.putFile(filePath);
+    }
+
+    @Override
+    public void downloadTSMFile(String champID, String memberID, IRequestListener listener) {
+        File path =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/ATour/"+memberID+"/");
+
+        StorageReference ref = getStorageRef().child(champID).child(memberID).child("TSM.xlsx");
+        File newFile = new File(path, "TSM.xlsx");
+        try {
+            if(!path.exists()) {
+                Log.e("TAG", "folder created");
+                // create it, if doesn't exit
+                path.mkdirs();
+            }
+            if (!newFile.exists()) newFile.createNewFile();
+        }catch (Exception e){
+            if (listener!=null) listener.onFailed("Не удалось создать файл");
+            e.printStackTrace();
+        }
+        ref.getFile(newFile).addOnSuccessListener(taskSnapshot -> {
+            if (listener!=null) listener.onSuccess();
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                if (listener!=null) listener.onFailed("Не удалось скачать файл");
+                exception.printStackTrace();
+            }
+        });
     }
 
     @Override

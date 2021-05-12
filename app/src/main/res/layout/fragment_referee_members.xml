@@ -12,10 +12,10 @@
     <TableLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
+        android:layout_height="35dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@color/white"
-        android:layout_height="?actionBarSize">
+        android:background="@color/white">
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -105,31 +105,41 @@
         android:layout_marginEnd="@dimen/padding"
         android:layout_marginStart="@dimen/padding"/>
 
-    <include
-        layout="@layout/list"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <EditText
-        android:id="@+id/et_referee_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="13"
-        android:layout_marginEnd="@dimen/padding"
-        android:layout_marginStart="@dimen/padding"
-        android:layout_marginTop="@dimen/padding"
-        android:textSize="@dimen/sub_text_size"
-        android:hint="разряд, судейская категория (МС, сс1к)"
-        android:textAlignment="center"
-        android:layout_gravity="center"
-        android:inputType="text"/>
-    <Button
-        android:id="@+id/btn_send"
-        android:layout_width="match_parent"
-        android:layout_marginStart="@dimen/padding"
-        android:layout_marginEnd="@dimen/padding"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="@dimen/padding"
-        style="@style/BlackButton"
-        android:text="@string/send"/>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/et_referee_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="13"
+                android:layout_marginEnd="@dimen/padding"
+                android:layout_marginStart="@dimen/padding"
+                android:layout_marginTop="@dimen/padding"
+                android:textSize="@dimen/sub_text_size"
+                android:hint="разряд, судейская категория (МС, сс1к)"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:inputType="text"/>
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_width="match_parent"
+                android:layout_marginStart="@dimen/padding"
+                android:layout_marginEnd="@dimen/padding"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="@dimen/padding"
+                style="@style/BlackButton"
+                android:text="@string/send"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -88,11 +88,11 @@ public class ValueFormatter {
                 Log.e("TAG", "Напряженность " + bd.doubleValue());
             }
             if (informativeness.isEmpty() || (k = nf.parse(informativeness).doubleValue()) < -4 || k > 7) {
-                return "Неверное значение 'Информативность'";
+                return "Неверное значение 'Полезность'";
             } else {
                 bd = new BigDecimal(informativeness).setScale(2, RoundingMode.HALF_DOWN);
                 estim.setInformativeness(bd.doubleValue());
-                Log.e("TAG", "Информативность " + bd.doubleValue());
+                Log.e("TAG", "Полезность " + bd.doubleValue());
             }
         }catch (Exception e){e.printStackTrace();}
         return null;

@@ -1,26 +1,40 @@
 package com.alex.atour.ui.profile;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.alex.atour.BuildConfig;
 import com.alex.atour.DTO.Member;
 import com.alex.atour.DTO.MemberEstimation;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
+import com.alex.atour.models.ConfirmationDialog;
 import com.alex.atour.ui.login.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
 import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -29,11 +43,6 @@ public class ProfileActivity extends AppCompatActivity {
     private EstimationViewModel estimVM;
     private String champID, userID;
     private MemberEstimation mEstim;
-
-    //todo::load TSM
-    //todo::load TSM
-    //todo::load TSM
-    //todo::load TSM
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +61,10 @@ public class ProfileActivity extends AppCompatActivity {
         ProgressBar pBar = findViewById(R.id.progress_bar);
         TextView tvDLink = findViewById(R.id.tv_d_link);
         TextView tvDComment = findViewById(R.id.tv_d_comment);
+        TextView tvDownloadTSM = findViewById(R.id.tv_d_tsm);
 
 
+        tvDownloadTSM.setOnClickListener(onClickDownloadTSM);
         viewModel.getEstimations().observe(this, estims->{
             if (estims!= null) {
                 RecyclerView recyclerView = findViewById(R.id.rv_list);
@@ -198,9 +209,9 @@ public class ProfileActivity extends AppCompatActivity {
         ((EditText)findViewById(R.id.et_informativeness)).setText( String.format(Locale.ENGLISH, "%.2f", req.getInformativeness()));
         ((EditText)findViewById(R.id.et_comment)).setText(req.getComment());
 
-        (findViewById(R.id.img_title_city)).setVisibility(View.GONE);
-        (findViewById(R.id.tv_title_email)).setVisibility(View.GONE);
-        (findViewById(R.id.tv_title_phone)).setVisibility(View.GONE);
+        showLayout(R.id.img_title_city, View.GONE);
+        showLayout(R.id.tv_title_email, View.GONE);
+        showLayout(R.id.tv_title_phone, View.GONE);
     }
 
     private void showLayout(int id, int visibility){
@@ -233,5 +244,63 @@ public class ProfileActivity extends AppCompatActivity {
     private void showRefereeEstimations(String champID, String userID){
         showLayout(R.id.layout_ref_estims, View.VISIBLE);
         viewModel.loadEstimations(champID, userID);
+    }
+
+   private View.OnClickListener onClickDownloadTSM = v -> {
+       viewModel.isTSMDownloaded().observe(this, isDownloaded -> {
+           if (isDownloaded) {
+               ConfirmationDialog confirmationDialog = new ConfirmationDialog("Справка ТСМ сохранена в папке Documents.\nОткрыть?", () -> {
+                   File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/ATour/" + userID + "/"),
+                           "TSM.xlsx");
+                   if (file.exists()) {
+                       Intent xlsxOpenintent = new Intent();
+                       Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
+                       xlsxOpenintent.setAction(Intent.ACTION_VIEW);
+                       xlsxOpenintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                       xlsxOpenintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                       xlsxOpenintent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                       xlsxOpenintent.setDataAndType(uri, "*/*");
+                       xlsxOpenintent.setDataAndType(uri, "application/vnd.ms-excel");
+                       try {
+                           //Toast.makeText(this, "i got file", Toast.LENGTH_LONG).show();
+                           startActivity(xlsxOpenintent);
+                       } catch (ActivityNotFoundException e) {
+                           Toast.makeText(this, "К сожалению, открыть файл не получилось.", Toast.LENGTH_LONG).show();
+                           e.printStackTrace();
+                       }
+                   } else {
+                       Toast.makeText(this, "Файл не найден", Toast.LENGTH_LONG).show();
+                   }
+               });
+               confirmationDialog.show(getSupportFragmentManager(), "myDialog");
+           }
+       });
+
+       ConfirmationDialog confirmationDialog = new ConfirmationDialog("Вы уверены?\nФайл будет сохранен в папке Documents", () -> {
+           if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+               Log.e("TAG", "start loading tsm for " + userID);
+               viewModel.downloadTSMFile(champID, userID);
+           }else {
+               //запрашиваем разрешение
+               ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+           }
+       });
+       confirmationDialog.show(getSupportFragmentManager(), "myDialog");
+   };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1 ){// save tsm
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                Log.e("TAG", "start loading tsm for " + userID);
+                viewModel.downloadTSMFile(champID, userID);
+            }  else {
+                viewModel.requestError("Для сохранения файла\nНеобходимо разрешение");
+            }
+        }
+
     }
 }
