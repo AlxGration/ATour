@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -70,6 +71,7 @@ public class MembersForRefereeFragment extends Fragment {
             confirmationDialog.show(getActivity().getSupportFragmentManager(), "myDialog");
         });
         viewModel.getMembersLiveData().observe(getViewLifecycleOwner(), members -> {
+            if (members.size() < 1) viewModel.requestError("Участников в вашем виде не найдено");
             adapter = new EstimsRecyclerAdapter(members);
             EstimsRecyclerAdapter.setOnItemClickListener(2, ((ChampActivity) getActivity()));
             recyclerView.setAdapter(adapter);

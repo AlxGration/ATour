@@ -604,15 +604,15 @@ public class FirebaseDB extends DBManager{
                             if (m.getRole() == 2)continue;
 
                             //type filter (show member to referee only if they have common types)
-                            if (me.isTypeWalk())    {members.add(m); continue;}
-                            if (me.isTypeSki())     {members.add(m); continue;}
-                            if (me.isTypeHike())    {members.add(m); continue;}
-                            if (me.isTypeWater())   {members.add(m); continue;}
+                            if (me.isTypeWalk() && m.isTypeWalk())    {members.add(m); continue;}
+                            if (me.isTypeSki() && m.isTypeSki())     {members.add(m); continue;}
+                            if (me.isTypeHike() && m.isTypeHike())    {members.add(m); continue;}
+                            if (me.isTypeWater() && m.isTypeWater())   {members.add(m); continue;}
 
-                            if (me.isTypeSpeleo())  {members.add(m); continue;}
-                            if (me.isTypeBike())    {members.add(m); continue;}
-                            if (me.isTypeAuto())    {members.add(m); continue;}
-                            if (me.isTypeOther())   members.add(m);
+                            if (me.isTypeSpeleo() && m.isTypeSpeleo())  {members.add(m); continue;}
+                            if (me.isTypeBike() && m.isTypeBike())    {members.add(m); continue;}
+                            if (me.isTypeAuto() && m.isTypeAuto())    {members.add(m); continue;}
+                            if (me.isTypeOther() && m.isTypeOther())   members.add(m);
                         }
                         if (listener!=null) listener.onSuccess(members);
                     }
