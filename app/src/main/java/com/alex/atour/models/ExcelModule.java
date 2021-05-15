@@ -350,7 +350,7 @@ public class ExcelModule {
 
 
             //place
-            for (int i = 11; i < places.size(); i++){
+            for (int i = 11; i < 11+places.size(); i++){
                 row = sheet.getRow(i);
                 int place = getPlaceFor(row.getCell(1).getStringCellValue(), places);
                 fillCell(row, 14, place);
