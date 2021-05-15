@@ -27,7 +27,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class ExcelModule {
 
@@ -147,9 +150,25 @@ public class ExcelModule {
         }catch (Exception e){ e.printStackTrace(); }
     }
 
+    class Estim implements Comparable<Estim>{
+        public String fio;
+        public double score;
+
+        Estim(String fio, double score){
+            this.fio = fio; this.score = score;
+        }
+
+        @Override
+        public int compareTo(Estim o) {
+            if (score == o.score)
+                return fio.compareTo(o.fio);
+            if (score - o.score > 0) return 1;
+            if (score - o.score < 0) return -1;
+            return 0;
+        }
+    }
 
     //todo: протестить с 5ю судьями
-    // todo аполнить дату,город и статус
     public void createTotalProtocol(ChampInfo champInfo, Set<String> membersIDs, String[] refereesRanks, ArrayList<TSMReport> tsmReports, DBManager.IRequestListener listener){
         if(!path.exists()) {
             Log.e("TAG", "folder created");
@@ -169,6 +188,7 @@ public class ExcelModule {
             RealmDB realmDB = db.getRealmDB();
             Row row;
             //main logic
+            TreeSet<Estim> places = new TreeSet<>();
             //iterate persons ids
             int index = 0;
             for (String pID: membersIDs){
@@ -276,7 +296,8 @@ public class ExcelModule {
 
                 //memberFIO
                 row = sheet.getRow(11+index);
-                fillCell(row, 1, tsm.getManagerFIO() + ", "+ tsm.getCompany());
+                String memberFIO = tsm.getManagerFIO() + ", "+ tsm.getCompany();
+                fillCell(row, 1, memberFIO);
 
                 //region
                 fillCell(row, 2, tsm.getShortPath());
@@ -299,6 +320,9 @@ public class ExcelModule {
                 //result
                 double res = compl+st+tec+inf+nov+tac+ten;
                 fillCell(row, 13, res);
+
+                // save member's score
+                places.add(new Estim(memberFIO, res));
 
                 index++;
             }
@@ -323,6 +347,15 @@ public class ExcelModule {
             //date
             String date = champInfo.getDataFrom() +" - "+champInfo.getDataTo();
             fillCell(row, 7, date);
+
+
+            //place
+            for (int i = 11; i < places.size(); i++){
+                row = sheet.getRow(i);
+                int place = getPlaceFor(row.getCell(1).getStringCellValue(), places);
+                fillCell(row, 14, place);
+                index++;
+            }
 
             //save and close streams
             File newFile = new File(path, templateTotalProtocolPath);
@@ -352,6 +385,14 @@ public class ExcelModule {
         double m = args[0];
         for(double d: args) m = Math.max(m, d);
         return m;
+    }
+    private int getPlaceFor(String memberFIO, TreeSet<Estim> places){
+        int place = places.size();
+        for (Estim e: places){
+            if (e.fio.equals(memberFIO)) return place;
+            place--;
+        }
+        return place;
     }
     private void removeValues(int x, int y, ArrayList<_Estimation> marks){
         switch (y){
