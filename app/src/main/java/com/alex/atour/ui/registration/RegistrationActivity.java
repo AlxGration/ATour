@@ -56,7 +56,7 @@ public class RegistrationActivity extends AppCompatActivity {
         });
         viewModel.getErrorMessage().observe(this, this::showError);
 
-        etPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        etPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
     }
 
     public void onClickShowHidePassword(View view) {
