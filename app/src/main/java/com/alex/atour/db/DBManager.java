@@ -74,9 +74,10 @@ public abstract class DBManager {
     public abstract void getAllEstimationsList(String champID, IEstimationsListListener listener); // получить все оценки судей
     public abstract void getAllRefereesRanksList(String champID, IRefereesRanksListListener listener); // получить разряды всех судей
     public abstract void getRefereeRank(String champID, String refereeID, IRefereeRankListListener listener); // получить разряд определенного судьи
-    public abstract void closeEnrollmentAndCreateRefereeProtocols(String champID, IRequestListener listener);//закрыть прием заявок, сформировать судейские протоколы
     public abstract void sendRefereeEstimations(List<Estimation> estimations, String refereeInfo, IRequestListener listener); // отправить все оценки судьи
 
+    public abstract void createRefereeProtocols(String champID, IRequestListener listener);// сформировать судейские протоколы
+    public abstract void changeEnrollmentFlag(String champID, boolean isOpen, IRequestListener listener);// открыть/закрыть прием заявок
     public abstract void acceptRequest(MembershipRequest req, IRequestListener listener);// одобрение заявки админом
     public abstract void denyRequest(MembershipRequest req, IRequestListener listener);// отмена заявки админом
 

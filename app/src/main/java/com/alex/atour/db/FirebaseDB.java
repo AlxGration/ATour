@@ -78,9 +78,11 @@ public class FirebaseDB extends DBManager{
     }
 
     public void signOut(){
+        getRealmDB().clearAllData();
         getAuth().signOut();
         user = null;
         getPrefs().clearUserData();
+
     }
 
     public void registration(User _user, String password, IRequestListener listener) {
@@ -343,15 +345,12 @@ public class FirebaseDB extends DBManager{
     }
 
     @Override
-    public void closeEnrollmentAndCreateRefereeProtocols(String champID, IRequestListener listener){
+    public void createRefereeProtocols(String champID, IRequestListener listener){
         //change members state to DOCS_SUBMITTED
         changeAllMembersState(champID, MembershipState.DOCS_SUBMITTED.ordinal(), new IRequestListener() {
             @Override
             public void onSuccess() {
-                //change isEnrollmentOpen to false in ChampInfo
-                HashMap<String, Object> update = new HashMap<>();
-                update.put("enrollmentOpen", false);
-                getDbRef().child(CHAMP_INFO_TABLE).child(champID).updateChildren(update);
+
                 if (listener!= null)listener.onSuccess();
             }
             @Override
@@ -360,6 +359,16 @@ public class FirebaseDB extends DBManager{
             }
         });
     }
+
+    @Override
+    public void changeEnrollmentFlag(String champID, boolean isOpen, IRequestListener listener) {
+        //change isEnrollmentOpen to true in ChampInfo
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("enrollmentOpen", isOpen);
+        getDbRef().child(CHAMP_INFO_TABLE).child(champID).updateChildren(update);
+        if (listener!= null)listener.onSuccess();
+    }
+
 
     private void getEstimationsList(Query query, IEstimationsListListener listener){
         query.addValueEventListener(new ValueEventListener() {

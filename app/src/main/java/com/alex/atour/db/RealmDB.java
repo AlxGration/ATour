@@ -135,6 +135,9 @@ public class RealmDB {
         });
     }
 
+    public void clearAllData(){
+        realm.executeTransactionAsync(realm -> realm.deleteAll());
+    }
     public interface ISuccessOperation{
         void onSuccess();
     }

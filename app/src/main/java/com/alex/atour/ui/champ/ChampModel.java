@@ -33,32 +33,42 @@ public class ChampModel {
         realmDB = db.getRealmDB();
     }
 
-    public void loadPage(String adminID, String champID){
+    public void loadPage(String adminID, String champID) {
         String curUserID = db.getPrefs().getUserID();
 
         db.getUserData(adminID, new DBManager.IUserInfoListener() {
             @Override
             public void onSuccess(User user) {
                 viewModel.setAdminData(user);
-                if (curUserID.equals(user.getId())){  //если айди совпадают, то админ-мод
+                if (curUserID.equals(user.getId())) {  //если айди совпадают, то админ-мод
                     viewModel.setRole(0);
-                }else{
+                } else {
                     //иначе это может быть или судья или участник (для них нужно знать о состоянии членства)
                     requestMyRoleAndStateInChamp(champID);
                 }
             }
+
             @Override
             public void onFailed(String msg) {
                 viewModel.requestError(msg);
             }
         });
-
     }
 
-    public void closeEnrollment(String champID){
-        db.closeEnrollmentAndCreateRefereeProtocols(champID, new DBManager.IRequestListener() {
+    public void createRefereesProtocols(String champID){
+        db.createRefereeProtocols(champID, new DBManager.IRequestListener() {
             @Override
-            public void onSuccess() { viewModel.setInEnrollmentOpen(false); }
+            public void onSuccess() { }
+            @Override
+            public void onFailed(String msg) { viewModel.requestError(msg); }
+        });
+    }
+
+
+    public void changeEnrollmentFlag(String champID, boolean isOpen){
+        db.changeEnrollmentFlag(champID, isOpen, new DBManager.IRequestListener() {
+            @Override
+            public void onSuccess() { viewModel.setInEnrollmentOpen(isOpen); }
             @Override
             public void onFailed(String msg) { viewModel.requestError(msg); }
         });

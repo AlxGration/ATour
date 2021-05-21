@@ -5,11 +5,19 @@
         android:orderInCategory="1"
         android:title="Заявки" />
     <item
-        android:id="@+id/action_close_enrollment"
+        android:id="@+id/action_open_enrollment"
         android:orderInCategory="2"
+        android:title="Открыть приём" />
+    <item
+        android:id="@+id/action_close_enrollment"
+        android:orderInCategory="3"
         android:title="Закрыть приём" />
     <item
+        android:id="@+id/action_create_referees_protocols"
+        android:orderInCategory="4"
+        android:title="Создать судейские протоколы" />
+    <item
         android:id="@+id/action_create_total_protocol"
-        android:orderInCategory="3"
+        android:orderInCategory="5"
         android:title="Создать итоговый протокол" />
 </menu>

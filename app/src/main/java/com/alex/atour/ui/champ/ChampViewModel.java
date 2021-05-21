@@ -41,10 +41,15 @@ public class ChampViewModel extends BaseViewModel {
         model.loadPage(adminID, champID);
     }
     public void createTotalProtocol(Context ctx, ChampInfo champInfo){ setIsLoading(true); model.createTotalProtocol(ctx, champInfo);}
+    public void createRefereesProtocols(String champID){ model.createRefereesProtocols(champID);}
 
-    public void closeEnrollment(String champID){
-        model.closeEnrollment(champID);
+    public void openEnrollment(String champID){
+        model.changeEnrollmentFlag(champID, true);
     }
+    public void closeEnrollment(String champID){
+        model.changeEnrollmentFlag(champID, false);
+    }
+
     void setAdminData(User user){
         admin.setValue(user);
         setIsLoading(false);

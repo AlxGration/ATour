@@ -130,7 +130,9 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         viewModel.getStateLiveData().observe(this, state->{
             showLayoutDependsOnRoleAndState(role, state); });
         viewModel.getIsEnrollmentOpenLiveData().observe(this, isOpen->{
-            if (isOpen) Toast.makeText(getApplicationContext(), "Регистрация завершена", Toast.LENGTH_SHORT).show();});
+            if (isOpen) Toast.makeText(getApplicationContext(), "Регистрация открыта", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(getApplicationContext(), "Регистрация завершена", Toast.LENGTH_SHORT).show();
+        });
 
         // request admin info
         // and user status and role (admin, referee, member)
@@ -140,7 +142,6 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.admin_menu, menu);
-        menu.getItem(1).setVisible(info.isEnrollmentOpen());
         return true;
     }
 
@@ -155,13 +156,25 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
                 intent.putExtra("champID", info.getChampID());
                 startActivity(intent);
                 return true;
-            case R.id.action_close_enrollment://закрытие приема заявок и формирование судейский протоколов
+            case R.id.action_open_enrollment://открытие приема заявок
+                confirmationDialog = new ConfirmationDialog("Вы уверены?", () -> {
+                    viewModel.openEnrollment(info.getChampID());
+                });
+                confirmationDialog.show(getSupportFragmentManager(), "myDialog");
+                return true;
+            case R.id.action_close_enrollment://закрытие приема заявок
                 confirmationDialog = new ConfirmationDialog("Вы уверены?", () -> {
                     viewModel.closeEnrollment(info.getChampID());
                 });
                 confirmationDialog.show(getSupportFragmentManager(), "myDialog");
                 return true;
-            case R.id.action_create_total_protocol:
+            case R.id.action_create_referees_protocols:// формирование судейских протоколов
+                confirmationDialog = new ConfirmationDialog("Вы уверены?", () -> {
+                    viewModel.createRefereesProtocols(info.getChampID());
+                });
+                confirmationDialog.show(getSupportFragmentManager(), "myDialog");
+                return true;
+            case R.id.action_create_total_protocol:// формирование итогового протокола
                 confirmationDialog = new ConfirmationDialog("Вы уверены?\nКопия протокола будет сохранена в папке Documents", () -> {
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                         Log.e("TAG", "start saving");

@@ -30,7 +30,7 @@ public class MembersViewModel extends BaseViewModel {
     public MembersViewModel(){
         db = DBManager.getInstance();
         realmDB = db.getRealmDB();
-        mEstims = new MutableLiveData<>(new ArrayList<>());
+        mEstims = new MutableLiveData<>();//new ArrayList<>());
     }
 
     public MutableLiveData<ArrayList<MemberEstimation>> getMembersLiveData() { return mEstims; }
