@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -12,9 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.R;
+import com.alex.atour.models.NetworkStateChangeReceiver;
 import com.alex.atour.ui.profile.ProfileActivity;
 
-public class RequestsListActivity extends AppCompatActivity implements RequestsListRecyclerAdapter.IonItemClickListener {
+public class RequestsListActivity extends AppCompatActivity implements RequestsListRecyclerAdapter.IonItemClickListener, NetworkStateChangeReceiver.NetworkStateChangeListener {
 
     private RequestsViewModel viewModel;
 
@@ -47,6 +50,11 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
             recyclerView.setAdapter(adapter);
         });
 
+        //проверка подключения internet
+        NetworkStateChangeReceiver receiver = new NetworkStateChangeReceiver();
+        receiver.attach(this);
+        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
         //ЗАПРОС СПИСКА ЗАЯВОК
         viewModel.getRequests(champID);
     }
@@ -73,5 +81,14 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
 
     public void onClickBackBtn(View view) {
         finish();
+    }
+
+    @Override
+    public void onNetworkStateChanged(boolean isConnected) {
+        if (isConnected) {
+            viewModel.requestError("");
+        }else {
+            viewModel.requestError("Отсутствует подключение к интернету" );
+        }
     }
 }

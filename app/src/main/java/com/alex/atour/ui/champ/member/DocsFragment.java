@@ -102,6 +102,10 @@ public class DocsFragment extends Fragment {
 
         ExcelModule excel = new ExcelModule(getActivity());
         TSMReport tsm = excel.parseTSM(tsmPath);
+        if (tsm == null){
+            viewModel.requestError("Не удалось открыть файл");
+            return;
+        }
         viewModel.saveTSMPathLocally(tsmPath.getPath());
         viewModel.sendTSMToServer(champID, tsm, tsmPath);
 

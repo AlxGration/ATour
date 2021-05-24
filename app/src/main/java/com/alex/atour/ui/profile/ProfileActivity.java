@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,13 +33,14 @@ import com.alex.atour.DTO.User;
 import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.models.ConfirmationDialog;
+import com.alex.atour.models.NetworkStateChangeReceiver;
 import com.alex.atour.ui.login.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.Locale;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements NetworkStateChangeReceiver.NetworkStateChangeListener {
 
     private ProfileViewModel viewModel;
     private EstimationViewModel estimVM;
@@ -102,6 +105,11 @@ public class ProfileActivity extends AppCompatActivity {
         });
         // показ заявки на участие
         viewModel.getMembershipRequest().observe(this, this::showRequest);
+
+        //проверка подключения internet
+        NetworkStateChangeReceiver receiver = new NetworkStateChangeReceiver();
+        receiver.attach(this);
+        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
 
         int comeFrom = getIntent().getIntExtra("comeFrom", -1);
@@ -239,6 +247,7 @@ public class ProfileActivity extends AppCompatActivity {
         );
     }
     private void showError(String err){
+        if (err.length() == 0) return;
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_LONG).show();
     }
     private void showRefereeEstimations(String champID, String userID){
@@ -302,5 +311,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    public void onNetworkStateChanged(boolean isConnected) {
+        if (isConnected) {
+            viewModel.requestError("");
+        }else {
+            viewModel.requestError("Отсутствует подключение к интернету" );
+        }
     }
 }

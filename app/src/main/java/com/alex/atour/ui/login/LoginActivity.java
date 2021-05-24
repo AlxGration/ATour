@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -12,13 +14,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.alex.atour.R;
+import com.alex.atour.models.NetworkStateChangeReceiver;
 import com.alex.atour.ui.list.MainActivity;
 import com.alex.atour.ui.registration.RegistrationActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import io.realm.Realm;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements NetworkStateChangeReceiver.NetworkStateChangeListener {
 
     private boolean isPasswordHidden;
     private EditText etPass, etLogin;
@@ -59,9 +62,15 @@ public class LoginActivity extends AppCompatActivity {
             btnLogin.setEnabled(!isLoading);
         });
         viewModel.getErrorMessage().observe(this, this::showError);
+
+        //проверка подключения internet
+        NetworkStateChangeReceiver receiver = new NetworkStateChangeReceiver();
+        receiver.attach(this);
+        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     private void showError(String err){
+        if (err.length() == 0) return;
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_SHORT).show();
     }
 
@@ -84,5 +93,14 @@ public class LoginActivity extends AppCompatActivity {
                 etLogin.getText().toString(),
                 etPass.getText().toString()
         );
+    }
+
+    @Override
+    public void onNetworkStateChanged(boolean isConnected) {
+        if (isConnected) {
+            viewModel.loginError("");
+        }else {
+            viewModel.loginError("Отсутствует подключение к интернету" );
+        }
     }
 }

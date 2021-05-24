@@ -2,6 +2,9 @@ package com.alex.atour.ui.registration;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.InputType;
@@ -13,9 +16,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.alex.atour.R;
+import com.alex.atour.models.NetworkStateChangeReceiver;
 import com.google.android.material.snackbar.Snackbar;
 
-public class RegistrationActivity extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity implements NetworkStateChangeReceiver.NetworkStateChangeListener {
 
     private boolean isPasswordHidden;
     private EditText etFIO, etPhone, etEmail, etPass;
@@ -57,6 +61,11 @@ public class RegistrationActivity extends AppCompatActivity {
         viewModel.getErrorMessage().observe(this, this::showError);
 
         etPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
+
+        //проверка подключения internet
+        NetworkStateChangeReceiver receiver = new NetworkStateChangeReceiver();
+        receiver.attach(this);
+        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     public void onClickShowHidePassword(View view) {
@@ -81,6 +90,16 @@ public class RegistrationActivity extends AppCompatActivity {
         );
     }
     private void showError(String err){
+        if (err.length() == 0) return;
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNetworkStateChanged(boolean isConnected) {
+        if (isConnected) {
+            viewModel.registrationError("");
+        }else {
+            viewModel.registrationError("Отсутствует подключение к интернету" );
+        }
     }
 }
