@@ -26,6 +26,7 @@ public class RegistrationActivity extends AppCompatActivity implements NetworkSt
     private Spinner spCity;
     private RegViewModel viewModel;
     private Button btnSend;
+    private NetworkStateChangeReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class RegistrationActivity extends AppCompatActivity implements NetworkSt
         etPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
 
         //проверка подключения internet
-        NetworkStateChangeReceiver receiver = new NetworkStateChangeReceiver();
+        receiver = new NetworkStateChangeReceiver();
         receiver.attach(this);
         registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
@@ -97,9 +98,18 @@ public class RegistrationActivity extends AppCompatActivity implements NetworkSt
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            viewModel.registrationError("");
+            viewModel.registrationError("Подключение восстановленно");
         }else {
             viewModel.registrationError("Отсутствует подключение к интернету" );
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver.detach();
         }
     }
 }

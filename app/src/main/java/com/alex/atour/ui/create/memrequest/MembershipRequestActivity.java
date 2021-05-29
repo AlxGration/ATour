@@ -2,6 +2,9 @@ package com.alex.atour.ui.create.memrequest;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,9 +16,10 @@ import android.widget.ToggleButton;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.MembershipRequest;
 import com.alex.atour.R;
+import com.alex.atour.models.NetworkStateChangeReceiver;
 import com.google.android.material.snackbar.Snackbar;
 
-public class MembershipRequestActivity extends AppCompatActivity {
+public class MembershipRequestActivity extends AppCompatActivity  implements NetworkStateChangeReceiver.NetworkStateChangeListener{
 
     private EditText etComment, etLink;
     private MemReqViewModel viewModel;
@@ -24,6 +28,7 @@ public class MembershipRequestActivity extends AppCompatActivity {
     private ImageButton btnOk;
     private ProgressBar pBar;
     private MembershipRequest memReq;
+    private NetworkStateChangeReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,12 @@ public class MembershipRequestActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //проверка подключения internet
+        receiver = new NetworkStateChangeReceiver();
+        receiver.attach(this);
+        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
     }
 
     public void onClickBackBtn(View view) { finish(); }
@@ -118,5 +129,22 @@ public class MembershipRequestActivity extends AppCompatActivity {
     }
     private void showError(String err){
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNetworkStateChanged(boolean isConnected) {
+        if (isConnected) {
+            showError("Подключение восстановленно");
+        }else {
+            showError("Отсутствует подключение к интернету" );
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver.detach();
+        }
     }
 }

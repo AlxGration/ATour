@@ -20,6 +20,7 @@ import com.alex.atour.ui.profile.ProfileActivity;
 public class RequestsListActivity extends AppCompatActivity implements RequestsListRecyclerAdapter.IonItemClickListener, NetworkStateChangeReceiver.NetworkStateChangeListener {
 
     private RequestsViewModel viewModel;
+    private NetworkStateChangeReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
         });
 
         //проверка подключения internet
-        NetworkStateChangeReceiver receiver = new NetworkStateChangeReceiver();
+        receiver = new NetworkStateChangeReceiver();
         receiver.attach(this);
         registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
@@ -86,9 +87,17 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            viewModel.requestError("");
+            viewModel.requestError(getResources().getString(R.string.no_requests));
         }else {
             viewModel.requestError("Отсутствует подключение к интернету" );
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver.detach();
         }
     }
 }

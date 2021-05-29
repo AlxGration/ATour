@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStateChan
     private ProgressBar pBar;
     private Button btnLogin;
     private LoginViewModel viewModel;
+    private NetworkStateChangeReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStateChan
         viewModel.getErrorMessage().observe(this, this::showError);
 
         //проверка подключения internet
-        NetworkStateChangeReceiver receiver = new NetworkStateChangeReceiver();
+        receiver = new NetworkStateChangeReceiver();
         receiver.attach(this);
         registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
@@ -98,9 +99,17 @@ public class LoginActivity extends AppCompatActivity implements NetworkStateChan
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            viewModel.loginError("");
+            viewModel.loginError("Подключение восстановленно");
         }else {
             viewModel.loginError("Отсутствует подключение к интернету" );
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver.detach();
         }
     }
 }

@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,6 +37,7 @@ import com.alex.atour.R;
 import com.alex.atour.db.DBManager;
 import com.alex.atour.models.ConfirmationDialog;
 import com.alex.atour.models.ExcelModule;
+import com.alex.atour.models.NetworkStateChangeReceiver;
 import com.alex.atour.ui.champ.referee.EstimsRecyclerAdapter;
 import com.alex.atour.ui.champ.admin.MembersListRecyclerAdapter;
 import com.alex.atour.ui.champ.admin.MembersFragment;
@@ -47,7 +50,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 
-public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener, EstimsRecyclerAdapter.IonItemClickListener {
+public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener, EstimsRecyclerAdapter.IonItemClickListener, NetworkStateChangeReceiver.NetworkStateChangeListener {
 
     private TextView tvMessage, tvAdminFio;
     private Button btnSendRequest;
@@ -60,6 +63,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private MembersForRefereeFragment membersForRefereeFragment;
     private DocsFragment docsFragment;
     private ResultFragment resultFragment;
+    private NetworkStateChangeReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +137,11 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
             if (isOpen) Toast.makeText(getApplicationContext(), "Регистрация открыта", Toast.LENGTH_SHORT).show();
             else Toast.makeText(getApplicationContext(), "Регистрация завершена", Toast.LENGTH_SHORT).show();
         });
+
+        //проверка подключения internet
+        receiver = new NetworkStateChangeReceiver();
+        receiver.attach(this);
+        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         // request admin info
         // and user status and role (admin, referee, member)
@@ -463,5 +472,22 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
             findViewById(R.id.info_layout).setVisibility(View.VISIBLE);
         }
         isInfoLayoutOpen = !isInfoLayoutOpen;
+    }
+
+    @Override
+    public void onNetworkStateChanged(boolean isConnected) {
+        if (isConnected) {
+            showError("Подключение восстановленно");
+        }else {
+            showError("Отсутствует подключение к интернету" );
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver.detach();
+        }
     }
 }

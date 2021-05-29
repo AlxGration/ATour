@@ -46,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity implements NetworkStateCh
     private EstimationViewModel estimVM;
     private String champID, userID;
     private MemberEstimation mEstim;
+    private NetworkStateChangeReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +108,10 @@ public class ProfileActivity extends AppCompatActivity implements NetworkStateCh
         viewModel.getMembershipRequest().observe(this, this::showRequest);
 
         //проверка подключения internet
-        NetworkStateChangeReceiver receiver = new NetworkStateChangeReceiver();
+        receiver = new NetworkStateChangeReceiver();
         receiver.attach(this);
         registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
 
 
         int comeFrom = getIntent().getIntExtra("comeFrom", -1);
@@ -316,9 +318,18 @@ public class ProfileActivity extends AppCompatActivity implements NetworkStateCh
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            viewModel.requestError("");
+            viewModel.requestError("Подключение восстановленно");
         }else {
             viewModel.requestError("Отсутствует подключение к интернету" );
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver.detach();
         }
     }
 }

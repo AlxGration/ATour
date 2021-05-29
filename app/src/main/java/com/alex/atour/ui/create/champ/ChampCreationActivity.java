@@ -3,8 +3,10 @@ package com.alex.atour.ui.create.champ;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import android.app.DatePickerDialog;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
@@ -16,11 +18,12 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.R;
+import com.alex.atour.models.NetworkStateChangeReceiver;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
 
-public class ChampCreationActivity extends AppCompatActivity {
+public class ChampCreationActivity extends AppCompatActivity implements NetworkStateChangeReceiver.NetworkStateChangeListener{
 
     private EditText etTitle;
     private Spinner spCity, spStatus;
@@ -28,6 +31,7 @@ public class ChampCreationActivity extends AppCompatActivity {
     private TextView tvDataFrom, tvDataTo;
     private ChampInfo champInfo;
     private ChampViewModel viewModel;
+    private NetworkStateChangeReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,11 @@ public class ChampCreationActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //проверка подключения internet
+        receiver = new NetworkStateChangeReceiver();
+        receiver.attach(this);
+        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     public void onClickBackBtn(View view) { finish();    }
@@ -147,5 +156,22 @@ public class ChampCreationActivity extends AppCompatActivity {
 
     private void showError(String err){
         Snackbar.make(findViewById(R.id.main_layout), err, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNetworkStateChanged(boolean isConnected) {
+        if (isConnected) {
+            showError("Подключение восстановленно");
+        }else {
+            showError("Отсутствует подключение к интернету" );
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver.detach();
+        }
     }
 }
