@@ -45,6 +45,7 @@
     <string name="referees">Судьи</string>
     <string name="documents">Документы</string>
     <string name="save">Сохранить</string>
+    <string name="no_internet_connection">Интернет: нет соединения</string>
 
     <string-array name="statuses">
         <item>Чемпионат</item>

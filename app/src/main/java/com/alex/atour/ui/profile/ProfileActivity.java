@@ -47,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity implements NetworkStateCh
     private String champID, userID;
     private MemberEstimation mEstim;
     private NetworkStateChangeReceiver receiver;
+    private TextView tvNetworkState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity implements NetworkStateCh
         TextView tvDLink = findViewById(R.id.tv_d_link);
         TextView tvDComment = findViewById(R.id.tv_d_comment);
         TextView tvDownloadTSM = findViewById(R.id.tv_d_tsm);
+        tvNetworkState = findViewById(R.id.tv_network_bar);
 
 
         tvDownloadTSM.setOnClickListener(onClickDownloadTSM);
@@ -318,9 +320,9 @@ public class ProfileActivity extends AppCompatActivity implements NetworkStateCh
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            viewModel.requestError("Подключение восстановленно");
+            tvNetworkState.setVisibility(View.GONE);
         }else {
-            viewModel.requestError("Отсутствует подключение к интернету" );
+            tvNetworkState.setVisibility(View.VISIBLE);
         }
     }
 

@@ -28,7 +28,7 @@ public class ChampCreationActivity extends AppCompatActivity implements NetworkS
     private EditText etTitle;
     private Spinner spCity, spStatus;
     private ProgressBar pBar;
-    private TextView tvDataFrom, tvDataTo;
+    private TextView tvDataFrom, tvDataTo, tvNetworkState;
     private ChampInfo champInfo;
     private ChampViewModel viewModel;
     private NetworkStateChangeReceiver receiver;
@@ -46,6 +46,7 @@ public class ChampCreationActivity extends AppCompatActivity implements NetworkS
         etTitle = findViewById(R.id.et_title);
         spCity = findViewById(R.id.spin_city);
         spStatus = findViewById(R.id.spin_status);
+        tvNetworkState = findViewById(R.id.tv_network_bar);
 
 
         Calendar cal = Calendar.getInstance();
@@ -161,9 +162,9 @@ public class ChampCreationActivity extends AppCompatActivity implements NetworkS
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            showError("Подключение восстановленно");
+            tvNetworkState.setVisibility(View.GONE);
         }else {
-            showError("Отсутствует подключение к интернету" );
+            tvNetworkState.setVisibility(View.VISIBLE);
         }
     }
     @Override

@@ -52,7 +52,7 @@ import java.io.File;
 
 public class ChampActivity extends AppCompatActivity implements MembersListRecyclerAdapter.IonItemClickListener, EstimsRecyclerAdapter.IonItemClickListener, NetworkStateChangeReceiver.NetworkStateChangeListener {
 
-    private TextView tvMessage, tvAdminFio;
+    private TextView tvMessage, tvAdminFio, tvNetworkState;
     private Button btnSendRequest;
     private ProgressBar pBar;
     private ChampInfo info;
@@ -64,6 +64,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     private DocsFragment docsFragment;
     private ResultFragment resultFragment;
     private NetworkStateChangeReceiver receiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,7 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
         TextView tvError = findViewById(R.id.tv_error);
         pBar = findViewById(R.id.progress_bar);
         toolbar = findViewById(R.id.toolbar);
+        tvNetworkState = findViewById(R.id.tv_network_bar);
 
         //setting ChampInfo on UI
         setChampInfoOnUI((ChampInfo) getIntent().getSerializableExtra("champInfo"));
@@ -477,9 +479,9 @@ public class ChampActivity extends AppCompatActivity implements MembersListRecyc
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            showError("Подключение восстановленно");
+            tvNetworkState.setVisibility(View.GONE);
         }else {
-            showError("Отсутствует подключение к интернету" );
+            tvNetworkState.setVisibility(View.VISIBLE);
         }
     }
     @Override

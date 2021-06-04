@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.alex.atour.R;
 import com.alex.atour.models.NetworkStateChangeReceiver;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStateChan
     private Button btnLogin;
     private LoginViewModel viewModel;
     private NetworkStateChangeReceiver receiver;
+    private TextView tvNetworkState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkStateChan
         etLogin = findViewById(R.id.et_login);
         btnLogin = findViewById(R.id.btn_login);
         pBar = findViewById(R.id.progress_bar);
+        tvNetworkState = findViewById(R.id.tv_network_bar);
 
         //observers
         viewModel.getAuthFlag().observe(this, isAuthSuccess->{
@@ -99,9 +102,9 @@ public class LoginActivity extends AppCompatActivity implements NetworkStateChan
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            viewModel.loginError("Подключение восстановленно");
+            tvNetworkState.setVisibility(View.GONE);
         }else {
-            viewModel.loginError("Отсутствует подключение к интернету" );
+            tvNetworkState.setVisibility(View.VISIBLE);
         }
     }
     @Override

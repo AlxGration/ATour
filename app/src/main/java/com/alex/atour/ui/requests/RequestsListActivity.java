@@ -21,6 +21,7 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
 
     private RequestsViewModel viewModel;
     private NetworkStateChangeReceiver receiver;
+    private TextView tvNetworkState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
         TextView tvError = findViewById(R.id.tv_error);
         ProgressBar pBar = findViewById(R.id.progress_bar);
         RecyclerView recyclerView = findViewById(R.id.rv_list);
+        tvNetworkState = findViewById(R.id.tv_network_bar);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         String champID = getIntent().getStringExtra("champID");
@@ -87,9 +89,9 @@ public class RequestsListActivity extends AppCompatActivity implements RequestsL
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            viewModel.requestError(getResources().getString(R.string.no_requests));
+            tvNetworkState.setVisibility(View.GONE);
         }else {
-            viewModel.requestError("Отсутствует подключение к интернету" );
+            tvNetworkState.setVisibility(View.VISIBLE);
         }
     }
     @Override

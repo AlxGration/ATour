@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.MembershipRequest;
@@ -29,6 +30,7 @@ public class MembershipRequestActivity extends AppCompatActivity  implements Net
     private ProgressBar pBar;
     private MembershipRequest memReq;
     private NetworkStateChangeReceiver receiver;
+    private TextView tvNetworkState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class MembershipRequestActivity extends AppCompatActivity  implements Net
         btnOk = findViewById(R.id.btn_ok);
         etComment = findViewById(R.id.et_comment);
         pBar = findViewById(R.id.progress_bar);
+        tvNetworkState = findViewById(R.id.tv_network_bar);
         RadioGroup rgRole = findViewById(R.id.rg_role);
         rgRole.setOnCheckedChangeListener((radioGroup, id)->{
             isReferee = (id==R.id.rb_referee);
@@ -134,9 +137,9 @@ public class MembershipRequestActivity extends AppCompatActivity  implements Net
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            showError("Подключение восстановленно");
+            tvNetworkState.setVisibility(View.GONE);
         }else {
-            showError("Отсутствует подключение к интернету" );
+            tvNetworkState.setVisibility(View.VISIBLE);
         }
     }
     @Override

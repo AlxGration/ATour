@@ -27,6 +27,7 @@ public class RegistrationActivity extends AppCompatActivity implements NetworkSt
     private RegViewModel viewModel;
     private Button btnSend;
     private NetworkStateChangeReceiver receiver;
+    private TextView tvNetworkState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class RegistrationActivity extends AppCompatActivity implements NetworkSt
         spCity = findViewById(R.id.spin_city);
         btnSend = findViewById(R.id.btn_send);
         ProgressBar pBar = findViewById(R.id.progress_bar);
+        tvNetworkState = findViewById(R.id.tv_network_bar);
 
         //observers
         viewModel.getIsLoading().observe(this, isLoading->{
@@ -98,9 +100,9 @@ public class RegistrationActivity extends AppCompatActivity implements NetworkSt
     @Override
     public void onNetworkStateChanged(boolean isConnected) {
         if (isConnected) {
-            viewModel.registrationError("Подключение восстановленно");
+            tvNetworkState.setVisibility(View.GONE);
         }else {
-            viewModel.registrationError("Отсутствует подключение к интернету" );
+            tvNetworkState.setVisibility(View.VISIBLE);
         }
     }
 

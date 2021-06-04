@@ -10,16 +10,26 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingEnd="@dimen/padding"
-        android:paddingStart="@dimen/padding"
-        android:paddingTop="@dimen/padding"
         android:theme="@style/Theme.ATour.AppBarOverlay">
+
+        <TextView
+            android:id="@+id/tv_network_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/no_internet_connection"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             app:layout_scrollFlags="enterAlways|scroll"
             android:layout_height="48dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="@dimen/padding"
+            android:layout_marginStart="@dimen/padding"
+            android:layout_marginTop="@dimen/padding">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -89,7 +99,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tabs_layout"
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize">
+            android:layout_height="?android:actionBarSize"
+            android:layout_marginEnd="@dimen/padding"
+            android:layout_marginStart="@dimen/padding">
             <TextView
                 android:id="@+id/tv_tab_1"
                 android:layout_width="wrap_content"

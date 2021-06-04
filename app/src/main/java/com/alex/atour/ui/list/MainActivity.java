@@ -1,7 +1,9 @@
 package com.alex.atour.ui.list;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import com.alex.atour.DTO.ChampInfo;
 import com.alex.atour.DTO.User;
 import com.alex.atour.R;
+import com.alex.atour.models.NetworkStateChangeReceiver;
 import com.alex.atour.ui.champ.ChampActivity;
 import com.alex.atour.ui.create.champ.ChampCreationActivity;
 import com.alex.atour.ui.list.search.SearchFragment;
@@ -31,11 +34,10 @@ import com.alex.atour.ui.profile.ProfileActivity;
 
 
 public class MainActivity extends AppCompatActivity implements
-        ChampsListRecyclerAdapter.IonItemClickListener{
+        ChampsListRecyclerAdapter.IonItemClickListener, NetworkStateChangeReceiver.NetworkStateChangeListener {
 
     private ViewPager viewPager;
-    private ChampsPagerAdapter champsPagerAdapter;
-    private TextView tvList, tvMy, tvManage;
+    private TextView tvList, tvMy, tvManage, tvNetworkState;
     private ImageView imgSearch;
     private ImageButton imgCancel;
     private EditText etSearch;
@@ -43,13 +45,14 @@ public class MainActivity extends AppCompatActivity implements
     private FrameLayout frameLayout;
     private SearchFragment searchFragment;
     private ProgressBar pBar;
+    private NetworkStateChangeReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        champsPagerAdapter = new ChampsPagerAdapter(getSupportFragmentManager());
+        ChampsPagerAdapter champsPagerAdapter = new ChampsPagerAdapter(getSupportFragmentManager());
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(champsPagerAdapter);
 
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements
         imgSearch = findViewById(R.id.img_search);
         tabsLayout = findViewById(R.id.tabs_layout);
         frameLayout = findViewById(R.id.frame_layout);
+        tvNetworkState = findViewById(R.id.tv_network_bar);
 
 
         tvMy.setOnClickListener(view -> viewPager.setCurrentItem(0));
@@ -113,6 +117,11 @@ public class MainActivity extends AppCompatActivity implements
             }
             return false;
         });
+
+        //проверка подключения internet
+        receiver = new NetworkStateChangeReceiver();
+        receiver.attach(this);
+        registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     public void showLoadingProcess(boolean isLoading){
@@ -203,5 +212,22 @@ public class MainActivity extends AppCompatActivity implements
         if (etSearch.getText().toString().isEmpty())
             super.onBackPressed();
         else onClickCancel(null);
+    }
+
+    @Override
+    public void onNetworkStateChanged(boolean isConnected) {
+        if (isConnected) {
+            tvNetworkState.setVisibility(View.GONE);
+        }else {
+            tvNetworkState.setVisibility(View.VISIBLE);
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver.detach();
+        }
     }
 }
